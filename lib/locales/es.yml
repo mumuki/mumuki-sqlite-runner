@@ -1,0 +1,6 @@
+es:
+  records: 'Registros'
+  memory: 'Memoria'
+  special_records: 'Registros especiales'
+  flags: 'Banderas'
+  check_equal_failure: "<b>%{record}</b> debería contener el valor <b>%{expected}</b>, pero se encontró <b>%{actual}</b>"

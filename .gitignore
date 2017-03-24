@@ -1,0 +1,6 @@
+.idea
+**/*.class
+hs_*.log
+bin/
+Gemfile.lock
+coverage/
