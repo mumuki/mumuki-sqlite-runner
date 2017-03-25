@@ -1,0 +1,209 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,activeacute,es-noshorthands]{babel}
+
+\usetheme{Warsaw}
+
+\usepackage{graphicx}
+\graphicspath{ {../imgs/} }
+
+
+
+\title[Mumuki SQL]
+{%
+    \normalsize{Presentación \\ Trabajo de Inserción Profesional}%
+}
+
+\author[Leandro Di Lorenzo]
+{
+    Leandro~Di~Lorenzo
+}
+
+
+\institute[TIP - UNQ]
+{
+    \textsc{
+        \normalsize{Universidad Nacional de Quilmes}
+    }
+}
+
+\date[apr 2017]{1 de Abril, 2017}
+
+
+\makeatletter
+    \newenvironment{withoutheadline}{
+        \setbeamertemplate{headline}[default]
+        \def\beamer@entrycode{\vspace*{-\headheight}}
+    }{}
+\makeatother
+
+
+\begin{document}
+
+\begin{withoutheadline}
+    \begin{frame}
+        \vspace{15pt}
+        \begin{figure}[h]
+                \includegraphics[scale=1]{logo-mumuki-sql}
+        \end{figure}
+        \vspace{-10pt}
+        \titlepage
+    \end{frame}
+\end{withoutheadline}
+
+
+\begin{frame}{Bla bla}
+    \tableofcontents[pausesections]
+\end{frame}
+
+
+%\section{Qué es y para qué sirve la Autenticación}
+%
+%\begin{frame}{}
+%    \frametitle{Qué es y para qué sirve la Autenticación}
+%    \begin{block}{Autenticación}
+%        Es un mecanismo que permite verificar la autenticidad de algo.
+%    \end{block}
+%    \pause
+%    \vspace{2em}
+%    \begin{exampleblock}{Identidades}
+%        Particularmente nos va a interesar la autenticidad de las identidades de las personas.
+%    \end{exampleblock}
+%\end{frame}
+%
+%\begin{frame}{}
+%    \frametitle{Ejemplos de Autenticación de Personas}
+%    \begin{itemize}[<+->]
+%        \item En compras con tarjeta de crédito se pide el documento para verificar que el titular sea el de la foto
+%        \item El acceso a un datacenter se realiza mediante un sensor de huella dactilar
+%        \item Un perito calígrafo compara y detecta validez de firmas en documentos
+%        \item Dibujar un patrón sobre puntos permite desbloquear el celular
+%        \item Una puerta cerrada con llave... \onslide<+-> solo pueden entrar los que tengan la llave
+%        \item ¿Se les ocurren otros?
+%    \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{}
+%    \frametitle{Otras consideraciones sobre la Autenticación}
+%    \begin{itemize}[<+->]
+%        \item Puede otorgar roles y permisos según el autenticado
+%        \item En general nos va a interesar la validación de \emph{usuario} y \emph{contraseña}
+%        \item Es importante resguardar las credenciales de autenticación:
+%        \begin{itemize}
+%            \item Si los valores quedan expuestos el sistema queda expuesto
+%            \item Se pierde la garantía de identidad
+%        \end{itemize}
+%    \end{itemize}
+%\end{frame}
+%
+%
+%\begin{frame}{}
+%    \frametitle{Protocolo básico}
+%    \begin{figure}[h]
+%        \includegraphics[width=\textwidth]{imgs/auth-protocol}
+%    \end{figure}
+%\end{frame}
+%
+%\begin{frame}{}
+%    \frametitle{\emph{Stateful}, \emph{Stateless}}
+%    \begin{block}{Stateful}
+%        Una vez que el usuario es autenticado esa información
+%        se mantiene en el \emph{estado} de la aplicación.
+%    \end{block}
+%    \pause
+%    \vspace{2em}
+%    \begin{exampleblock}{Stateless}
+%        Como no hay \emph{estado}, en cada petición es necesario validar
+%        la autenticidad de la persona.
+%    \end{exampleblock}
+%\end{frame}
+%
+%\section{Sesión vs Token (Based Authentication)}
+%\begin{frame}{}
+%    \frametitle{Session Based Auth}
+%    \begin{itemize}[<+->]
+%        \item Una vez que el usuario se autentica el servidor genera una sesión
+%        para el usuario y la almacena en memoria
+%        \item El servidor responde al usuario con el id de sesión
+%        \item El usuario debe guardar el id de la sesión en una cookie para mantenerla
+%        durante el tiempo que use la aplicación
+%        \item En cada petición el usuario debe mandar el id de la sesión
+%    \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{}
+%    \frametitle{Peticiones en Session Based}
+%    \begin{figure}[h]
+%        \includegraphics[width=\textwidth]{imgs/session-protocol}
+%    \end{figure}
+%\end{frame}
+%
+%\begin{frame}{}
+%    \frametitle{Token Based Auth}
+%    \begin{itemize}[<+->]
+%        \item Una vez que el usuario se autentica el servidor genera un token
+%        con los datos del usuario y determinadas configuraciones de seguridad
+%        \item El servidor responde enviando el token generado
+%        \item El servidor no almacena el token
+%        \item El usuario puede guardar el token en cualquier lado
+%        \item Las cookies son una forma más de almacenamiento
+%        \item En cada petición el usuario debe mandar el token
+%        \item Se puede mandar por Cookie, Header, GET, POST, etc...
+%        \item Si existe más de un servidor que requiera usuarios autenticados,
+%        todos pueden decodificar el token sin almacenarlo
+%    \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{}
+%    \frametitle{Peticiones en Token Based}
+%    \begin{figure}[h]
+%        \includegraphics[width=\textwidth]{imgs/token-protocol}
+%    \end{figure}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Lecturas Recomendadas}
+%  \begin{thebibliography}{10}
+%  \beamertemplatearticlebibitems
+%  \bibitem{ins-outs}
+%    Chris Sevilleja, Scotch.io
+%    \newblock The Ins and Outs of Token Based Authentication
+%    \newblock \url{https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication}
+%
+%  \bibitem{cookie-token}
+%    Alberto Pose, Auth0
+%    \newblock Cookies vs Tokens. Getting auth right with Angular.JS
+%    \newblock \url{https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/}
+%
+%  \bibitem{http-bad}
+%    Adrian Otto
+%    \newblock Why HTTP Basic Auth is Bad
+%    \newblock \url{http://adrianotto.com/2013/02/why-http-basic-auth-is-bad/}
+%
+%  \end{thebibliography}
+%\end{frame}
+%
+%\section{OAuth 2.0: The Social Media Authorization}
+%\begin{frame}{}
+%    \begin{center}\begin{LARGE}
+%        OAuth 2.0: The Social Media Authorization
+%    \end{LARGE}\end{center}
+%\end{frame}
+%
+%\section{JSON Web Tokens: The Open Token Solution}
+%\begin{frame}{}
+%    \begin{center}\begin{LARGE}
+%        JSON Web Tokens: The Open Token Solution
+%    \end{LARGE}\end{center}
+%\end{frame}
+%
+%\section{Demo JSON Web Tokens}
+%\begin{frame}{}
+%    \begin{center}\begin{LARGE}
+%        Demo JSON Web Tokens
+%    \end{LARGE}\end{center}
+%\end{frame}
+
+
+\end{document}
