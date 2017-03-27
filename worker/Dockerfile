@@ -1,6 +1,13 @@
-FROM java:openjdk-8-jdk
-MAINTAINER Federico Aloi
-RUN wget https://github.com/Orga-UNQ/QSim/releases/download/v1.1.1/QSim.jar
+FROM postgres:9.6.2
+MAINTAINER Leandro Di Lorenzo
 
-COPY runqsim /bin/runqsim
-RUN chmod u+x /bin/runqsim
+ENV POSTGRES_DB=mumuki
+ENV POSTGRES_USER=mumuki
+ENV POSTGRES_PASSWORD=mumuki
+
+COPY 0_create_table.sql /docker-entrypoint-initdb.d/
+COPY 1_init.sh /docker-entrypoint-initdb.d/
+
+EXPOSE 5432
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["postgres"]

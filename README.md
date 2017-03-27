@@ -137,19 +137,19 @@ bundle install
 RACK_ENV=development bundle exec rackup -p 4567
 ```
 
-# Test
+## Testing
 
-## Install docker
+### Install docker
 
 https://docs.docker.com/engine/installation/
 
-### Verify docker installation
+#### Verify docker installation
 
 ```bash
 $ sudo docker run hello-world
 ```
 
-### Allow docker run without root privileges
+#### Allow docker run without root privileges
 
 ```bash
 # Create the docker group
@@ -166,14 +166,31 @@ Log out and log back in so that your group membership is re-evaluated.
 $ docker run hello-world
 ```
 
-## Pull docker container
+### Pull docker container
 
 ```bash
+# FIXME: Temporary while the tests are those of qsim
 $ docker pull mumuki/mumuki-qsim-worker
 ```
 
-## Run test
+### Run tests
 
 ```bash
 $ bundle exec rake 
 ```
+
+### Generate docker container
+
+```bash
+$ cd mumuki-sql-runner/worker
+$ docker build -t mumuki-sql .      # build container
+$ docker run -it --rm mumuki-sql    # run container
+```
+
+If you need to destroy container, run:
+
+```bash
+$ docker rmi mumuki-sql
+```
+
+And then you can re-build it.
