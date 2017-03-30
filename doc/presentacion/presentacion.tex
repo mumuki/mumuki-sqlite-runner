@@ -1,59 +1,29 @@
 \documentclass{beamer}
-
-\usepackage[utf8]{inputenc}
-\usepackage[spanish,activeacute,es-noshorthands]{babel}
-
-\usetheme{Warsaw}
-
-\usepackage{graphicx}
-\graphicspath{ {../imgs/} }
-
-
-
-\title[Mumuki SQL]
-{%
-    \normalsize{Presentación \\ Trabajo de Inserción Profesional}%
-}
-
-\author[Leandro Di Lorenzo]
-{
-    Leandro~Di~Lorenzo
-}
-
-
-\institute[TIP - UNQ]
-{
-    \textsc{
-        \normalsize{Universidad Nacional de Quilmes}
-    }
-}
-
-\date[apr 2017]{1 de Abril, 2017}
-
-
-\makeatletter
-    \newenvironment{withoutheadline}{
-        \setbeamertemplate{headline}[default]
-        \def\beamer@entrycode{\vspace*{-\headheight}}
-    }{}
-\makeatother
+\usepackage{packages}
+\input{data}
 
 
 \begin{document}
 
+%%
+%% Carátula
+%%
 \begin{withoutheadline}
     \begin{frame}
-        \vspace{15pt}
-        \begin{figure}[h]
-                \includegraphics[scale=1]{logo-mumuki-sql}
-        \end{figure}
-        \vspace{-10pt}
         \titlepage
     \end{frame}
 \end{withoutheadline}
 
+%%
+%% MQL
+%%
+\begin{frame}{MQL}
+    \begin{figure}[h]
+            \includegraphics[scale=1]{logo-mql}
+    \end{figure}
+\end{frame}
 
-\begin{frame}{Bla bla}
+\begin{frame}{Índice}
     \tableofcontents[pausesections]
 \end{frame}
 
