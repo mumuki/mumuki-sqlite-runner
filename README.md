@@ -108,78 +108,80 @@ examples:
 
 Additional full examples can be found in the [integration suite](https://github.com/mumuki/mumuki-qsim-runner/blob/master/spec/integration_spec.rb) or [programs folder](https://github.com/mumuki/mumuki-qsim-runner/tree/master/spec/data)
 
-# Install the server
+## Install the server
 
-## Clone the project
+### Clone the project
 
 ```
-git clone https://github.com/mumuki/mumuki-qsim-server 
-cd mumuki-qsim-server
+git clone https://github.com/leandrojdl/mumuki-sql-runner
+cd mumuki-sql-runner
 ```
 
-## Install Ruby
+### Install Ruby Environment
+
+[Install rbenv](https://github.com/rbenv/rbenv#installation)
 
 ```bash
+# install ruby
 rbenv install 2.3.1
 rbenv rehash
+
+# install bundle
 gem install bundler
-```
 
-## Install Dependencies
-
-```bash
+# install dependencies
 bundle install
 ```
 
-# Run the server
+### Install Docker Environment
 
-```bash
-RACK_ENV=development bundle exec rackup -p 4567
-```
+[Install Docker](https://docs.docker.com/engine/installation/)
 
-## Testing
-
-### Install docker
-
-https://docs.docker.com/engine/installation/
-
-#### Verify docker installation
+Verify docker installation
 
 ```bash
 $ sudo docker run hello-world
 ```
 
-#### Allow docker run without root privileges
+Allow docker run without root privileges
 
 ```bash
 # Create the docker group
 $ sudo groupadd docker
 
 # Add your user to the docker group.
-$ sudo usermod -aG docker $USER
+$ sudo usermod -aG docker <your-user>
 ```
 
-Log out and log back in so that your group membership is re-evaluated.
+Log out and log back in SO that your group membership is re-evaluated.
 
 ```bash
 # Verify that you can docker commands without sudo.
 $ docker run hello-world
 ```
 
-### Pull docker container
+Pull docker container
 
 ```bash
-# FIXME: Temporary while the tests are those of qsim
+# [FIXME] Temporary while the tests are those of qsim
 $ docker pull mumuki/mumuki-qsim-worker
 ```
 
-### Run tests
+#### Run the server
+
+```bash
+RACK_ENV=development bundle exec rackup -p 4567
+```
+
+#### Run the tests
 
 ```bash
 $ bundle exec rake 
 ```
 
-### Generate docker container
+##### Generate docker container
+
+> [FIXME] Temporary until pull sql-runner to docker repo
 
 ```bash
 $ cd mumuki-sql-runner/worker
