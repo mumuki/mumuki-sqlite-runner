@@ -184,15 +184,25 @@ $ bundle exec rake
 > [FIXME] Temporary until pull sql-runner to docker repo
 
 ```bash
+# postgres
 $ cd mumuki-sql-runner/worker
 $ docker build -t mumuki-sql .      # build container
 $ docker run -it --rm mumuki-sql    # run container
+
+# sqlite
+$ cd mumuki-sql-runner/worker/sqlite
+$ docker build -t mumuki-sqlite .      # build container
+$ docker run -it --rm mumuki-sqlite    # run container
 ```
 
 If you need to destroy container, run:
 
 ```bash
+# postgres
 $ docker rmi mumuki-sql
+
+# sqlite
+$ docker rmi mumuki-sqlite
 ```
 
 And then you can re-build it.
