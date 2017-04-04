@@ -168,7 +168,7 @@ describe QsimTestHook do
         let(:result) { run!('select * from test;') }
 
         it { expect(result[1]).to eq :passed }
-        it { expect(result[0]).to eq "1|Testing1\n2|Testing2\n3|Testing3\n" }
+        it { expect(result[0]).to eq "id|name\n1|Testing1\n2|Testing2\n3|Testing3\n" }
       end
 
     #   context 'when it fails' do
