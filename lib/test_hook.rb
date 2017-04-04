@@ -1,3 +1,5 @@
+require 'pp'
+
 class QsimTestHook < Mumukit::Templates::FileHook
   include Mumukit::WithTempfile
   attr_reader :examples
@@ -5,11 +7,12 @@ class QsimTestHook < Mumukit::Templates::FileHook
   isolated
 
   def tempfile_extension
-    '.qsim'
+    '.sql'
   end
 
   def command_line(filename)
-    "runqsim #{filename} #{q_architecture} #{input_file_separator}"
+    # "cat #{filename}"
+    "runsql #{filename}"
   end
 
   def compile_file_content(request)
@@ -28,13 +31,18 @@ class QsimTestHook < Mumukit::Templates::FileHook
   end
 
   def post_process_file(_file, result, status)
-    output = parse_json result
+    # pp _file
+    # pp result
+    # pp status
+    # output = parse_json result
+    output = result
+    # pp output
 
     case status
       when :passed
         framework.test output, @examples
       when :failed
-        [output[:error], :errored]
+        [output, :errored]
       else
         [output, status]
     end
@@ -173,6 +181,6 @@ class QsimTestHook < Mumukit::Templates::FileHook
   end
 
   def input_file_separator
-    '!!!BEGIN_EXAMPLES!!!'
+    '-- BEGIN_EXAMPLES'
   end
 end

@@ -5,11 +5,8 @@ module Qsim
     end
 
     def main_code
-      "#{skip_command}\n#{@request.content}"
+      "#{@request.content}"
     end
 
-    def skip_command
-      'MOV R0, R0'
-    end
   end
 end

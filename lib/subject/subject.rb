@@ -12,16 +12,10 @@ module Qsim
     end
 
     def compile_code(input_file_separator, initial_state_file)
-      <<~QSIM
-        JMP main
-
+      <<~SQL
         #{extra_code}
-
-        main:
         #{main_code}
-        #{input_file_separator}
-        #{initial_state_file}
-      QSIM
+      SQL
     end
   end
 end
