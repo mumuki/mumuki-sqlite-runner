@@ -1,3 +1,4 @@
+require 'pp'
 require_relative '../spec/data/fixture'
 
 describe QsimTestHook do
@@ -148,7 +149,7 @@ describe QsimTestHook do
   # arrancar por aca
   # buscar gem que permita comparar facil cosas de sql
   describe '#run!' do
-    context 'when program fails with syntax error' do
+    context 'program fails with syntax error' do
       let(:result) { run!('selec * from test;') }
 
       it { expect(result[1]).to eq :errored }
@@ -162,14 +163,14 @@ describe QsimTestHook do
     #   it { expect(result[0]).to eq 'Una de las etiquetas utilizadas es invalida' }
     # end
 
-    # context 'when program finishes' do
-    #   context 'when it is successful' do
-    #     let(:result) { result_expecting(R3: '0007') }
-    #
-    #     it { expect(result[0]).to eq 'R3 is 0007' }
-    #     it { expect(result[1]).to eq :passed }
-    #   end
-    #
+    context 'program finishes' do
+      context 'when it is successful' do
+        let(:result) { run!('select * from test;') }
+
+        it { expect(result[1]).to eq :passed }
+        it { expect(result[0]).to eq "1|Testing1\n2|Testing2\n3|Testing3\n" }
+      end
+
     #   context 'when it fails' do
     #     let(:result) { result_expecting(R3: '0008') }
     #
@@ -183,7 +184,7 @@ describe QsimTestHook do
     #                   postconditions: { equal: record } }]
     #     run!(q1_ok_program, examples).first.first
     #   end
-    # end
+    end
 
     def run!(program, examples = [{}])
       tests = { examples: examples }.to_yaml

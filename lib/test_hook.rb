@@ -40,7 +40,8 @@ class QsimTestHook < Mumukit::Templates::FileHook
 
     case status
       when :passed
-        framework.test output, @examples
+        [output, :passed]
+        # framework.test output, @examples
       when :failed
         [output, :errored]
       else
