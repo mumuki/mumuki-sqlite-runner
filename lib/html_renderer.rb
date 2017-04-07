@@ -1,6 +1,6 @@
 require 'active_support/inflector'
 
-module Qsim
+module Sqlite
   class HtmlRenderer
     def render(result, output)
       @output = output

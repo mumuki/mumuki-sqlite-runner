@@ -1,6 +1,6 @@
 require 'pp'
 
-class QsimTestHook < Mumukit::Templates::FileHook
+class SqliteTestHook < Mumukit::Templates::FileHook
   include Mumukit::WithTempfile
   attr_reader :examples
 
@@ -20,7 +20,7 @@ class QsimTestHook < Mumukit::Templates::FileHook
     @examples = to_examples(test[:examples])
     @subject = test[:subject]
 
-    Qsim::Subject
+    Sqlite::Subject
       .from_test(test, request)
       .compile_code(input_file_separator, initial_state_file)
   end
@@ -97,8 +97,8 @@ class QsimTestHook < Mumukit::Templates::FileHook
   end
 
   def framework
-    Mumukit::Metatest::Framework.new checker: Qsim::Checker.new,
-                                     runner: Qsim::MultipleExecutionsRunner.new
+    Mumukit::Metatest::Framework.new checker: Sqlite::Checker.new,
+                                     runner: Sqlite::MultipleExecutionsRunner.new
   end
 
   def parse_json(json_result)

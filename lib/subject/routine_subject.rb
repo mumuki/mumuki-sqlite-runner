@@ -1,4 +1,4 @@
-module Qsim
+module Sqlite
   class RoutineSubject < Subject
     def extra_code
       "#{@request.extra}\n#{@request.content}"

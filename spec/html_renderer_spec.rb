@@ -1,4 +1,4 @@
-describe Qsim::HtmlRenderer do
+describe Sqlite::HtmlRenderer do
   describe '#render' do
     it 'renders memory by default' do
       expect(render).to include 'Records', 'R0', 'CAFE', 'R7', 'BABE'
@@ -39,7 +39,7 @@ describe Qsim::HtmlRenderer do
                  flags: { N: 0, Z: 0, V: 0, C: 1 },
                  special_records: { SP: 'FFEF' } }
       result.deep_symbolize_keys!
-      Qsim::HtmlRenderer.new.render(result, output)
+      Sqlite::HtmlRenderer.new.render(result, output)
     end
   end
 end

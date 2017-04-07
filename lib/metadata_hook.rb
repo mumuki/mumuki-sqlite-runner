@@ -1,11 +1,11 @@
-class QsimMetadataHook < Mumukit::Hook
+class SqliteMetadataHook < Mumukit::Hook
   def metadata
     {
       language: {
-        name: 'qsim',
-        icon: { type: 'devicon', name: 'qsim' },
+        name: 'sqlite',
+        icon: { type: 'devicon', name: 'sqlite' },
         version: 'v0.2.2',
-        extension: 'qsim',
+        extension: 'sql',
         ace_mode: 'assembly_x86',
         graphic: true
       },

@@ -1,10 +1,10 @@
 require 'pp'
 require_relative '../spec/data/fixture'
 
-describe QsimTestHook do
+describe SqliteTestHook do
   include Fixture
 
-  let(:runner) { QsimTestHook.new }
+  let(:runner) { SqliteTestHook.new }
 
   # describe '#set_output' do
   #   let(:defaults) { { records: true } }

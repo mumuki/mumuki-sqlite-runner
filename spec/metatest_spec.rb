@@ -1,8 +1,8 @@
 describe 'metatest' do
   let(:result) { framework.test compilation, examples }
   let(:framework) do
-    Mumukit::Metatest::Framework.new checker: Qsim::Checker.new,
-                                     runner: Qsim::MultipleExecutionsRunner.new
+    Mumukit::Metatest::Framework.new checker: Sqlite::Checker.new,
+                                     runner: Sqlite::MultipleExecutionsRunner.new
   end
   let(:compilation) do
     [{

@@ -1,4 +1,4 @@
-module Qsim
+module Sqlite
   class Subject
     def self.from_test(test, request)
       subject = test[:subject]

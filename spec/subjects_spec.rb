@@ -1,22 +1,22 @@
 describe 'Subjects' do
-  describe Qsim::Subject do
+  describe Sqlite::Subject do
     describe '.from_test' do
       context 'given a subject' do
         it 'returns a Routine subject' do
           subject = subject_with_test(subject: 'bar')
-          expect(subject).to be_instance_of Qsim::RoutineSubject
+          expect(subject).to be_instance_of Sqlite::RoutineSubject
         end
       end
 
       context 'without subject' do
         it 'returns a Program subject' do
           subject = subject_with_test
-          expect(subject).to be_instance_of Qsim::ProgramSubject
+          expect(subject).to be_instance_of Sqlite::ProgramSubject
         end
       end
 
       def subject_with_test(test = {})
-        Qsim::Subject.from_test(test, '')
+        Sqlite::Subject.from_test(test, '')
       end
     end
   end
@@ -24,7 +24,7 @@ describe 'Subjects' do
   describe '#compile_code' do
     context 'with a subject' do
       it 'returns the expected code' do
-        code = compiled_code(Qsim::RoutineSubject, 'decrement')
+        code = compiled_code(Sqlite::RoutineSubject, 'decrement')
         expect(code).to eq <<~QSIM
           JMP main
 
@@ -41,7 +41,7 @@ describe 'Subjects' do
 
     context 'without a subject' do
       it 'returns the expected code' do
-        code = compiled_code(Qsim::ProgramSubject)
+        code = compiled_code(Sqlite::ProgramSubject)
         expect(code).to eq <<~QSIM
           JMP main
 

@@ -1,4 +1,4 @@
-module Qsim
+module Sqlite
   class ProgramSubject < Subject
     def extra_code
       @request.extra

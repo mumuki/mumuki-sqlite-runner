@@ -1,4 +1,4 @@
-module Qsim
+module Sqlite
   class Checker < Mumukit::Metatest::Checker
     def check(result, example)
       @output_options = example[:output]
@@ -23,7 +23,7 @@ module Qsim
     private
 
     def renderer
-      @renderer ||= Qsim::HtmlRenderer.new
+      @renderer ||= Sqlite::HtmlRenderer.new
     end
   end
 end
