@@ -1,8 +1,10 @@
 require 'pp'
-require_relative '../spec/data/fixture'
+require_relative 'data/fixture'
 
 describe SqliteTestHook do
   include Fixture
+  include InvalidSyntax
+  include TestTable
 
   let(:runner) { SqliteTestHook.new }
 
@@ -150,10 +152,10 @@ describe SqliteTestHook do
   # buscar gem que permita comparar facil cosas de sql
   describe '#run!' do
     context 'program fails with syntax error' do
-      let(:result) { run!('selec * from test;') }
+      let(:result) { run!(InvalidSyntax.query) }
 
-      it { expect(result[1]).to eq :errored }
-      it { expect(result[0]).to eq "Error: near line 2: near \"selec\": syntax error\n" }
+      it { expect(result[1]).to eq InvalidSyntax.expected_status }
+      it { expect(result[0]).to eq InvalidSyntax.expected_message }
     end
 
     # context 'when program fails with runtime error' do
@@ -165,10 +167,10 @@ describe SqliteTestHook do
 
     context 'program finishes' do
       context 'when it is successful' do
-        let(:result) { run!('select * from test;') }
+        let(:result) { run!(TestTable::SelectAll.query) }
 
-        it { expect(result[1]).to eq :passed }
-        it { expect(result[0]).to eq "id|name\n1|Testing1\n2|Testing2\n3|Testing3\n" }
+        it { expect(result[1]).to eq TestTable::SelectAll.expected_status }
+        it { expect(result[0]).to eq TestTable::SelectAll.expected_message }
       end
 
     #   context 'when it fails' do
