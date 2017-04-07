@@ -1,13 +1,12 @@
-FROM postgres:9.6.2
-MAINTAINER Leandro Di Lorenzo
+FROM tcgerlach/sqlite
+MAINTAINER Leandro Di Lorenzo <leandro.jdl@gmail.com>
 
-ENV POSTGRES_DB=mumuki
-ENV POSTGRES_USER=mumuki
-ENV POSTGRES_PASSWORD=mumuki
+COPY runsql /bin/runsql
+RUN chmod u+x /bin/runsql
 
-COPY 0_create_table.sql /docker-entrypoint-initdb.d/
-COPY 1_init.sh /docker-entrypoint-initdb.d/
+COPY sqliterc /root/.sqliterc
+COPY 0_create_table.sql /db.sql
+RUN runsql db.sql
 
-EXPOSE 5432
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["postgres"]
+ENTRYPOINT [""]
+CMD ["/bin/sh"]
