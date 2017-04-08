@@ -1,9 +1,7 @@
 
 [![Build Status](https://travis-ci.org/leandrojdl/mumuki-sqlite-runner.svg?branch=master)](https://travis-ci.org/leandrojdl/mumuki-sqlite-runner)
-```
-[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-qsim-server/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-qsim-server)
-[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-qsim-server/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-qsim-server)
-```
+[![Code Climate](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/badges/gpa.svg)](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner)
+[![Test Coverage](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/badges/coverage.svg)](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/coverage)
 
 
 # Mumuki Sqlite Runner
