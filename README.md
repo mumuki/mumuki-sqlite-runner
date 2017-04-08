@@ -10,14 +10,15 @@ Motor de SQLite para integrarse a la [Plataforma Mumuki](https://mumuki.io/).
 
 ## Disclaimer
 
-Este proyecto nace a partir del _Proyecto de Inserción Profesional_ el cual estoy desarrollando
-para el cierre de la _Tecnicatura en Programación Informática_ en la _Universidad Nacional de Quilmes_.
-
-Es por ello que tanto el proyecto como esta documentación se encuentran en constante construcción.
-
-La información asociada al informe del _TIP_ puede encontrarse en la [Wiki](https://github.com/leandrojdl/mumuki-sqlite-runner/wiki).
-
-El resto del README será utilizado como detalle de instalación y funcionamiento del _Runner_.
+> Este proyecto nace a partir del _Proyecto de Inserción Profesional_, el cual estoy desarrollando
+> para el cierre de la Tecnicatura en Programación Informática en la Universidad Nacional de Quilmes.
+>
+> Es por ello que tanto el proyecto como esta documentación se encuentran en constante construcción.
+>
+> La información asociada al informe del _TIP_ puede encontrarse en la
+> [Wiki](https://github.com/leandrojdl/mumuki-sqlite-runner/wiki).
+>
+> El resto del README será utilizado como detalle de instalación y funcionamiento del _Runner_.
 
 ## Install
 
