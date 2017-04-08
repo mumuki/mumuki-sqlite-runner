@@ -3,12 +3,12 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = 'mumuki-qsim-runner'
-  spec.version       = '1.1.4'
-  spec.authors       = ['Federico Aloi']
-  spec.email         = ['fede@mumuki.org']
-  spec.summary       = 'Qsim Runner for Mumuki'
-  spec.homepage      = 'http://github.com/mumuki/mumuki-qsim-server'
+  spec.name          = 'mumuki-sqlite-runner'
+  spec.version       = '0.1'
+  spec.authors       = ['Leandro Di Lorenzo']
+  spec.email         = ['leandro.jdl@gmail.com']
+  spec.summary       = 'SQLite Runner for Mumuki'
+  spec.homepage      = 'http://github.com/leandrojdl/mumuki-sqlite-runner'
   spec.license       = 'MIT'
 
   spec.files         = Dir['lib/**/**']

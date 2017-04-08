@@ -2,7 +2,7 @@ language: ruby
 
 env:
   matrix:
-  - RACK_ENV=development
+    - RACK_ENV=development
 
 sudo: false
 
@@ -16,7 +16,15 @@ before_install:
   - docker pull leandrojdl/mumuki-sqlite-worker
 
 script:
-  - rspec spec/runner_spec.rb    # temporary until the project is complete
+  - rspec spec/runner_spec.rb
+
+addons:
+  code_climate:
+    repo_token:
+      secure: "F5GRhyEZg6R+NXHubTDYBF5ouerwtaWyw8fO+lZRo4fk3bgNAlKPlIKdhzIt/jeLYF1NwC1HeJMnqXVrahIa+LArD7t2wBjuWXWq4i+sjJTNqyy9wfr8WjNftXR0P7USri1bzolJmJaA7GY8DRmp+FeIaO3tGOFCYRnHon7n2M6d8/E4To+MmCNiAwNgK/W1vSiWXDEDp1L+G2WuH3wTcraE4algBiC7s7ozQpCCssOI1ByFNtgSufJEDbdRQNATAjDyjs9bcEB8iFsOo5/NtAv7ARMXeSa6MTnVdFujexLtjKxwdup3PXPhFwG1Qn5rmUyZV/QmKtxBebbeEAkfXVkRijAVEbVe0dkL/LmsFc9pkDs+37FONYtHgMespsVbA+YYkY0DIruaUoVo4ibyvQzWeqnDRr3NrYXfbg34gbZindjZb02COl/GkukNg0NfWdDWBBUAS/nu09xdZe37xIaijgDbY1ZBCaff0UiYyGi7AFFs5N1ZRqPzCYIksfSQAF19UjipjkVZwQXhmA7ynItrnrH5nDbnubRsDcn71n5t51+pKQVb8/1gN7GNJfcpooHUo3qDtH4xoum1HZf783pvUL8+RGo1DZTObyEyHcld1Wp86VNWmpnAN2jrnKdgCd4+JuemU5D7X+2QXziBznO/0kPh38QRAw/tArAe6jI="
+
+after_success:
+  - bundle exec codeclimate-test-reporter
 
 notifications:
   email:
