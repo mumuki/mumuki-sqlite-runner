@@ -5,7 +5,7 @@ I18n.load_translations_path File.join(__dir__, 'locales', '*.yml')
 
 Mumukit.runner_name = 'sqlite'
 Mumukit.configure do |config|
-  config.docker_image = 'mumuki-sqlite'
+  config.docker_image = 'leandrojdl/mumuki-sqlite-worker'
   config.content_type = 'plain'
   config.structured = true
 end
