@@ -1,9 +1,9 @@
 require 'pp'
+require 'yaml'
 require_relative 'data/fixture'
 
 describe SqliteTestHook do
   include Fixture
-  include InvalidSyntax
   include TestTable
 
   let(:runner) { SqliteTestHook.new }
@@ -148,14 +148,15 @@ describe SqliteTestHook do
   #   end
   # end
 
-  # arrancar por aca
-  # buscar gem que permita comparar facil cosas de sql
   describe '#run!' do
-    context 'program fails with syntax error' do
-      let(:result) { run!(InvalidSyntax.query) }
-
-      it { expect(result[1]).to eq InvalidSyntax.expected_status }
-      it { expect(result[0]).to eq InvalidSyntax.expected_message }
+    context 'program fails' do
+      context 'with this syntax errors:' do
+        thing = YAML.load_file (File.join(__dir__, 'data/syntax_error_fixture.yml'))
+        sql = thing['fixture']['with_errors_on']['select_keyword']
+        it "- #{sql['query']}" do
+          run_expectation sql
+        end
+      end
     end
 
     # context 'when program fails with runtime error' do
@@ -198,5 +199,13 @@ describe SqliteTestHook do
 
   def req(content, extra = '', test = 'examples: [{}]')
     struct content: content.strip, extra: extra.strip, test: test
+  end
+
+  # ---
+  def run_expectation(sql = {})
+    result = run! sql['query']
+
+    expect(result[1].to_s).to eq sql['expected_status']
+    expect(result[0].strip).to eq sql['expected_message']
   end
 end

@@ -1,0 +1,6 @@
+fixture:
+  with_errors_on:
+    select_keyword:
+      query: selec * from test;
+      expected_status: errored
+      expected_message: 'Error: near line 2: near "selec": syntax error'
