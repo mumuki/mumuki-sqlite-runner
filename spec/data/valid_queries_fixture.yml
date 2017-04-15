@@ -1,18 +1,48 @@
-- query: select * from test;
+- name: Query 1
+  creation: |
+    CREATE TABLE test1 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  data: |
+    INSERT INTO test1 (name) values ('Name 1');
+    INSERT INTO test1 (name) values ('Name 2');
+  query: select * from test1;
   expected_result: |-
     id|name
-    1|Testing1
-    2|Testing2
-    3|Testing3
-- query: select id from test;
+    1|Name 1
+    2|Name 2
+- name: Query 2
+  creation: |
+    CREATE TABLE test2 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  data: |
+    INSERT INTO test2 (name) values ('Name 1');
+    INSERT INTO test2 (name) values ('Name 2');
+  query: select id from test2;
   expected_result: |-
     id
     1
     2
-    3
-- query: select name from test;
+- name: Query 3
+  creation: |
+    CREATE TABLE test2 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  data: |
+    INSERT INTO test2 (name) values ('Name 1');
+    INSERT INTO test2 (name) values ('Name 2');
+  query: select name from test2;
   expected_result: |-
     name
-    Testing1
-    Testing2
-    Testing3
+    Name 1
+    Name 2
+#- query: select name from test;
+#  expected_result: |-
+#    name
+#    Testing1
+#    Testing2
+#    Testing3

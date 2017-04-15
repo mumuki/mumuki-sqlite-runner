@@ -16,39 +16,3 @@ class Fixture
   end
 end
 
-module InvalidSyntax
-  def self.query
-    'selec * from test;'
-  end
-
-  def self.expected_status
-    :errored
-  end
-
-  def self.expected_message
-    <<~ERROR
-      Error: near line 2: near "selec": syntax error
-    ERROR
-  end
-end
-
-module TestTable
-  module SelectAll
-    def self.query
-      'select * from test;'
-    end
-
-    def self.expected_status
-      :passed
-    end
-
-    def self.expected_message
-      <<~RESULT
-        id|name
-        1|Testing1
-        2|Testing2
-        3|Testing3
-      RESULT
-    end
-  end
-end

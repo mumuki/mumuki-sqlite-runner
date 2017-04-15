@@ -2,7 +2,6 @@ require 'pp'
 require_relative 'data/fixture'
 
 describe SqliteTestHook do
-  include TestTable
 
   let(:runner) { SqliteTestHook.new }
 
@@ -128,74 +127,39 @@ describe SqliteTestHook do
   #                           output: { records: true }
   #   end
   # end
-  #
-  # describe '#execute!' do
-  #   let(:result) do
-  #     request = req(q1_ok_program)
-  #     runner.execute!(request).first
-  #   end
-  #
-  #   it 'returns qsim execution result' do
-  #     expect(result).to include id: 0,
-  #                               special_records: { PC: '0008', SP: 'FFEF', IR: '28E5 ' },
-  #                               flags: { N: 0, Z: 0, V: 0, C: 0 },
-  #                               records: {
-  #                                 R0: '0000', R1: '0000', R2: '0000', R3: '0007',
-  #                                 R4: '0000', R5: '0004', R6: '0000', R7: '0000'
-  #                               }
-  #   end
-  # end
 
   describe '#run!' do
+
     context 'program fails with this syntax errors:' do
       Fixture.get(:syntax_error).each do | fixture |
-        it "- #{fixture['query']}" do
-          result = run! fixture['query']
+        it "- #{fixture['name']}: #{fixture['query']}" do
+          result = run_fixture fixture
 
-          expect(result[1]).to eq :errored
-          expect(result[2]).to eq fixture['query']
-          expect(result[0]).to eq fixture['expected_error']
+          expect(result[1]).to eq :failed
+          expect(result[0]).to match fixture['expected_error']
         end
       end
     end
 
     context 'program obtain valid records with this queries:' do
       Fixture.get(:valid_queries).each do | fixture |
-        it "- #{fixture['query']}" do
-          result = run! fixture['query']
+        it "- #{fixture['name']}: #{fixture['query']}" do
+          result = run_fixture fixture
 
           expect(result[1]).to eq :passed
-          expect(result[2]).to eq fixture['query']
           expect(result[0]).to eq fixture['expected_result']
         end
       end
-
-    #   context 'when it fails' do
-    #     let(:result) { result_expecting(R3: '0008') }
-    #
-    #     it { expect(result[0]).to eq 'R3 is 0007' }
-    #     it { expect(result[1]).to eq :failed }
-    #   end
-    #
-    #   def result_expecting(record)
-    #     examples = [{ name: 'R3 is 0007',
-    #                   operation: :run,
-    #                   postconditions: { equal: record } }]
-    #     run!(q1_ok_program, examples).first.first
-    #   end
     end
 
   end
 
-  def run!(program, examples = [{}])
-    tests = { examples: examples }.to_yaml
-    request = req(program, '', tests)
-    file = runner.compile(request)
-    runner.run!(file)
-  end
-
-  def req(content, extra = '', test = 'examples: [{}]')
-    struct content: content.strip, extra: extra.strip, test: test
+  def run_fixture(fixture)
+    req = struct content: fixture['query'],
+                 creation: fixture['creation'],
+                 data: fixture['data']
+    file = runner.compile(req)
+    runner.run! file
   end
 
 end
