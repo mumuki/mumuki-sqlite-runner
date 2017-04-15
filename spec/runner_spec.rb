@@ -1,9 +1,7 @@
 require 'pp'
-require 'yaml'
 require_relative 'data/fixture'
 
 describe SqliteTestHook do
-  include Fixture
   include TestTable
 
   let(:runner) { SqliteTestHook.new }
@@ -149,29 +147,27 @@ describe SqliteTestHook do
   # end
 
   describe '#run!' do
-    context 'program fails' do
-      context 'with this syntax errors:' do
-        thing = YAML.load_file (File.join(__dir__, 'data/syntax_error_fixture.yml'))
-        sql = thing['fixture']['with_errors_on']['select_keyword']
-        it "- #{sql['query']}" do
-          run_expectation sql
+    context 'program fails with this syntax errors:' do
+      Fixture.get(:syntax_error).each do | fixture |
+        it "- #{fixture['query']}" do
+          result = run! fixture['query']
+
+          expect(result[1]).to eq :errored
+          expect(result[2]).to eq fixture['query']
+          expect(result[0]).to eq fixture['expected_error']
         end
       end
     end
 
-    # context 'when program fails with runtime error' do
-    #   let(:result) { run!(runtime_error_program) }
-    #
-    #   it { expect(result[1]).to eq :errored }
-    #   it { expect(result[0]).to eq 'Una de las etiquetas utilizadas es invalida' }
-    # end
+    context 'program obtain valid records with this queries:' do
+      Fixture.get(:valid_queries).each do | fixture |
+        it "- #{fixture['query']}" do
+          result = run! fixture['query']
 
-    context 'program finishes' do
-      context 'when it is successful' do
-        let(:result) { run!(TestTable::SelectAll.query) }
-
-        it { expect(result[1]).to eq TestTable::SelectAll.expected_status }
-        it { expect(result[0]).to eq TestTable::SelectAll.expected_message }
+          expect(result[1]).to eq :passed
+          expect(result[2]).to eq fixture['query']
+          expect(result[0]).to eq fixture['expected_result']
+        end
       end
 
     #   context 'when it fails' do
@@ -189,23 +185,17 @@ describe SqliteTestHook do
     #   end
     end
 
-    def run!(program, examples = [{}])
-      tests = { examples: examples }.to_yaml
-      request = req(program, '', tests)
-      file = runner.compile(request)
-      runner.run!(file)
-    end
+  end
+
+  def run!(program, examples = [{}])
+    tests = { examples: examples }.to_yaml
+    request = req(program, '', tests)
+    file = runner.compile(request)
+    runner.run!(file)
   end
 
   def req(content, extra = '', test = 'examples: [{}]')
     struct content: content.strip, extra: extra.strip, test: test
   end
 
-  # ---
-  def run_expectation(sql = {})
-    result = run! sql['query']
-
-    expect(result[1].to_s).to eq sql['expected_status']
-    expect(result[0].strip).to eq sql['expected_message']
-  end
 end

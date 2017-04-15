@@ -11,7 +11,6 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   end
 
   def command_line(filename)
-    # "cat #{filename}"
     "runsql #{filename}"
   end
 
@@ -31,19 +30,15 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   end
 
   def post_process_file(_file, result, status)
-    # pp _file
-    # pp result
-    # pp status
-    # output = parse_json result
-    output = result
-    # pp output
+    input  = IO.read(_file).strip
+    output = result.strip
 
     case status
-      when :passed
-        [output, :passed]
-        # framework.test output, @examples
+    when :passed
+        [output, :passed, input]
+      # framework.test output, @examples
       when :failed
-        [output, :errored]
+        [output, :errored, input]
       else
         [output, status]
     end
