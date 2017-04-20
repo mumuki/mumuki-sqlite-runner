@@ -5,153 +5,74 @@ describe SqliteTestHook do
 
   let(:runner) { SqliteTestHook.new }
 
-  # describe '#set_output' do
-  #   let(:defaults) { { records: true } }
-  #
-  #   context 'when specified' do
-  #     it 'removes unnecessary keys' do
-  #       output = build_output(foo: 1)
-  #       expect(output).to eq defaults
-  #     end
-  #
-  #     it 'keeps specified settings and adds defaults' do
-  #       output = build_output(flags: true, special_records: true, memory: true)
-  #       expect(output).to eq recordsx: true,
-  #                            flags: true,
-  #                            special_records: true,
-  #                            memory: true
-  #     end
-  #
-  #     context 'given a memory range' do
-  #       context 'when out of range' do
-  #         it 'sets memory to false' do
-  #           output = build_output(memory: { from: '0', to: 'FFFF0' })
-  #           expect(output).to eq defaults
-  #         end
-  #       end
-  #
-  #       context "when 'from' is greater 'than' to" do
-  #         it 'sets memory to false' do
-  #           output = build_output(memory: { from: '2', to: '1' })
-  #           expect(output).to eq defaults
-  #         end
-  #       end
-  #
-  #       it 'remains unchanged' do
-  #         output = build_output(memory: { from: '0', to: 'AAAA' })
-  #         expect(output[:memory]).to eq from: '0', to: 'AAAA'
-  #       end
-  #     end
-  #   end
-  #
-  #   context 'when it is not specified' do
-  #     it 'sets default values' do
-  #       output = build_output
-  #       expect(output).to eq defaults
-  #     end
-  #   end
-  #
-  #   def build_output(config = {})
-  #     test = (config.empty? ? {} : { output: config })
-  #     runner.send(:define_output, test)
-  #   end
-  # end
-  #
-  # describe '#to_examples' do
-  #   it 'categorizes preconditions records and fields' do
-  #     tests = [{ preconditions: { R1: '1010', N: '1', PC: '1', FFFF: '1' } }]
-  #     example = to_examples(tests).first
-  #     expect(example).to eq id: 0,
-  #                           preconditions: {
-  #                             records: { R1: '1010' },
-  #                             special_records: { PC: '1' },
-  #                             flags: { N: '1' },
-  #                             memory: { FFFF: '1' }
-  #                           }
-  #   end
-  #
-  #   it 'accepts tests without preconditions' do
-  #     example = to_examples([{}]).first
-  #     expect(example).to eq id: 0,
-  #                           preconditions: {}
-  #   end
-  #
-  #   it 'ignores unmatched preconditions' do
-  #     tests = [preconditions: { foo: '1', R8: '1', Z: '1' }]
-  #     example = to_examples(tests).first
-  #     expect(example).to eq id: 0,
-  #                           preconditions: { flags: { Z: '1' } }
-  #   end
-  #
-  #   def to_examples(tests)
-  #     runner.send(:to_examples, tests).map { |test| test.except(:output) }
-  #   end
-  # end
-  #
-  # describe '#compile_file_content' do
-  #   let(:request) do
-  #     req(r1_plus_r2_program, r1_plus_r2_program_extra, r1_plus_r2_program_examples)
-  #   end
-  #   let(:compilation) { runner.compile_file_content(request) }
-  #   let(:example) do
-  #     runner.compile_file_content(request)
-  #     runner.examples.first
-  #   end
-  #
-  #   it 'compiles the code and preconditions' do
-  #     expect(compilation).to eq <<~QSIM
-  #       JMP main
-  #
-  #       duplicateR1:
-  #       MUL R1, 0x0002
-  #       RET
-  #
-  #       main:
-  #       MOV R0, R0
-  #       MOV R1, 0x0004
-  #       CALL duplicateR1
-  #       !!!BEGIN_EXAMPLES!!!
-  #       [{"special_records":{"PC":"0000","SP":"FFEF","IR":"0000"},"flags":{"N":0,"Z":0,"V":0,"C":0},"records":{"R0":"B5E1","R1":"000F","R2":"0000","R3":"0000","R4":"0000","R5":"0000","R6":"0000","R7":"0000"},"memory":{},"id":0}]
-  #     QSIM
-  #   end
-  #
-  #   it 'parses the examples' do
-  #     expect(example).to eq id: 0,
-  #                           name: 'R2 stores the sum of R0 and R1',
-  #                           preconditions: {
-  #                             records: { R0: 'B5E1', R1: '000F' }
-  #                           },
-  #                           postconditions: {
-  #                             equal: { R2: 'B5F0' }
-  #                           },
-  #                           output: { records: true }
-  #   end
-  # end
+  describe 'redefined methods' do
 
-  describe '#run!' do
+    describe '#tempfile_extension' do
+      it { expect(runner.tempfile_extension).to eq '.sql' }
+    end
 
-    context 'fails and returns the expected error with this queries' do
-      Fixture.get(:syntax_error).each do | fixture |
-        it "- #{fixture['name']}: #{fixture['query']}" do
-          result = run_fixture fixture
-
-          expect(result[1]).to eq :failed
-          expect(result[0]).to match fixture['expected_error']
-        end
+    describe '#command_line("filename.sql")' do
+      it do
+        command = runner.command_line('filename.sql')
+        expect(command).to eq 'runsql filename.sql'
       end
     end
 
-    context 'works and returns the expected result with this queries' do
-      Fixture.get(:valid_queries).each do | fixture |
-        it "- #{fixture['name']}: #{fixture['query']}" do
-          result = run_fixture fixture
+    describe '#compile_file_content' do
+      it 'should build valid sql syntax from a valid request received' do
+        req = struct creation: 'create table test (num int);',
+                     data: 'insert into test (42);',
+                     content: 'select * from test;'
+        expected_content = <<~SQL
+          -- CREATE
+          create table test (num int);
+          -- DATA
+          insert into test (42);
+          -- QUERY
+          select * from test;
+        SQL
 
-          expect(result[1]).to eq :passed
-          expect(result[0]).to eq fixture['expected_result']
-        end
+        expect(runner.compile_file_content(req)).to eq expected_content
       end
     end
 
+    describe '#post_process_file("filename.sql", "-- sql code\\n", :passed)' do
+      it do
+        post_process = runner.post_process_file('filename.sql', "-- sql code\n", :passed)
+        expect(post_process).to eq ['-- sql code', :passed]
+      end
+    end
+  end
+
+  describe 'parent methods' do
+    describe '#run!' do
+
+      context 'malformed queries' do
+        Fixture.get(:syntax_error).each do | fixture |
+          context "- with '#{fixture['query']}'" do
+            let(:result) { run_fixture fixture }
+            it "should fails with '#{fixture['expected_error']}'" do
+              expect(result[1]).to eq :failed
+              expect(result[0]).to match fixture['expected_error']
+            end
+          end
+        end
+      end
+
+      context 'well-formed queries' do
+        Fixture.get(:valid_queries).each do | fixture |
+          context "- with: #{fixture['query']}" do
+            let(:result) { run_fixture fixture }
+            expected = fixture['expected_result']
+            it "should passed and returns '#{Regexp.escape(expected.to_s)}" do
+              expect(result[1]).to eq :passed
+              expect(result[0]).to eq fixture['expected_result']
+            end
+          end
+        end
+      end
+
+    end
   end
 
   def run_fixture(fixture)
