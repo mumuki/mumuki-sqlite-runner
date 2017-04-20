@@ -130,7 +130,7 @@ describe SqliteTestHook do
 
   describe '#run!' do
 
-    context 'program fails with this syntax errors:' do
+    context 'fails and returns the expected error with this queries' do
       Fixture.get(:syntax_error).each do | fixture |
         it "- #{fixture['name']}: #{fixture['query']}" do
           result = run_fixture fixture
@@ -141,7 +141,7 @@ describe SqliteTestHook do
       end
     end
 
-    context 'program obtain valid records with this queries:' do
+    context 'works and returns the expected result with this queries' do
       Fixture.get(:valid_queries).each do | fixture |
         it "- #{fixture['name']}: #{fixture['query']}" do
           result = run_fixture fixture
