@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>README - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-Mumuki+Sqlite+Runner">Mumuki Sqlite Runner</a>
+    <li><a href="#label-Disclaimer">Disclaimer</a>
+    <li><a href="#label-Install">Install</a>
+    <li><a href="#label-Clone+the+Project">Clone the Project</a>
+    <li><a href="#label-Install+Ruby+Environment">Install Ruby Environment</a>
+    <li><a href="#label-Install+Docker+Environment">Install Docker Environment</a>
+    <li><a href="#label-Run+Tests">Run Tests</a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./README_md.html">README</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page README.md">
+
+<p><a href="https://travis-ci.org/leandrojdl/mumuki-sqlite-runner"><img
+src="https://travis-ci.org/leandrojdl/mumuki-sqlite-runner.svg?branch=master"></a>
+<a
+href="https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner"><img
+src="https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/badges/gpa.svg"></a>
+<a
+href="https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/coverage"><img
+src="https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/badges/coverage.svg"></a></p>
+
+<h1 id="label-Mumuki+Sqlite+Runner">Mumuki <a href="Sqlite.html">Sqlite</a> Runner<span><a href="#label-Mumuki+Sqlite+Runner">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Motor de SQLite para integrarse a la <a
+href="https://mumuki.io/">Plataforma Mumuki</a>.</p>
+
+<h2 id="label-Disclaimer">Disclaimer<span><a href="#label-Disclaimer">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<blockquote>
+<p>Este proyecto nace a partir del <em>Proyecto de Inserción Profesional</em>,
+el cual estoy desarrollando para el cierre de la Tecnicatura en
+Programación Informática en la Universidad Nacional de Quilmes.</p>
+
+<p>Es por ello que tanto el proyecto como esta documentación se encuentran en
+constante construcción.</p>
+
+<p>La información asociada al informe del <em>TIP</em> puede encontrarse en la
+<a href="https://github.com/leandrojdl/mumuki-sqlite-runner/wiki">Wiki</a>.</p>
+
+<p>El resto del <a href="README_md.html">README</a> será utilizado como
+detalle de instalación y funcionamiento del <em>Runner</em>.</p>
+</blockquote>
+
+<h2 id="label-Install">Install<span><a href="#label-Install">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<h4 id="label-Clone+the+Project">Clone the Project<span><a href="#label-Clone+the+Project">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<pre>$ git clone https://github.com/leandrojdl/mumuki-sqlite-runner
+$ cd mumuki-sqlite-runner</pre>
+
+<h4 id="label-Install+Ruby+Environment">Install Ruby Environment<span><a href="#label-Install+Ruby+Environment">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p><a href="https://github.com/rbenv/rbenv#installation">Install rbenv</a></p>
+
+<pre># install ruby
+$ rbenv install 2.3.1
+$ rbenv rehash
+
+# install bundle gem
+$ gem install bundler
+
+# install project dependencies
+$ bundle install</pre>
+
+<h3 id="label-Install+Docker+Environment">Install Docker Environment<span><a href="#label-Install+Docker+Environment">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p><a href="https://docs.docker.com/engine/installation/">Install Docker</a></p>
+
+<p>Verify docker installation</p>
+
+<pre>$ sudo docker run hello-world</pre>
+
+<p>Allow docker run without root privileges</p>
+
+<pre># Create the docker group
+$ sudo groupadd docker
+
+# Add your user to the docker group.
+$ sudo usermod -aG docker [your-user]</pre>
+
+<p>Log out and log back in SO that your group membership is re-evaluated.</p>
+
+<p>Then Verify that you can run docker commands without sudo.</p>
+
+<pre>$ docker run hello-world</pre>
+
+<p>Pull docker container</p>
+
+<pre>$ docker pull leandrojdl/mumuki-sqlite-worker</pre>
+
+<h4 id="label-Run+Tests">Run Tests<span><a href="#label-Run+Tests">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<pre>$ rspec spec/runner_spec.rb    # temporary until the project is complete</pre>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
