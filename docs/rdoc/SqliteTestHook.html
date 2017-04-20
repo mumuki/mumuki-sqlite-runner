@@ -91,6 +91,9 @@
 
   <section class="description">
     
+<p>This Hook allow to run <a href="Sqlite.html">Sqlite</a> Worker from an
+adhoc program that receives .sql files.</p>
+
   </section>
 
   
@@ -125,13 +128,13 @@
 
         <div class="method-description">
           
-          
+          <p>Define command to run by worker</p>
           
           
 
           
           <div class="method-source-code" id="command_line-source">
-            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 11</span>
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">command_line</span>(<span class="ruby-identifier">filename</span>)
   <span class="ruby-node">&quot;runsql #{filename}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -158,13 +161,13 @@
 
         <div class="method-description">
           
-          
+          <p>Define the .sql file template from request structure</p>
           
           
 
           
           <div class="method-source-code" id="compile_file_content-source">
-            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 15</span>
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">compile_file_content</span>(<span class="ruby-identifier">request</span>)
   <span class="ruby-operator">&lt;&lt;</span><span class="ruby-operator">~</span><span class="ruby-constant">SQL</span>
     <span class="ruby-operator">-</span><span class="ruby-operator">-</span> <span class="ruby-constant">CREATE</span>
@@ -198,13 +201,13 @@
 
         <div class="method-description">
           
-          
+          <p>Define how output results</p>
           
           
 
           
           <div class="method-source-code" id="post_process_file-source">
-            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 26</span>
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post_process_file</span>(<span class="ruby-identifier">_file</span>, <span class="ruby-identifier">result</span>, <span class="ruby-identifier">status</span>)
   <span class="ruby-identifier">output</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>
   [<span class="ruby-identifier">output</span>, <span class="ruby-identifier">status</span>]
@@ -232,13 +235,13 @@
 
         <div class="method-description">
           
-          
+          <p>Just define file extension</p>
           
           
 
           
           <div class="method-source-code" id="tempfile_extension-source">
-            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 7</span>
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tempfile_extension</span>
   <span class="ruby-string">&#39;.sql&#39;</span>
 <span class="ruby-keyword">end</span></pre>

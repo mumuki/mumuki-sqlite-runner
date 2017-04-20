@@ -1,4 +1,4 @@
-Thu, 20 Apr 2017 10:39:06 -0300
+Thu, 20 Apr 2017 11:03:09 -0300
 README.md	Sat, 08 Apr 2017 00:08:28 -0300
 lib/checker.rb	Fri, 07 Apr 2017 10:19:53 -0300
 lib/html_renderer.rb	Fri, 07 Apr 2017 10:20:51 -0300
@@ -6,4 +6,4 @@ lib/metadata_hook.rb	Fri, 07 Apr 2017 10:25:21 -0300
 lib/multiple_executions_runner.rb	Fri, 07 Apr 2017 10:22:00 -0300
 lib/sqlite_runner.rb	Fri, 07 Apr 2017 23:20:24 -0300
 lib/subject.rb	Mon, 20 Mar 2017 22:27:51 -0300
-lib/test_hook.rb	Sat, 15 Apr 2017 17:58:12 -0300
+lib/test_hook.rb	Thu, 20 Apr 2017 11:03:05 -0300
