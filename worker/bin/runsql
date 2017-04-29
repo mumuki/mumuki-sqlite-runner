@@ -1,5 +1,6 @@
 #!/bin/sh
 FILE="$1"
+ERROR="error.log"
 OUTPUT="sqlite_output.txt"
 SQL1="mql_create.sql"
 SQL2="mql_inserts.sql"
@@ -11,9 +12,17 @@ SQL4="mql_select-alu.sql"
 for i in `seq 1 4`; do
     eval SQL_FILE=\${SQL${i}}
     echo "-- ${SQL_FILE}" >> ${OUTPUT}
-    (sqlite3 mumuki < ${SQL_FILE}) >> ${OUTPUT}
+    (sqlite3 mumuki < ${SQL_FILE}) >> ${OUTPUT} 2>> ${ERROR}
 done
 
-(cat ${OUTPUT}) 2>&1
+# if error has no content, then exit success, else error
+if [ $(tr -d "\r\n" < ${ERROR}|wc -c) -eq 0 ]; then
+    EXIT=${OUTPUT}
+    CODE=0
+else
+    EXIT=${ERROR}
+    CODE=1
+fi
 
-exit $?
+(cat ${EXIT}) 2>&1
+exit ${CODE}

@@ -27,4 +27,4 @@ diff:
 	$(DIFF) mql_select-alu.expect mql_select-alu.sql
 
 clean:
-	rm -f mqlsplit mql_*.sql .trash sqlite_output.txt mumuki
+	rm -f mqlsplit mql_*.sql .trash sqlite_output.txt mumuki error.log
