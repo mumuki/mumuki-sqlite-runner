@@ -1,0 +1,19 @@
+#!/bin/sh
+FILE="$1"
+OUTPUT="sqlite_output.txt"
+SQL1="mql_create.sql"
+SQL2="mql_inserts.sql"
+SQL3="mql_select-doc.sql"
+SQL4="mql_select-alu.sql"
+
+(mqlsplit.py ${FILE}) > /dev/null
+
+for i in `seq 1 4`; do
+    eval SQL_FILE=\${SQL${i}}
+    echo "-- ${SQL_FILE}" >> ${OUTPUT}
+    (sqlite3 mumuki < ${SQL_FILE}) >> ${OUTPUT}
+done
+
+(cat ${OUTPUT}) 2>&1
+
+exit $?

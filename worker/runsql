@@ -1,7 +1,0 @@
-#!/bin/sh
-
-FILE="$1"
-
-(sqlite3 mumuki < ${FILE}) 2>&1
-
-exit $?

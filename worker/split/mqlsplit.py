@@ -1,42 +1,44 @@
 #!/usr/bin/python
 
-import sys
+from sys import *
 
 TAG = '-- '
-buffer = ''
-block_name = ''
-filename   = ".trash"
 
 def write_file(filename, buffer):
     file = open(filename, "w")
     file.write(buffer.strip() + "\n")
     file.close()
 
-if len(sys.argv) <= 1:
-    print "Error: file needed as argument."
-    sys.exit(1);
+def get_filename(line):
+    name = line.strip()
+    name = name.replace(TAG, "")
+    name = name.lower()
+    return "mql_" + name + ".sql";
 
-infile = sys.argv[1]
+if __name__ == '__main__':
 
-with open(infile) as f:
-    content = f.readlines()
+    if len(argv) <= 1:
+        print "Error: file needed as argument."
+        exit(1);
 
-for line in content:
-    if line.startswith(TAG):
-        # flush buffer
-        write_file(filename, buffer)
+    # init vars
+    buffer   = ''
+    filename = ".trash"
 
-        # get new block name
-        block_name = line.strip()
-        block_name = block_name.replace(TAG, "")
-        block_name = block_name.lower()
+    # read entire file
+    with open(argv[1]) as file:
+        content = file.readlines()
 
-        # set new tmp vars
-        filename = "mql_" + block_name + ".sql";
-        buffer = '';
+    # process file line by line
+    for line in content:
+        if line.startswith(TAG):
+            # flush buffer into file & restart vars
+            write_file(filename, buffer)
+            buffer   = ''
+            filename = get_filename(line)
 
-    # save line
-    buffer += line;
+        # buffer line
+        buffer += line;
 
-# flush last block
-write_file (filename, buffer);
+    # flush buffer into las file
+    write_file(filename, buffer);
