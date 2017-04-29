@@ -1,0 +1,4 @@
+-- SELECT-DOC
+select name from test;
+
+

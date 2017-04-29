@@ -1,0 +1,2 @@
+-- SELECT-ALU
+select * from test;
