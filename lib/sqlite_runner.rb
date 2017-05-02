@@ -15,3 +15,6 @@ require_relative './test_hook'
 # require_relative './checker'
 # require_relative './multiple_executions_runner'
 # require_relative './html_renderer'
+
+# sqlite module helpers
+require_relative './sqlite/output_processor'

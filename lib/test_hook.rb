@@ -21,19 +21,17 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # Define the .sql file template from request structure
   def compile_file_content(request)
     <<~SQL
-      -- CREATE
-      #{request.creation}
-      -- DATA
-      #{request.data}
-      -- QUERY
-      #{request.content}
+      #{request.extra.strip}
+      -- SELECT-ALU
+      #{request.content.strip}
     SQL
   end
 
   # Define how output results
   def post_process_file(_file, result, status)
-    output = result.strip
-    [output, status]
+    output = Sqlite::OutputProcessor.new result
+
+    [output.select_alu, status]
   end
 
 end
