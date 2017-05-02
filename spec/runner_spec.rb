@@ -80,19 +80,22 @@ describe SqliteTestHook do
   end
 
   describe 'parent methods' do
-    # describe '#run!' do
-    #
-    #   context 'malformed queries' do
-    #     Fixture.get(:syntax_error).each do | fixture |
-    #       context "- with '#{fixture['query']}'" do
-    #         let(:result) { run_fixture fixture }
-    #         it "should fails with '#{fixture['expected_error']}'" do
-    #           expect(result[1]).to eq :failed
-    #           expect(result[0]).to match fixture['expected_error']
-    #         end
-    #       end
-    #     end
-    #   end
+    describe '#run!' do
+
+      context 'malformed queries' do
+        Fixture.get(:syntax_error).each do | fixture |
+          context "- with '#{fixture['content']}'" do
+
+            it "should fails with '#{fixture['expected']}'" do
+              result = run_fixture fixture
+
+              expect(result[1]).to eq :failed
+              expect(result[0]).to match fixture['expected']
+            end
+
+          end
+        end
+      end
     #
     #   context 'well-formed queries' do
     #     Fixture.get(:valid_queries).each do | fixture |
@@ -107,14 +110,14 @@ describe SqliteTestHook do
     #     end
     #   end
     #
-    # end
+    end
   end
 
   def run_fixture(fixture)
-    req = struct content: fixture['query'],
-                 creation: fixture['creation'],
-                 data: fixture['data']
-    file = runner.compile(req)
+    req = struct extra: fixture['extra'],
+                 content: fixture['content'],
+                 test: fixture['test']
+    file = runner.compile req
     runner.run! file
   end
 

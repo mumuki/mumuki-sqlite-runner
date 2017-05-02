@@ -1,15 +1,19 @@
-- name: Syntax Error 1
-  query: selec * from test;
-  expected_error: !ruby/regexp '/Error: near line \d: near "selec": syntax error/'
+- extra: none
+  content: selec * from test;
+  test: none
+  expected: !ruby/regexp '/Error: near line \d: near "selec": syntax error/'
 
-- name: Syntax Error 2
-  query: select from test;
-  expected_error: !ruby/regexp '/Error: near line \d: near "from": syntax error/'
+- extra: none
+  content: select from test;
+  test: none
+  expected: !ruby/regexp '/Error: near line \d: near "from": syntax error/'
 
-- name: Syntax Error 3
-  query: select * fro test;
-  expected_error: !ruby/regexp '/Error: near line \d: near "fro": syntax error/'
+- extra: none
+  content: select * fro test;
+  test: none
+  expected: !ruby/regexp '/Error: near line \d: near "fro": syntax error/'
 
-- name: Syntax Error 4
-  query: select * from test
-  expected_error: !ruby/regexp '/Error: incomplete SQL: select \* from test/'
+- extra: none
+  content: select * from test
+  test: none
+  expected: !ruby/regexp '/Error: incomplete SQL: select \* from test/'

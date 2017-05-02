@@ -18,7 +18,7 @@ before_install:
   - docker pull leandrojdl/mumuki-sqlite-worker
 
 script:
-  - rspec spec/runner_spec.rb
+  - bundle exec rspec spec/runner_spec.rb spec/sqlite/
 
 after_success:
   - bundle exec codeclimate-test-reporter

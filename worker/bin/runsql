@@ -7,22 +7,30 @@ SQL2="mql_inserts.sql"
 SQL3="mql_select-doc.sql"
 SQL4="mql_select-alu.sql"
 
+# create files to prevent errors if not exists
+touch ${ERROR}
+touch ${SQL1}
+touch ${SQL2}
+touch ${SQL3}
+touch ${SQL4}
+
+# split input request
 (mqlsplit.py ${FILE}) > /dev/null
 
+# run each sql file
 for i in `seq 1 4`; do
     eval SQL_FILE=\${SQL${i}}
     echo "-- ${SQL_FILE}" >> ${OUTPUT}
-    (sqlite3 mumuki < ${SQL_FILE}) >> ${OUTPUT} 2>> ${ERROR}
+    (sqlite3 mumuki < ${SQL_FILE}) >> ${OUTPUT} 2>&1  # save stdout & stderr to the output-file to be sent back
+    (sqlite3 mumuki_error < ${SQL_FILE}) 2>> ${ERROR} # save stderr into error-file to check for errors
 done
 
-# if error has no content, then exit success, else error
+## if error has no content, then exit success, else error
 if [ $(tr -d "\r\n" < ${ERROR}|wc -c) -eq 0 ]; then
-    EXIT=${OUTPUT}
     CODE=0
 else
-    EXIT=${ERROR}
     CODE=1
 fi
 
-(cat ${EXIT}) 2>&1
+(cat ${OUTPUT}) 2>&1
 exit ${CODE}
