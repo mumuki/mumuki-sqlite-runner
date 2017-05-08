@@ -36,7 +36,12 @@ module Sqlite
 
     # Returns output corresponding to the student query
     def select_alu
-      @data['select-alu'.to_sym]
+      data 'select-alu'
+    end
+
+    # Returns output corresponding to the teacher query
+    def select_doc
+      data 'select-doc'
     end
 
     protected
@@ -47,6 +52,10 @@ module Sqlite
 
     def extract_name(line)
       line.to_s.gsub(/-- mql_/, '').gsub(/.sql/, '').strip.to_sym
+    end
+
+    def data(key)
+      @data[key.to_sym].strip
     end
 
   end

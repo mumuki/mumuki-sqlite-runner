@@ -48,7 +48,7 @@ describe SqliteTestHook do
     end
 
     describe '#post_process_file' do
-      it 'output result set when query passed and match with expected' do
+      it 'returns "OK" when query passed and match with expected' do
         result = <<~OUTPUT
           -- mql_create.sql
           -- mql_inserts.sql
@@ -64,17 +64,46 @@ describe SqliteTestHook do
           Test 3
         OUTPUT
 
-        output_expected = <<~DATASET
+        post_process = runner.post_process_file('', result, :passed)
+
+        expect(post_process[1]).to eq :passed
+        expect(post_process[0]).to eq 'OK'
+      end
+
+      it 'returns "La consulta no coincide" when query passed but not match with expected' do
+        result = <<~OUTPUT
+          -- mql_create.sql
+          -- mql_inserts.sql
+          -- mql_select-doc.sql
           name
           Test 1
           Test 2
           Test 3
-        DATASET
+          -- mql_select-alu.sql
+          name
+          Test 1
+          Test 2
+        OUTPUT
 
-        post_process = runner.post_process_file('filename.sql', result, :passed)
+        post_process = runner.post_process_file('', result, :passed)
 
-        expect(post_process[1]).to eq :passed
-        expect(post_process[0]).to eq output_expected
+        expect(post_process[1]).to eq :errored
+        expect(post_process[0]).to eq 'La consulta no coincide'
+      end
+
+      it 'returns Error message when query fail' do
+        result = <<~OUTPUT
+          -- mql_create.sql
+          -- mql_inserts.sql
+          -- mql_select-doc.sql
+          -- mql_select-alu.sql
+          Error near something
+        OUTPUT
+
+        post_process = runner.post_process_file('', result, :failed)
+
+        expect(post_process[1]).to eq :failed
+        expect(post_process[0]).to eq 'Error near something'
       end
     end
   end
@@ -82,9 +111,9 @@ describe SqliteTestHook do
   describe 'parent methods' do
     describe '#run!' do
 
-      context 'malformed queries' do
+      context 'with malformed queries' do
         Fixture.get(:syntax_error).each do | fixture |
-          context "- with '#{fixture['content']}'" do
+          context "'#{fixture['content']}'" do
 
             it "should fails with '#{fixture['expected']}'" do
               result = run_fixture fixture
@@ -96,20 +125,17 @@ describe SqliteTestHook do
           end
         end
       end
-    #
-    #   context 'well-formed queries' do
-    #     Fixture.get(:valid_queries).each do | fixture |
-    #       context "- with: #{fixture['query']}" do
-    #         let(:result) { run_fixture fixture }
-    #         expected = fixture['expected_result']
-    #         it "should passed and returns '#{Regexp.escape(expected.to_s)}" do
-    #           expect(result[1]).to eq :passed
-    #           expect(result[0]).to eq fixture['expected_result']
-    #         end
-    #       end
-    #     end
-    #   end
-    #
+
+      context 'with well-formed queries' do
+        Fixture.get(:valid_queries).each_with_index do | fixture, index |
+          it "Test ##{index+1} should pass and returns OK" do
+            result = run_fixture fixture
+            expect(result[1]).to eq :passed
+            expect(result[0]).to eq 'OK'
+          end
+        end
+      end
+
     end
   end
 

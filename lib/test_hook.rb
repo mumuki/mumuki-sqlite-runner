@@ -19,6 +19,13 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   end
 
   # Define the .sql file template from request structure
+  # request = {
+  #   test: (string) teacher's code that define which testing verification student code should pass,
+  #   extra: (string) teacher's code that prepare field where student code should run,
+  #   content: (string) student code,
+  #   expectations: [mulang verifications] todo: better explain
+  # }
+  #
   def compile_file_content(request)
     <<~SQL
       #{request.extra.strip}
@@ -31,7 +38,19 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   def post_process_file(_file, result, status)
     output = Sqlite::OutputProcessor.new result
 
-    [output.select_alu, status]
+    # FIXME do some better
+    case status
+      when :passed
+        if output.select_alu.eql? output.select_doc
+          ['OK', :passed]
+        else
+          ['La consulta no coincide', :errored]
+        end
+      when :failed
+        [output.select_alu, status]
+      else
+        [output, status]
+    end
   end
 
 end
