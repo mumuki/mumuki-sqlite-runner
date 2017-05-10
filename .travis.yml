@@ -6,7 +6,7 @@ env:
   global:
     secure: Or2qNYOGS6QUg6PtRzotoNNjpNmgT+nEBPAanXKD89awppkvqviEN1gYj7FYjos9jejqFtJZEoRRgGMIbAvetwAgZqYZXikMWH56VtNkdEJY3eofhEcCBcYku5uWAxbAxrPAPjwbg+tKqPANZ+cyO/LsWJTmXvMCpFLx7PoF6LIC5gQmzhuScm5PFXCQTSzHH+OPqyYuVICNY/XOIH1icPFvzSNjmFqy12Uknd7QJ1nsmYYDZ8l5A10LwTxIZJtXmWF7ZRv1lOZfnLxAadPJMLHiGB3Stci2g+mD/O3K8jHF8tq6I1329nAbNQIFArLsKtkzjujUHAHbzsW0YDnxB1391E+6SRA50Q4HNoN7VDx1u+lS8fH+1hbCgfpuWmbM1Q5zOuKgbVLiFio6o+A96K/xf/NyuUQnhC0gappvycDOGbL8e2DkKAF2+OlJEOirLLuyoPBqzRdt2N6EnwGSgRfHMFgVwMco321GBaYhHAPRWJ0r3whPDi0KN+pl7dbwpCAj1yRnF+pVHpj+VGH3e4X7fLeoeDLOc2PSeZKD7EOFViGSCKz8Lghqb5muOjkTd5cMfUR+60qujo3/47PSa+jLoybOrR2VjjNsslyJGG9ZhRu2Xk3yB8G131k2rMFfVwQ9meFE7bayscShwFsC17+zgiu09MuHc7bb3Fd4Rpc=
 
-sudo: true
+sudo: false
 
 rvm:
   - 2.3.1
@@ -18,7 +18,6 @@ before_install:
   - docker pull leandrojdl/mumuki-sqlite-worker
 
 before_script:
-  - touch $LOG_PATH
   - mv .env.travis .env
 
 script:
