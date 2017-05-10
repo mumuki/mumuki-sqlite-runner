@@ -13,6 +13,7 @@
       select * from test1;
   content: "select * from test1;"
   test: none
+  count: 0
 
 -
   extra: |
@@ -28,3 +29,4 @@
       select name from test2;
   content: "select name from test2;"
   test: none
+  count: 0

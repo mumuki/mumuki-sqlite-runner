@@ -17,11 +17,17 @@ services:
 before_install:
   - docker pull leandrojdl/mumuki-sqlite-worker
 
+before_script:
+  - mv .env.travis .env
+
 script:
-  - bundle exec rspec spec/runner_spec.rb spec/sqlite/
+  - bundle exec rspec
 
 after_success:
   - bundle exec codeclimate-test-reporter
+
+after_failure:
+  - cat $LOG_PATH
 
 notifications:
   email:

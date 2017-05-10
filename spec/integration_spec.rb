@@ -2,51 +2,59 @@ require 'active_support/all'
 require 'mumukit/bridge'
 
 describe 'Server' do
-  extend Fixture
 
   before(:all) do
-    @pid = Process.spawn 'rackup -p 4568', err: '/dev/null'
-    sleep 8
+    @pid = Process.spawn 'rackup -p 4568', err: ENV['LOG_PATH']
+    sleep 2
   end
 
-  after(:all) { Process.kill 'TERM', @pid }
+  after(:all) do
+    Process.kill 'TERM', @pid
+  end
 
   shared_examples_for 'a successful submission' do |program, tests, extra = '', examples_count: 1|
     context 'answers a valid hash when submission passes' do
       let(:response) { run_tests(program, tests, extra) }
 
-      it { expect(response[:response_type]).to eq :structured }
+      it { expect(response[:response_type]).to eq :unstructured }
       it { expect(response[:test_results].size).to eq examples_count }
       it { expect(response[:status]).to eq :passed }
     end
+    end
 
-    def run_tests(program, tests, extra)
-      bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')
-      bridge.run_tests!(test: tests, extra: extra, content: program, expectations: [])
+  shared_examples_for 'a syntax-error submission' do |program, tests, extra = '', examples_count: 1|
+    context 'answers a failed hash when submission has syntax errors' do
+      let(:response) { run_tests(program, tests, extra) }
+
+      it { expect(response[:response_type]).to eq :unstructured }
+      it { expect(response[:test_results].size).to eq examples_count }
+      it { expect(response[:status]).to eq :failed }
     end
   end
 
-  context 'given a single example' do
-    it_behaves_like 'a successful submission', q1_ok_program, q1_ok_program_examples
+  Fixture.get(:valid_queries).each_with_index do |fixture, index|
+    context "given the ##{index+1} valid query example" do
+      it_behaves_like 'a successful submission',
+                      fixture['content'],
+                      fixture['test'],
+                      fixture['extra'],
+                      examples_count: fixture['count']
+    end
   end
 
-  context 'given multiples examples' do
-    it_behaves_like 'a successful submission',
-                    r1_times_r2_program,
-                    r1_times_r2_program_examples,
-                    examples_count: 2
+  Fixture.get(:syntax_error).each_with_index do |fixture, index|
+    context "given the ##{index+1} syntax-error example" do
+      it_behaves_like 'a syntax-error submission',
+                      fixture['content'],
+                      fixture['test'],
+                      fixture['extra'],
+                      examples_count: 0
+    end
   end
 
-  context 'given a subject' do
-    it_behaves_like 'a successful submission',
-                    times_three_program,
-                    times_three_program_examples
+  def run_tests(program, tests, extra)
+    bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')
+    bridge.run_tests!(test: tests, extra: extra, content: program, expectations: [])
   end
 
-  context 'given extra code' do
-    it_behaves_like 'a successful submission',
-                    times_two_program,
-                    times_two_program_examples,
-                    times_two_program_extra
-  end
 end

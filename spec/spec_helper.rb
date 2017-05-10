@@ -1,5 +1,6 @@
 require 'rspec'
 require 'simplecov'
+require 'dotenv/load'
 require_relative './data/fixture'
 
 SimpleCov.start

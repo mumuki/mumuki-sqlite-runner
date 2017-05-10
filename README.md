@@ -82,5 +82,5 @@ $ docker pull leandrojdl/mumuki-sqlite-worker
 #### Run Tests
 
 ```bash
-$ rspec spec/runner_spec.rb    # temporary until the project is complete
+$ bundle exec rspec
 ```

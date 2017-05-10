@@ -1,5 +1,3 @@
-require 'pp'
-require_relative 'data/fixture'
 
 describe 'SqliteTestHook as isolated FileHook' do
 

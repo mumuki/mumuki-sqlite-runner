@@ -1,5 +1,3 @@
-require 'pp'
-
 ##
 # This Hook allow to run Sqlite Worker from an adhoc program that receives .sql files.
 
