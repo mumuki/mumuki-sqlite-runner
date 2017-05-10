@@ -27,6 +27,6 @@ describe Sqlite::OutputProcessor do
       Test 4
     EXPECTED
 
-    expect(processor.select_alu).to eq expected
+    expect(processor.select_alu).to eq expected.strip
   end
 end
