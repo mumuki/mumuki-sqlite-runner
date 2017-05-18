@@ -18,6 +18,7 @@
  - Forwardear el port del postgres para evitar conflicto con conexiones propias.
    Actualmente hay que usar 127.0.0.1:5432 para conectar desde el guest al vagrant.
    Si alguien tiene un motor corriendo en el guest no va a poder conectar contra la base del vagrant.
+   Además, configurar postgres para que pueda ser accedido desde fuera de vagrant.
    - **Opción 1**: 5432 (guest) => 54322 (host)
    - **Opción 2**: Definirle una IP propia al vagrant en vez de que use localhost
    

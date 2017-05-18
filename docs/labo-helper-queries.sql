@@ -1,5 +1,4 @@
-﻿
-SELECT "schema_migrations".* FROM "schema_migrations"
+﻿SELECT "schema_migrations".* FROM "schema_migrations"
 
 --  Organization Load (0.5ms)
 SELECT "organizations".* FROM "organizations"  WHERE "organizations"."name" = 'localmumuki' LIMIT 1
@@ -32,6 +31,43 @@ SELECT  "languages".* FROM "languages"  WHERE "languages"."id" = 15 LIMIT 1;
 -- Guide Load (0.5ms)
 SELECT  "guides".* FROM "guides"  WHERE "guides"."id" = 116 LIMIT 1;
 
-select * from exercises where id = 1401;
+select * from lessons;
 
-select * from books;
+select * from assignments;
+
+select * from guides
+where id = 116
+where name like '%Funciones y Tipos de Datos, revisado%';
+
+select * from exercises where id = 1401 or id = 1402;
+
+select * from paths;
+
+select * from books order by name asc;
+
+select * from chapters;
+
+select * from topics;
+
+select ch.id, ch.number, ch.book_id, b.name, b.description, ch.topic_id, t.name, t.description
+from chapters as ch
+left join books as b on b.id = ch.book_id
+left join topics as t on t.id = ch.topic_id
+-- where t.name like '%Imperativ%'
+where b.id = 27
+
+select * from usages
+where item_id in (116, 165);
+
+
+SELECT  "usages".* 
+FROM "usages"  
+WHERE "usages"."item_id" = 33 
+AND "usages"."item_type" = 'Topic' 
+AND "usages"."organization_id" = 1  
+ORDER BY "usages"."id" 
+ASC LIMIT 1  
+-- [["item_id", 33], ["item_type", "Topic"]]
+
+select * from usages order by item_type
+where item_type = 'Chapter';
