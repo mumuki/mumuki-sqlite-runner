@@ -1,5 +1,5 @@
 import unittest
-from mql import *
+from mqlparser import *
 
 
 class TestMQLParser(unittest.TestCase):
@@ -30,19 +30,20 @@ class TestMQLParser(unittest.TestCase):
         self.assertEqual('init', get_tag('-- #INIT'))
 
     def test_mql_parser(self):
-        content = """
-        -- #init
-        create table ...;
-        insert into ...;
-        -- #solution
-        select ... from ...;
-        -- DATASET
-        insert into table1;
-        -- DATASET
-        insert into table2;
-        -- #student
-        select ... from ...;
-        """
+        content = [
+            '-- #init\n',
+            'create table ...;\n',
+            'insert into ...;\n',
+            '-- #solution\n',
+            'select ... from ...;\n',
+            '-- DATASET\n',
+            'insert into table1;\n',
+            '-- DATASET\n',
+            'insert into table2;\n',
+            '-- #student\n',
+            'select ... from ...;'
+        ]
+
         parser = MQLParser(content)
         parser.compile()
         self.assertFalse(parser.has_error())

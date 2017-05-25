@@ -1,20 +1,8 @@
 #!/usr/bin/python
 
-""" Parse inputs like this:
+from subprocess import *
 
--- #init
-create table ...;
-insert into ...;
--- #solution
-select ... from ...;
--- DATASET
-insert into ...;
--- DATASET
-insert into ...;
--- #student
-select ... from ...;
-
-into dictionary like this:
+""" Receive a dictionary like this:
 
 program = {
     'init': "create table ...;\ninsert into ...;",
@@ -26,70 +14,132 @@ program = {
     'student': "select ... from ...;"
 }
 
-if error, dictionary includes 'error' key with description
+And Run sqlite3 with an empty mumuki database.
+
+Example:
+    clean mumuki database
+    run 'init'
+    run 'dataset'[0]
+    run 'solution'
+    run 'student'
+    
+    clean mumuki database
+    run 'init'
+    run 'dataset'[1]
+    run 'solution'
+    run 'student'
+    
+    ...
+
+
+Output expected if success:
+
+{
+    'solutions': [
+        'id|name|...\n1|test1|...\n1|test2|...\',
+        'id|name|...\n1|bla1|...\n1|bla2|...\',
+    ],
+    'results': [
+        'id|name|...\n1|test1|...\n1|test2|...\',
+        'id|name|...\n1|bla1|...\n1|bla2|...\',
+    ],
+}
+
+
+Output expected if error:
+
+{
+    'error': 'Error descriptions...'
+}
 """
 
 
-def is_tag(line):
-    str = line.strip()
-    return str.startswith('--') and str.replace('--', '').lower().strip() in ['#init', '#student', '#solution']
+def rm(filename):
+    call(['rm', '-f', filename])
 
 
-def is_dataset(line):
-    str = line.strip()
-    return str.startswith('--') and str.replace('--', '').lower().strip() == 'dataset'
+def clean_all():
+    rm('mumuki')
+    rm('init.sql')
+    rm('dataset.sql')
+    rm('solution.sql')
+    rm('student.sql')
 
 
-# PRE: is_tag(line)
-def get_tag(line):
-    return line.replace('--', '').replace('#', '').lower().strip()
+def clean_database():
+    rm('mumuki')
+    call(['touch', 'mumuki'])
 
 
-class MQLParser:
-    def __init__(self, input):
-        self.input = input
-        self.code = {
-            '.trash': "",
-            'init': "",
-            'student': "",
-            'solution': "",
-            'datasets': {},
+def dump(name, content):
+    file = open(name + '.sql', 'w')
+    file.write(content + '\n')
+    file.close()
+
+
+class RunException(Exception):
+    pass
+
+
+def command(filename):
+    return 'sqlite3 mumuki < {}.sql'.format(filename)
+
+
+class MQL:
+    def __init__(self, code):
+        self.code = code
+        self.result = {
+            'solutions': [],
+            'results': [],
         }
 
     def has_error(self):
-        return 'error' in self.code
+        return 'error' in self.result
 
     def error(self):
-        return self.code['error']
+        return self.result['error']
 
-    def get_code(self):
-        return self.code
+    def get_result(self):
+        return self.result
 
-    def compile(self):
-        di = 0
-        current = '.trash'
-        for line in self.input.splitlines():
-            line = line.strip()
-            if is_tag(line):
-                current = get_tag(line)
+    def dump(self, name):
+        dump(name, self.code[name])
 
-            elif is_dataset(line):
-                current = 'datasets'
-                di += 1
-                self.code[current][di] = ""
+    def run(self):
+        self.dump('init')
+        self.dump('solution')
+        self.dump('student')
 
-            elif current == 'datasets':
-                self.code[current][di] = self.code[current][di] + line + "\n"
+        for dataset in self.code['datasets']:
+            try:
+                dump('dataset', dataset)
+                self.run_dataset()
+            except RunException:
+                clean_all()
+                return
 
+        clean_all()
+
+    def run_dataset(self):
+        clean_database()
+        self._run('init')
+        self._run('dataset')
+        self._run('solution')
+        self._run('student')
+
+    def _run(self, param):
+        try:
+            output = check_output(command(param), stderr=STDOUT, shell=True)
+        except CalledProcessError as e:
+            self.result['error'] = {
+                'code': e.returncode,
+                'output': e.output,
+            }
+            raise RunException
+        else:
+            if param == 'solution':
+                self.result['solutions'].append(output)
+            elif param == 'student':
+                self.result['results'].append(output)
             else:
-                self.code[current] = self.code[current] + line + "\n"
-
-        self._clean_compiled()
-
-    def _clean_compiled(self):
-        del self.code['.trash']
-        for key in ['init', 'student', 'solution']:
-            self.code[key] = self.code[key].strip()
-        for k in self.code['datasets'].keys():
-            self.code['datasets'][k] = self.code['datasets'][k].strip()
-        self.code['datasets'] = self.code['datasets'].values()
+                pass

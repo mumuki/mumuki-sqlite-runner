@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
 from sys import argv
-from mql import MQLParser
+from mql import MQL
+from mqlparser import MQLParser
 
 
 args_error = """
 Error: file needed as argument.
-Example: python mql.py test.sql
+Example: python mql.py INPUT.sql
 """
 
 
@@ -25,12 +26,14 @@ if __name__ == '__main__':
         print parser.error()
         exit(1)
 
-    print parser.get_code()
+    # # temp until MQL is ready
+    # print parser.get_code()
 
-    # result = MQL(parser.get_code()).run()
-    #
-    # if result.has_error():
-    #     print result.error()
-    #     exit(1)
-    #
-    # print result.parse_output()
+    mql = MQL(parser.get_code())
+    mql.run()
+
+    if mql.has_error():
+        print mql.error()
+        exit(1)
+
+    print mql.get_result()
