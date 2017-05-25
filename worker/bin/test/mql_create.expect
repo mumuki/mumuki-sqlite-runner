@@ -1,4 +1,0 @@
--- CREATE
-create table test ( name varchar(200) );
-
-

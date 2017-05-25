@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import json
 from sys import argv
 from mql import MQL
 from mqlparser import MQLParser
@@ -36,4 +37,4 @@ if __name__ == '__main__':
         print mql.error()
         exit(1)
 
-    print mql.get_result()
+    print json.dumps(mql.get_result(), indent=4)

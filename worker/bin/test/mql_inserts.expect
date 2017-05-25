@@ -1,6 +1,0 @@
--- INSERTS
-insert into test values ('Test 1');
-insert into test values ('Test 2');
-insert into test values ('Test 3');
-
-

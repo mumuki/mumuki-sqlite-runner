@@ -1,30 +1,13 @@
-CXX=g++
 PY=python
-CFLAGS=-Wall -std=c++11
-DIFF=diff --ignore-blank-lines
+DIFF=diff --ignore-blank-lines --ignore-trailing-space
 
-.PHONY: all clean runsql test pytest diff
+.PHONY: all clean pytest
 
-all: clean runsql
-
-mqlsplit: mqlsplit.cpp
-	$(CXX) $(CFLAGS) $^ -o $@
-
-test:
-	./mqlsplit test.sql
+all: clean pytest
 
 pytest:
-	$(PY) mqlsplit.py test.sql
-
-runsql:
-	./runsql test.sql
-	$(DIFF) sqlite_output.expect sqlite_output.txt
-
-diff:
-	$(DIFF) mql_create.expect     mql_create.sql
-	$(DIFF) mql_inserts.expect    mql_inserts.sql
-	$(DIFF) mql_select-doc.expect mql_select-doc.sql
-	$(DIFF) mql_select-alu.expect mql_select-alu.sql
+	$(PY) runmql.py test/INPUT.sql > test/OUTPUT.json
+	$(DIFF) test/EXPECTED.json test/OUTPUT.json
 
 clean:
-	rm -f mqlsplit mql_*.sql .trash sqlite_output.txt mumuki error.log
+	rm -f *.pyc mumuki test/OUTPUT.json
