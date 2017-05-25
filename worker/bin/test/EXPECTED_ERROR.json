@@ -1,0 +1,4 @@
+{
+  "output": "Error: incomplete SQL: select name from test\n",
+  "code": 1
+}

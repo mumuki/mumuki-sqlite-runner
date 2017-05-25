@@ -5,11 +5,14 @@ from sys import argv
 from mql import MQL
 from mqlparser import MQLParser
 
-
 args_error = """
 Error: file needed as argument.
 Example: python mql.py INPUT.sql
 """
+
+
+def as_json(content):
+    return json.dumps(content, indent=2)
 
 
 if __name__ == '__main__':
@@ -24,17 +27,14 @@ if __name__ == '__main__':
     parser.compile()
 
     if parser.has_error():
-        print parser.error()
+        print as_json(parser.error())
         exit(1)
-
-    # # temp until MQL is ready
-    # print parser.get_code()
 
     mql = MQL(parser.get_code())
     mql.run()
 
     if mql.has_error():
-        print mql.error()
+        print as_json(mql.error())
         exit(1)
 
-    print json.dumps(mql.get_result(), indent=4)
+    print as_json(mql.get_result())
