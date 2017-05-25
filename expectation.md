@@ -2,23 +2,24 @@
 # in student code is not required opening tags
 # in teacher's, instead, it is
 #
-# Is important to use tags with this explicit name with these freedoms
-#  - order
-#  - case insensitive
+# Important: tags must be like example below;
+# If are different, script could not work as expected
+#
+# Is allowed:
+#  - change blocks order between each request part
+#  - case insensitive on tags (sql syntax is parsed by engine)
 request = {
   test: '
-    -- SOLUTION
     select ... from ...;
-    -- DATASET-TEST-1
+    -- DATASET
     insert into ...;
     insert into ...;
     ...
-    -- DATASET-TEST-n
+    -- DATASET
     insert into ...;
     insert into ...;
   ',
   extra: '
-    -- CREATE
     create table ...;
     insert into ...;
     # any sql sentences needed to prepare field
@@ -38,11 +39,11 @@ request = {
 
 def compile_file_content(request)
   <<~SQL
-    -- [init]
+    -- #init
     #{request.extra.strip}
-    -- [tests]
+    -- #solution
     #{request.test.strip}
-    -- [student]
+    -- #student
     #{request.content.strip}
   SQL
 end
@@ -53,26 +54,34 @@ end
 
 # expect string with this format
 #
-# -- [solutions] # teacher query results
-# -- SOLUTION-1
+# -- #solutions # teacher query results
+# -- SOLUTION 1
 # id|name|age
 #  1|Foo|10
-# -- SOLUTION-2
+# -- SOLUTION 2
 # id|name|age
 #  1|Foo|10
 #  3|Bar|15
-# -- [results]  # student query results
-# -- SOLUTION-1 # correct
+# -- #results  # student query results
+# -- SOLUTION 1 # correct
 # id|name|age
 #  1|Foo|10
-# -- SOLUTION-2 # wrong
+# -- SOLUTION 2 # wrong
 # id|name|age
 #  1|Foo|10
 #  4|Baz|17
 #
 # return {
-#  solutions: [string SOLUTION-1, string SOLUTION-2, ..],
-#  results: [string RESULT-1, string RESULT-2, ..],
+#  solutions: {
+#   1: string SOLUTION 1,
+#   2: string SOLUTION 2,
+#   ...
+#  },
+#  results: {
+#   1: string RESULT 1,
+#   2: string RESULT 2,
+#   ...
+#  },
 # }
 def process(_result)
   # do the work ...
