@@ -14,7 +14,6 @@ request = {
     -- DATASET
     insert into ...;
     insert into ...;
-    ...
     -- DATASET
     insert into ...;
     insert into ...;
@@ -51,40 +50,19 @@ end
 def post_process_file(_file, result, status)
   [process(result), status]
 end
+```
 
-# expect string with this format
-#
-# -- #solutions # teacher query results
-# -- SOLUTION 1
-# id|name|age
-#  1|Foo|10
-# -- SOLUTION 2
-# id|name|age
-#  1|Foo|10
-#  3|Bar|15
-# -- #results  # student query results
-# -- SOLUTION 1 # correct
-# id|name|age
-#  1|Foo|10
-# -- SOLUTION 2 # wrong
-# id|name|age
-#  1|Foo|10
-#  4|Baz|17
-#
-# return {
-#  solutions: {
-#   1: string SOLUTION 1,
-#   2: string SOLUTION 2,
-#   ...
-#  },
-#  results: {
-#   1: string RESULT 1,
-#   2: string RESULT 2,
-#   ...
-#  },
-# }
-def process(_result)
-  # do the work ...
-end
+`post_process_file` expects result with this format:
 
+```json
+{
+ "solutions": [
+  "id|name|age\n1|Foo|10",
+  "id|name|age\n1|Foo|10\n3|Bar|15"
+ ],
+ "results": [
+  "id|name|age\n1|Foo|10",
+  "id|name|age\n1|Foo|10\n4|Baz|17"
+ ]
+}
 ```
