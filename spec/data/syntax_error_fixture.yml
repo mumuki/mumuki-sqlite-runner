@@ -1,19 +1,19 @@
-- extra: none
+- extra: -- none
   content: selec * from test;
-  test: none
+  test: -- none
   expected: !ruby/regexp '/Error: near line \d: near "selec": syntax error/'
 
-- extra: none
+- extra: -- none
   content: select from test;
-  test: none
+  test: -- none
   expected: !ruby/regexp '/Error: near line \d: near "from": syntax error/'
 
-- extra: none
+- extra: -- none
   content: select * fro test;
-  test: none
+  test: -- none
   expected: !ruby/regexp '/Error: near line \d: near "fro": syntax error/'
 
-- extra: none
+- extra: -- none
   content: select * from test
-  test: none
+  test: -- none
   expected: !ruby/regexp '/Error: incomplete SQL: select \* from test/'

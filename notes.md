@@ -125,21 +125,20 @@ La tabla `test1` contiene 2 registros:
 
 El ejercicio requiere generar una consulta que retorne todos los registros de la tabla.
 MD
-ej1.test = '-- NONE'
+ej1.test = <<-SQL
+select * from test1;
+-- DATASET
+INSERT INTO test1 (name) values ('Name 1');
+INSERT INTO test1 (name) values ('Name 2');
+SQL
 ej1.language_id = sqlite.id
 ej1.guide_id = bd_guide.id
 ej1.hint = 'Escribí `select * from test1;`'
 ej1.extra = <<-SQL
--- CREATE
 CREATE TABLE test1 (
-id integer primary key,
-name varchar(200) NOT NULL
+  id integer primary key,
+  name varchar(200) NOT NULL
 );
--- INSERTS
-INSERT INTO test1 (name) values ('Name 1');
-INSERT INTO test1 (name) values ('Name 2');
--- SELECT-DOC
-select * from test1;
 SQL
 ej1.number = 1
 ej1.corollary = 'Va queriendo...'

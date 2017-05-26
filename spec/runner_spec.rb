@@ -1,3 +1,4 @@
+require 'json'
 
 describe 'SqliteTestHook as isolated FileHook' do
 
@@ -5,22 +6,49 @@ describe 'SqliteTestHook as isolated FileHook' do
 
 
   describe '#tempfile_extension' do
-    it { expect(runner.tempfile_extension).to eq '.sql' }
+    it { expect(runner.tempfile_extension).to eq '.json' }
   end
 
-  describe '#command_line "file.sql"' do
-    let(:command) { runner.command_line 'file.sql'          }
-    it            { expect(command).to eq 'runsql file.sql' }
+  describe '#command_line "file.json"' do
+    let(:command) { runner.command_line 'file.json'          }
+    it            { expect(command).to eq 'runsql file.json' }
   end
 
-  describe '#compile_file_content {extra, content}' do
-    let(:req) { struct extra: 'extra', content: 'content', test: ':test'}
-    it do
-      expected = <<~SQL
-        extra
-        -- SELECT-ALU
-        content
+  describe '#compile_file_content {extra, content, test}' do
+    let(:req) do
+
+      test = <<~SQL
+        select * from test
+        --DATASET
+        insert into test values (1)
+        --    DATASET    
+        insert into test values (2)
+          --dataset
+        insert into test values (3)
+        --   dataset  
+        
+        insert into test values (4)
+        -- more on same dataset
+        insert into test values (4.1)
       SQL
+
+      struct extra: 'create table test',
+             content: 'select id from test',
+             test: test
+    end
+
+    it do
+      expected = {
+          init: 'create table test',
+          solution: 'select * from test',
+          student:  'select id from test',
+          datasets: [
+              'insert into test values (1)',
+              'insert into test values (2)',
+              'insert into test values (3)',
+              "insert into test values (4)\n-- more on same dataset\ninsert into test values (4.1)"
+          ],
+      }.to_json
 
       expect(runner.compile_file_content(req)).to eq expected
     end
@@ -28,58 +56,36 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#post_process_file' do
     it 'returns "OK" when query passed and match with expected' do
-      result = <<~OUTPUT
-        -- mql_create.sql
-        -- mql_inserts.sql
-        -- mql_select-doc.sql
-        name
-        Test 1
-        Test 2
-        Test 3
-        -- mql_select-alu.sql
-        name
-        Test 1
-        Test 2
-        Test 3
-      OUTPUT
+      result = {
+        solutions: ['solution 1', 'solution 2'],
+        results:   ['solution 1', 'solution 2']
+      }
 
-      post_process = runner.post_process_file('', result, :passed)
+      post_process = runner.post_process_file('', result.to_json, :passed)
 
       expect(post_process[1]).to eq :passed
       expect(post_process[0]).to eq 'OK'
     end
 
     it 'returns "La consulta no coincide" when query passed but not match with expected' do
-      result = <<~OUTPUT
-        -- mql_create.sql
-        -- mql_inserts.sql
-        -- mql_select-doc.sql
-        name
-        Test 1
-        Test 2
-        Test 3
-        -- mql_select-alu.sql
-        name
-        Test 1
-        Test 2
-      OUTPUT
+      result = {
+          solutions: ['solution 1', 'solution 2'],
+          results:   ['solution 1', 'solution 3']
+      }
 
-      post_process = runner.post_process_file('', result, :passed)
+      post_process = runner.post_process_file('', result.to_json, :passed)
 
       expect(post_process[1]).to eq :errored
       expect(post_process[0]).to eq 'La consulta no coincide'
     end
 
     it 'returns Error message when query fail' do
-      result = <<~OUTPUT
-        -- mql_create.sql
-        -- mql_inserts.sql
-        -- mql_select-doc.sql
-        -- mql_select-alu.sql
-        Error near something
-      OUTPUT
+      result = {
+          output: 'Error near something',
+          code: 1
+      }
 
-      post_process = runner.post_process_file('', result, :failed)
+      post_process = runner.post_process_file('', result.to_json, :failed)
 
       expect(post_process[1]).to eq :failed
       expect(post_process[0]).to eq 'Error near something'

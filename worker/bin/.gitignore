@@ -1,3 +1,2 @@
 .trash
-mql_*.sql
-mqlsplit
+*.pyc
