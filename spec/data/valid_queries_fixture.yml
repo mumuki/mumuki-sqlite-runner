@@ -1,32 +1,28 @@
 ---
 -
   extra: |-
-      -- CREATE
-      CREATE TABLE test1 (
-        id integer primary key,
-        name varchar(200) NOT NULL
-      );
-      -- INSERTS
-      INSERT INTO test1 (name) values ('Name 1');
-      INSERT INTO test1 (name) values ('Name 2');
-      -- SELECT-DOC
-      select * from test1;
+    CREATE TABLE test1 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
   content: "select * from test1;"
-  test: none
+  test: |-
+    select * from test1;
+    -- DATASET
+    INSERT INTO test1 (name) values ('Name 1');
+    INSERT INTO test1 (name) values ('Name 2');
   count: 0
 
 -
   extra: |
-      -- CREATE
-      CREATE TABLE test2 (
-        id integer primary key,
-        name varchar(200) NOT NULL
-      );
-      -- INSERTS
-      INSERT INTO test2 (name) values ('Name 1');
-      INSERT INTO test2 (name) values ('Name 2');
-      -- SELECT-DOC
-      select name from test2;
+    CREATE TABLE test2 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
   content: "select name from test2;"
-  test: none
+  test: |-
+    select name from test2;
+    -- DATASET
+    INSERT INTO test2 (name) values ('Name 1');
+    INSERT INTO test2 (name) values ('Name 2');
   count: 0
