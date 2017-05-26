@@ -7,11 +7,10 @@ COPY config/sqliterc /root/.sqliterc
 COPY bin/runsql.sh /bin/runsql
 COPY bin/runmql.py /bin/runmql.py
 COPY bin/mql.py /bin/mql.py
-COPY bin/mqlparser.py /bin/mqlparser.py
 
 # temporary copy for testing
-COPY bin/test/INPUT.sql /INPUT.sql
-COPY bin/test/INPUT_ERROR.sql /INPUT_ERROR.sql
+COPY bin/test/INPUT.json /INPUT.json
+COPY bin/test/INPUT_ERROR.json /INPUT_ERROR.json
 
 RUN chmod u+x /bin/runsql
 RUN chmod u+x /bin/runmql.py

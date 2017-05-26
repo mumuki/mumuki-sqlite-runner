@@ -8,11 +8,11 @@ DIFF=diff --ignore-blank-lines --ignore-trailing-space
 all: clean test test_error
 
 test:
-	$(SHELL) runsql.sh test/INPUT.sql > test/OUTPUT.json
+	$(SHELL) runsql.sh test/INPUT.json > test/OUTPUT.json
 	$(DIFF) test/EXPECTED.json test/OUTPUT.json
 
 test_error:
-	$(SHELL) runsql.sh test/INPUT_ERROR.sql > test/OUTPUT_ERROR.json
+	$(SHELL) runsql.sh test/INPUT_ERROR.json > test/OUTPUT_ERROR.json
 	$(DIFF) test/EXPECTED_ERROR.json test/OUTPUT_ERROR.json
 
 clean:

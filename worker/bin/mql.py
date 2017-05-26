@@ -78,7 +78,8 @@ def dump(name, content):
 
 
 class RunException(Exception):
-    pass
+    def __init__(self, message):
+        self.message = message
 
 
 def command(filename):
@@ -96,7 +97,7 @@ class MQL:
     def has_error(self):
         return 'error' in self.result
 
-    def error(self):
+    def get_error(self):
         return self.result['error']
 
     def get_result(self):
@@ -110,15 +111,19 @@ class MQL:
         self.dump('solution')
         self.dump('student')
 
+        if not self.code['datasets']:
+            self.code['datasets'] = ["-- none"]
+
         for dataset in self.code['datasets']:
             try:
                 dump('dataset', dataset)
                 self.run_dataset()
             except RunException:
                 clean_all()
-                return
+                return self
 
         clean_all()
+        return self
 
     def run_dataset(self):
         clean_database()
@@ -135,7 +140,7 @@ class MQL:
                 'code': e.returncode,
                 'output': e.output,
             }
-            raise RunException
+            raise RunException('Error: ' + e.output)
         else:
             if param == 'solution':
                 self.result['solutions'].append(output)
