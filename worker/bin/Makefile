@@ -17,4 +17,4 @@ test_error:
 	$(DIFF) test/EXPECTED_ERROR.json test/OUTPUT_ERROR.json
 
 clean:
-	rm -f *.pyc mumuki test/OUTPUT.json test/OUTPUT_ERROR.json
+	rm -f *.pyc mumuki.sqlite test/OUTPUT.json test/OUTPUT_ERROR.json

@@ -1,2 +1,8 @@
 .trash
 *.pyc
+mumuki.sqlite
+init.sql
+dataset.sql
+solution.sql
+student.sql
+

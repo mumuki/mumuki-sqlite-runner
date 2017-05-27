@@ -53,22 +53,20 @@ Output expected if error:
 }
 """
 
+DATABASE = 'mumuki.sqlite'
+
 
 def rm(filename):
     call(['rm', '-f', filename])
 
 
 def clean_all():
-    rm('mumuki')
-    rm('init.sql')
-    rm('dataset.sql')
-    rm('solution.sql')
-    rm('student.sql')
+    map(clean, [DATABASE, 'init.sql', 'dataset.sql', 'solution.sql', 'student.sql'])
 
 
-def clean_database():
-    rm('mumuki')
-    call(['touch', 'mumuki'])
+def clean(file):
+    rm(file)
+    call(['touch', file])
 
 
 def dump(name, content):
@@ -83,11 +81,7 @@ class RunException(Exception):
 
 
 def command(filename):
-    return 'sqlite3 mumuki < {}.sql'.format(filename)
-
-
-def list_to_dict(list):
-    return {key: value.strip() for key, value in enumerate(list)}
+    return 'sqlite3 {db} < {file}.sql'.format(db=DATABASE, file=filename)
 
 
 class MQL:
@@ -111,6 +105,7 @@ class MQL:
         dump(name, self.code[name])
 
     def run(self):
+        clean_all()
         self.dump('init')
         self.dump('solution')
         self.dump('student')
@@ -131,7 +126,7 @@ class MQL:
         return self
 
     def run_dataset(self):
-        clean_database()
+        clean(DATABASE)
         self._run('init')
         self._run('dataset')
         self._run('solution')
@@ -155,5 +150,5 @@ class MQL:
                 pass
 
     def post_process(self):
-        self.result['solutions'] = list_to_dict(self.result['solutions'])
-        self.result['results'] = list_to_dict(self.result['results'])
+        self.result['solutions'] = map(str.strip, self.result['solutions'])
+        self.result['results'] = map(str.strip, self.result['results'])
