@@ -87,7 +87,7 @@ def command(filename):
 
 
 def list_to_dict(list):
-    return {key: value for key, value in enumerate(list)}
+    return {key: value.strip() for key, value in enumerate(list)}
 
 
 class MQL:
@@ -143,7 +143,7 @@ class MQL:
         except CalledProcessError as e:
             self.result['error'] = {
                 'code': e.returncode,
-                'output': e.output,
+                'output': e.output.strip(),
             }
             raise RunException('Error: ' + e.output)
         else:

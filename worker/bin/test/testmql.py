@@ -31,10 +31,10 @@ class TestMQL(unittest.TestCase):
         self.assertFalse(mql.has_error())
         self.assertEquals(2, len(result['solutions']))
         self.assertEquals(2, len(result['results']))
-        self.assertEquals("name\nTest 1.1\nTest 1.2\nTest 1.3\n", result['solutions'][0])
-        self.assertEquals("name\nTest 2.1\nTest 2.2\nTest 2.3\n", result['solutions'][1])
-        self.assertEquals("id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3\n", result['results'][0])
-        self.assertEquals("id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3\n", result['results'][1])
+        self.assertEquals("name\nTest 1.1\nTest 1.2\nTest 1.3", result['solutions'][0])
+        self.assertEquals("name\nTest 2.1\nTest 2.2\nTest 2.3", result['solutions'][1])
+        self.assertEquals("id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3", result['results'][0])
+        self.assertEquals("id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3", result['results'][1])
 
     def test_run_error(self):
         # Arrange
@@ -52,7 +52,7 @@ class TestMQL(unittest.TestCase):
         # Assert
         self.assertTrue(mql.has_error())
         self.assertEquals(1, error['code'])
-        self.assertEquals("Error: incomplete SQL: select name from test\n", error['output'])
+        self.assertEquals("Error: incomplete SQL: select name from test", error['output'])
 
 
 if __name__ == '__main__':
