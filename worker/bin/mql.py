@@ -86,6 +86,10 @@ def command(filename):
     return 'sqlite3 mumuki < {}.sql'.format(filename)
 
 
+def list_to_dict(list):
+    return {key: value for key, value in enumerate(list)}
+
+
 class MQL:
     def __init__(self, code):
         self.code = code
@@ -123,6 +127,7 @@ class MQL:
                 return self
 
         clean_all()
+        self.post_process()
         return self
 
     def run_dataset(self):
@@ -148,3 +153,7 @@ class MQL:
                 self.result['results'].append(output)
             else:
                 pass
+
+    def post_process(self):
+        self.result['solutions'] = list_to_dict(self.result['solutions'])
+        self.result['results'] = list_to_dict(self.result['results'])

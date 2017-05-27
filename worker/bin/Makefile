@@ -8,6 +8,7 @@ DIFF=diff --ignore-blank-lines --ignore-trailing-space
 all: clean test test_error
 
 test:
+	python test/testmql.py
 	$(SHELL) runsql.sh test/INPUT.json > test/OUTPUT.json
 	$(DIFF) test/EXPECTED.json test/OUTPUT.json
 
