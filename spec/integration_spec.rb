@@ -16,19 +16,19 @@ describe 'Server' do
     context 'answers a valid hash when submission passes' do
       let(:response) { run_tests(program, tests, extra) }
 
-      it { expect(response[:response_type]).to eq :unstructured }
-      it { expect(response[:test_results].size).to eq examples_count }
       it { expect(response[:status]).to eq :passed }
+      it { expect(response[:response_type]).to eq :structured }
+      it { expect(response[:test_results].size).to eq examples_count }
     end
-    end
+  end
 
   shared_examples_for 'a syntax-error submission' do |program, tests, extra = '', examples_count: 1|
     context 'answers a failed hash when submission has syntax errors' do
       let(:response) { run_tests(program, tests, extra) }
 
+      it { expect(response[:status]).to eq :failed }
       it { expect(response[:response_type]).to eq :unstructured }
       it { expect(response[:test_results].size).to eq examples_count }
-      it { expect(response[:status]).to eq :failed }
     end
   end
 

@@ -63,8 +63,13 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       post_process = runner.post_process_file('', result.to_json, :passed)
 
-      expect(post_process[1]).to eq :passed
-      expect(post_process[0]).to eq 'OK'
+      expect(post_process[0][0][0]).to eq 'Dataset 1'
+      expect(post_process[0][0][1]).to eq :passed
+      expect(post_process[0][0][2]).to eq "Consulta correcta!\n\nsolution 1"
+
+      expect(post_process[0][1][0]).to eq 'Dataset 2'
+      expect(post_process[0][1][1]).to eq :passed
+      expect(post_process[0][1][2]).to eq "Consulta correcta!\n\nsolution 2"
     end
 
     it 'returns "La consulta no coincide" when query passed but not match with expected' do
@@ -75,8 +80,9 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       post_process = runner.post_process_file('', result.to_json, :passed)
 
-      expect(post_process[1]).to eq :errored
-      expect(post_process[0]).to eq 'La consulta no coincide'
+      expect(post_process[0][1][0]).to eq 'Dataset 2'
+      expect(post_process[0][1][1]).to eq :failed
+      expect(post_process[0][1][2]).to eq "Las consultas no coinciden\n\nSe esperaba solution 2 pero se obtuvo solution 3"
     end
 
     it 'returns Error message when query fail' do
@@ -113,8 +119,10 @@ describe 'SqliteTestHook as isolated FileHook' do
         Fixture.get(:valid_queries).each_with_index do | fixture, index |
           it "Test ##{index+1} should pass and returns OK" do
             result = run_fixture fixture
-            expect(result[1]).to eq :passed
-            expect(result[0]).to eq 'OK'
+
+            expect(result[0][0][0]).to eq 'Dataset 1'
+            expect(result[0][0][1]).to eq :passed
+            expect(result[0][0][2]).to include 'Consulta correcta!'
           end
         end
       end

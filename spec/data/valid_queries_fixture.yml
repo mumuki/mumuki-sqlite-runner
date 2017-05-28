@@ -11,7 +11,7 @@
     -- DATASET
     INSERT INTO test1 (name) values ('Name 1');
     INSERT INTO test1 (name) values ('Name 2');
-  count: 0
+  count: 1
 
 -
   extra: |
@@ -25,4 +25,4 @@
     -- DATASET
     INSERT INTO test2 (name) values ('Name 1');
     INSERT INTO test2 (name) values ('Name 2');
-  count: 0
+  count: 1
