@@ -1,0 +1,82 @@
+<style>
+  table.sqlite_error {
+    display: inline-block;
+  }
+  table.sqlite_result {
+    display: inline-block;
+    border: 1px solid #0B465D;
+  }
+  table.sqlite_result {
+    display: inline-block;
+    border: 1px solid darkred;
+  }
+  table.sqlite_error tr:nth-child(even) {
+    background-color: #FBC2C4;
+  }
+  table.sqlite_error tr:nth-child(odd) {
+    background-color: #FFFFFF;
+  }
+  table.sqlite_error th {
+    color: white;
+    font-weight: bold;
+    background-color: #FFA07A;
+  }
+  table.sqlite_error td {
+    text-align: left;
+    width: 50px;
+  }
+</style>
+
+<h4>Dataset <%= @dataset %></h4>
+<h5><%= @error %></h5>
+
+<div class="row">
+
+  <!-- Result -->
+  <div class="col-md-6">
+    <table class="table table-bordered sqlite_error sqlite_result">
+      <thead>
+      <tr>
+        <% @result_headers.each do |header| %>
+            <th><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @result_rows.each do |row| %>
+          <tr>
+            <% row.each do |field| %>
+                <td><%= field %></td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Solution -->
+  <div class="col-md-6">
+    <table class="table table-bordered sqlite_error sqlite_solution">
+      <thead>
+      <tr>
+        <% @solution_headers.each do |header| %>
+            <th><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @solution_rows.each do |row| %>
+          <tr>
+            <% row.each do |field| %>
+                <td><%= field %></td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

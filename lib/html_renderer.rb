@@ -2,66 +2,37 @@ require 'active_support/inflector'
 
 module Sqlite
   class HtmlRenderer
-    def render(result, output)
-      @output = output
-      @result = {}
-      output.keys.each do |output_key|
-        fields = range(output_key, output)
-                   .map { |key| [key_for(output_key, key), '0000'] }
-                   .to_h
-                   .merge(result[output_key])
-                   .sort
-        @result[output_key] = fields
-      end
-      template_file.result binding
+
+    def render_success(result)
+      @dataset = result[:id]
+      @headers, @rows = split_rows(result[:rows])
+      template_file_success.result binding
     end
 
-    private
-
-    def template_file
-      ERB.new File.read("#{__dir__}/view/records.html.erb")
+    def render_error(result, solution, error)
+      @error = error
+      @dataset = result[:id]
+      @result_headers, @result_rows = split_rows(result[:rows])
+      @solution_headers, @solution_rows = split_rows(solution[:rows])
+      template_file_error.result binding
     end
 
-    def to_memory(number)
-      number.to_s(16).rjust(4, '0').upcase.to_sym
+    def split_rows(result)
+      rows = result.split(/\n+/i)
+      headers = rows.shift.split(/\|/)
+      rows = rows.map { |row| row.split(/\|/) }
+      return headers, rows
     end
 
-    def to_record(number)
-      "R#{number}".to_sym
+    protected
+
+    def template_file_success
+      ERB.new File.read("#{__dir__}/view/rows_success.html.erb")
     end
 
-    def to_flag(number)
-      number.to_sym
+    def template_file_error
+      ERB.new File.read("#{__dir__}/view/rows_error.html.erb")
     end
 
-    def to_special_record(record)
-      record.to_sym
-    end
-
-    def memory_range(options)
-      from = options[:memory][:from].to_hex
-      to = options[:memory][:to].to_hex
-      (from..to)
-    end
-
-    def range(output_key, output)
-      send("#{output_key}_range", output)
-    end
-
-    def key_for(output_key, key)
-      send("to_#{output_key}".singularize, key)
-    end
-
-    def records_range(_)
-      (0..7)
-    end
-
-    def flags_range(_)
-      %w(N Z V C).map(&:to_sym)
-    end
-
-    def special_records_range(_)
-      %w(SP PC IR).map(&:to_sym)
-    end
   end
 end
