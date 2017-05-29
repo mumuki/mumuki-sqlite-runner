@@ -65,11 +65,11 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expect(post_process[0][0][0]).to eq 'Dataset 1'
       expect(post_process[0][0][1]).to eq :passed
-      expect(post_process[0][0][2]).to eq "Consulta correcta!\n\nsolution 1"
+      expect(post_process[0][0][2]).to include 'Consulta correcta!'
 
       expect(post_process[0][1][0]).to eq 'Dataset 2'
       expect(post_process[0][1][1]).to eq :passed
-      expect(post_process[0][1][2]).to eq "Consulta correcta!\n\nsolution 2"
+      expect(post_process[0][1][2]).to include 'Consulta correcta!'
     end
 
     it 'returns "La consulta no coincide" when query passed but not match with expected' do
@@ -82,7 +82,7 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expect(post_process[0][1][0]).to eq 'Dataset 2'
       expect(post_process[0][1][1]).to eq :failed
-      expect(post_process[0][1][2]).to eq "Las consultas no coinciden\n\nSe esperaba solution 2 pero se obtuvo solution 3"
+      expect(post_process[0][1][2]).to include 'Las consultas no coinciden'
     end
 
     it 'returns Error message when query fail' do

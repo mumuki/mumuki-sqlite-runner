@@ -1,0 +1,42 @@
+<style>
+  table.sqlite_success {
+    width: auto;
+    border: none;
+  }
+  table.sqlite_success tr:nth-child(even) {
+    background-color: #DDDDDD;
+  }
+  table.sqlite_success tr:nth-child(odd) {
+    background-color: #FFFFFF;
+  }
+  table.sqlite_success th {
+    color: white;
+    font-weight: bold;
+    background-color: #BBBBBB;
+  }
+  table.sqlite_success td {
+    width: auto;
+    text-align: left;
+  }
+</style>
+
+<h5>Consulta correcta!</h5>
+<table class="table table-bordered sqlite_success">
+  <thead>
+  <tr>
+  <% @headers.each do |header| %>
+    <th><%= header %></th>
+  <% end %>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @rows.each do |row| %>
+      <tr>
+      <% row.each do |field| %>
+        <td><%= field %></td>
+      <% end %>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,81 @@
+<style>
+  table.sqlite_error {
+    width: auto;
+  }
+  table.sqlite_result {
+    border: 3px solid #0B465D;
+  }
+  table.sqlite_solution {
+    border: 3px solid darkred;
+  }
+  table.sqlite_error tr:nth-child(even) {
+    background-color: #DDDDDD;
+  }
+  table.sqlite_error tr:nth-child(odd) {
+    background-color: #FFFFFF;
+  }
+  table.sqlite_error th {
+    color: white;
+    font-weight: bold;
+    background-color: #2E2F30;
+  }
+    table.sqlite_error td {
+      width: auto;
+      text-align: left;
+    }
+</style>
+
+<h5><%= @error %></h5>
+
+<div class="row">
+
+  <!-- Result -->
+  <div class="col-md-6">
+    <h6>Se esperaba:</h6>
+    <table class="table table-bordered sqlite_error sqlite_result">
+      <thead>
+      <tr>
+        <% @result_headers.each do |header| %>
+            <th><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @result_rows.each do |row| %>
+          <tr>
+            <% row.each do |field| %>
+                <td><%= field %></td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Solution -->
+  <div class="col-md-6">
+    <h6>Se obtuvo:</h6>
+    <table class="table table-bordered sqlite_error sqlite_solution">
+      <thead>
+      <tr>
+        <% @solution_headers.each do |header| %>
+            <th><%= header %></th>
+        <% end %>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @solution_rows.each do |row| %>
+          <tr>
+            <% row.each do |field| %>
+                <td><%= field %></td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

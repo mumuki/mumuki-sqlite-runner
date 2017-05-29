@@ -11,7 +11,7 @@ module Sqlite
       if check_equal(result[:rows], solution[:rows])
         [name, :passed, render_success_output(result)]
       else
-        [name, :failed, render_error_output(result, 'Las consultas no coinciden')]
+        [name, :failed, render_error_output(result, solution, 'Las consultas no coinciden')]
       end
 
     end
@@ -23,20 +23,16 @@ module Sqlite
       result == solution
     end
 
-    # Return success message to be printed
-    # Include row table
-    # Todo: call HtmlRenderer
+    # Return success page rendered with results
     def render_success_output(result)
-      # renderer.render(result, @output_options)
-      "Consulta correcta!\n\n#{result[:rows]}"
+      renderer.render_success result
+      # "Consulta correcta!\n\n#{result[:rows]}"
     end
 
-    # Return error message to be printed
-    # Include result rows & solution rows to show differences
-    # Todo: call HtmlRenderer
-    def render_error_output(result, error)
-      # "#{error}\n#{renderer.render(result, @output_options)}"
-      "#{error}\n\nSe esperaba #{result[:rows]} pero se obtuvo #{@solution}"
+    # Return error page rendered with results & solutions
+    def render_error_output(result, solution, error)
+      renderer.render_error result, solution, error
+      # "#{error}\n\nSe esperaba #{result[:rows]} pero se obtuvo #{solution[:rows]}"
     end
 
     private
