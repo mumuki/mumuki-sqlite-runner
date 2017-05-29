@@ -3,15 +3,13 @@
     display: inline-block;
   }
   table.sqlite_result {
-    display: inline-block;
     border: 1px solid #0B465D;
   }
-  table.sqlite_result {
-    display: inline-block;
+  table.sqlite_solution {
     border: 1px solid darkred;
   }
   table.sqlite_error tr:nth-child(even) {
-    background-color: #FBC2C4;
+    background-color: #DDDDDD;
   }
   table.sqlite_error tr:nth-child(odd) {
     background-color: #FFFFFF;
@@ -19,15 +17,10 @@
   table.sqlite_error th {
     color: white;
     font-weight: bold;
-    background-color: #FFA07A;
-  }
-  table.sqlite_error td {
-    text-align: left;
-    width: 50px;
+    background-color: #2E2F30;
   }
 </style>
 
-<h4>Dataset <%= @dataset %></h4>
 <h5><%= @error %></h5>
 
 <div class="row">
