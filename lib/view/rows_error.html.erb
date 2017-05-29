@@ -1,4 +1,7 @@
 <style>
+  table.sqlite_error {
+    width: auto;
+  }
   table.sqlite_result {
     border: 3px solid #0B465D;
   }
@@ -16,6 +19,10 @@
     font-weight: bold;
     background-color: #2E2F30;
   }
+    table.sqlite_error td {
+      width: auto;
+      text-align: left;
+    }
 </style>
 
 <h5><%= @error %></h5>
