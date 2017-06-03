@@ -70,7 +70,15 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-render">#render</a>
+    <li ><a href="#method-i-render_error">#render_error</a>
+    
+    <li ><a href="#method-i-render_success">#render_success</a>
+    
+    <li ><a href="#method-i-split_rows">#split_rows</a>
+    
+    <li ><a href="#method-i-template_file_error">#template_file_error</a>
+    
+    <li ><a href="#method-i-template_file_success">#template_file_success</a>
     
   </ul>
 </div>
@@ -106,11 +114,11 @@
        </header>
 
     
-      <div id="method-i-render" class="method-detail ">
+      <div id="method-i-render_error" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">render</span><span
-            class="method-args">(result, output)</span>
+          <span class="method-name">render_error</span><span
+            class="method-args">(result, solution, error)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -124,20 +132,159 @@
           
 
           
-          <div class="method-source-code" id="render-source">
-            <pre><span class="ruby-comment"># File lib/html_renderer.rb, line 5</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">output</span>)
-  <span class="ruby-ivar">@output</span> = <span class="ruby-identifier">output</span>
-  <span class="ruby-ivar">@result</span> = {}
-  <span class="ruby-identifier">output</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">output_key</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">fields</span> = <span class="ruby-identifier">range</span>(<span class="ruby-identifier">output_key</span>, <span class="ruby-identifier">output</span>)
-               .<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">key_for</span>(<span class="ruby-identifier">output_key</span>, <span class="ruby-identifier">key</span>), <span class="ruby-string">&#39;0000&#39;</span>] }
-               .<span class="ruby-identifier">to_h</span>
-               .<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">result</span>[<span class="ruby-identifier">output_key</span>])
-               .<span class="ruby-identifier">sort</span>
-    <span class="ruby-ivar">@result</span>[<span class="ruby-identifier">output_key</span>] = <span class="ruby-identifier">fields</span>
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">template_file</span>.<span class="ruby-identifier">result</span> <span class="ruby-identifier">binding</span>
+          <div class="method-source-code" id="render_error-source">
+            <pre><span class="ruby-comment"># File lib/html_renderer.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">render_error</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">solution</span>, <span class="ruby-identifier">error</span>)
+  <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">error</span>
+  <span class="ruby-ivar">@dataset</span> = <span class="ruby-identifier">result</span>[<span class="ruby-value">:id</span>]
+  <span class="ruby-ivar">@result_headers</span>, <span class="ruby-ivar">@result_rows</span> = <span class="ruby-identifier">split_rows</span>(<span class="ruby-identifier">result</span>[<span class="ruby-value">:rows</span>])
+  <span class="ruby-ivar">@solution_headers</span>, <span class="ruby-ivar">@solution_rows</span> = <span class="ruby-identifier">split_rows</span>(<span class="ruby-identifier">solution</span>[<span class="ruby-value">:rows</span>])
+  <span class="ruby-identifier">template_file_error</span>.<span class="ruby-identifier">result</span> <span class="ruby-identifier">binding</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-render_success" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">render_success</span><span
+            class="method-args">(result)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="render_success-source">
+            <pre><span class="ruby-comment"># File lib/html_renderer.rb, line 6</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">render_success</span>(<span class="ruby-identifier">result</span>)
+  <span class="ruby-ivar">@dataset</span> = <span class="ruby-identifier">result</span>[<span class="ruby-value">:id</span>]
+  <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@rows</span> = <span class="ruby-identifier">split_rows</span>(<span class="ruby-identifier">result</span>[<span class="ruby-value">:rows</span>])
+  <span class="ruby-identifier">template_file_success</span>.<span class="ruby-identifier">result</span> <span class="ruby-identifier">binding</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-split_rows" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">split_rows</span><span
+            class="method-args">(result)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="split_rows-source">
+            <pre><span class="ruby-comment"># File lib/html_renderer.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">split_rows</span>(<span class="ruby-identifier">result</span>)
+  <span class="ruby-identifier">rows</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\n+/i</span>)
+  <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">shift</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\|/</span>)
+  <span class="ruby-identifier">rows</span> = <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">row</span><span class="ruby-operator">|</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\|/</span>) }
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">headers</span>, <span class="ruby-identifier">rows</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="protected-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Protected Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-template_file_error" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">template_file_error</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="template_file_error-source">
+            <pre><span class="ruby-comment"># File lib/html_renderer.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">template_file_error</span>
+  <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-node">&quot;#{__dir__}/view/rows_error.html.erb&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-template_file_success" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">template_file_success</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="template_file_success-source">
+            <pre><span class="ruby-comment"># File lib/html_renderer.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">template_file_success</span>
+  <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-node">&quot;#{__dir__}/view/rows_success.html.erb&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           

@@ -70,7 +70,7 @@
 
   <ul class="link-list" role="directory">
     
-    <li class="calls-super" ><a href="#method-i-check">#check</a>
+    <li ><a href="#method-i-check">#check</a>
     
     <li ><a href="#method-i-check_equal">#check_equal</a>
     
@@ -116,7 +116,7 @@
         
         <div class="method-heading">
           <span class="method-name">check</span><span
-            class="method-args">(result, example)</span>
+            class="method-args">(result, solution)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -125,21 +125,24 @@
 
         <div class="method-description">
           
+          <p>Verify if example dataset is equals than result if ok: Return passed &amp;
+render success if ok else : return failed &amp; render error</p>
           
-          
-          
-            <div class="method-calls-super">
-              Calls superclass method
-              
-            </div>
           
 
           
           <div class="method-source-code" id="check-source">
-            <pre><span class="ruby-comment"># File lib/checker.rb, line 3</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">check</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">example</span>)
-  <span class="ruby-ivar">@output_options</span> = <span class="ruby-identifier">example</span>[<span class="ruby-value">:output</span>]
-  <span class="ruby-keyword">super</span>
+            <pre><span class="ruby-comment"># File lib/checker.rb, line 7</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">solution</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-node">&quot;Dataset #{solution[:id]}&quot;</span>
+  <span class="ruby-ivar">@solution</span> = <span class="ruby-identifier">solution</span>[<span class="ruby-value">:rows</span>]
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">check_equal</span>(<span class="ruby-identifier">result</span>[<span class="ruby-value">:rows</span>], <span class="ruby-identifier">solution</span>[<span class="ruby-value">:rows</span>])
+    [<span class="ruby-identifier">name</span>, <span class="ruby-value">:passed</span>, <span class="ruby-identifier">render_success_output</span>(<span class="ruby-identifier">result</span>)]
+  <span class="ruby-keyword">else</span>
+    [<span class="ruby-identifier">name</span>, <span class="ruby-value">:failed</span>, <span class="ruby-identifier">render_error_output</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">solution</span>, <span class="ruby-string">&#39;Las consultas no coinciden&#39;</span>)]
+  <span class="ruby-keyword">end</span>
+
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -155,7 +158,7 @@
         
         <div class="method-heading">
           <span class="method-name">check_equal</span><span
-            class="method-args">(result, records)</span>
+            class="method-args">(result, solution)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -164,18 +167,16 @@
 
         <div class="method-description">
           
-          
+          <p>Verify if both datasets are equals Temp: comparing raw strings Todo:
+convert into some struct and check headers, columns &amp; rows</p>
           
           
 
           
           <div class="method-source-code" id="check_equal-source">
-            <pre><span class="ruby-comment"># File lib/checker.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_equal</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">records</span>)
-  <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">record</span>, <span class="ruby-identifier">expected</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">actual</span> = <span class="ruby-identifier">result</span>[<span class="ruby-value">:records</span>][<span class="ruby-identifier">record</span>]
-    <span class="ruby-identifier">fail</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-value">:check_equal_failure</span>, <span class="ruby-identifier">record</span><span class="ruby-operator">:</span> <span class="ruby-identifier">record</span>, <span class="ruby-identifier">expected</span><span class="ruby-operator">:</span> <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span><span class="ruby-operator">:</span> <span class="ruby-identifier">actual</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">expected</span>
-  <span class="ruby-keyword">end</span>
+            <pre><span class="ruby-comment"># File lib/checker.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_equal</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">solution</span>)
+  <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">solution</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -191,7 +192,7 @@
         
         <div class="method-heading">
           <span class="method-name">render_error_output</span><span
-            class="method-args">(result, error)</span>
+            class="method-args">(result, solution, error)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -200,15 +201,16 @@
 
         <div class="method-description">
           
-          
+          <p>Return error page rendered with results &amp; solutions</p>
           
           
 
           
           <div class="method-source-code" id="render_error_output-source">
-            <pre><span class="ruby-comment"># File lib/checker.rb, line 19</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">render_error_output</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">error</span>)
-  <span class="ruby-node">&quot;#{error}\n#{renderer.render(result, @output_options)}&quot;</span>
+            <pre><span class="ruby-comment"># File lib/checker.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">render_error_output</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">solution</span>, <span class="ruby-identifier">error</span>)
+  <span class="ruby-identifier">renderer</span>.<span class="ruby-identifier">render_error</span> <span class="ruby-identifier">result</span>, <span class="ruby-identifier">solution</span>, <span class="ruby-identifier">error</span>
+  <span class="ruby-comment"># &quot;#{error}\n\nSe esperaba #{result[:rows]} pero se obtuvo #{solution[:rows]}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -233,15 +235,16 @@
 
         <div class="method-description">
           
-          
+          <p>Return success page rendered with results</p>
           
           
 
           
           <div class="method-source-code" id="render_success_output-source">
-            <pre><span class="ruby-comment"># File lib/checker.rb, line 15</span>
+            <pre><span class="ruby-comment"># File lib/checker.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">render_success_output</span>(<span class="ruby-identifier">result</span>)
-  <span class="ruby-identifier">renderer</span>.<span class="ruby-identifier">render</span>(<span class="ruby-identifier">result</span>, <span class="ruby-ivar">@output_options</span>)
+  <span class="ruby-identifier">renderer</span>.<span class="ruby-identifier">render_success</span> <span class="ruby-identifier">result</span>
+  <span class="ruby-comment"># &quot;Consulta correcta!\n\n#{result[:rows]}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

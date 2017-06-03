@@ -74,6 +74,12 @@
     
     <li ><a href="#method-i-compile_file_content">#compile_file_content</a>
     
+    <li ><a href="#method-i-framework">#framework</a>
+    
+    <li ><a href="#method-i-parse_test">#parse_test</a>
+    
+    <li ><a href="#method-i-post_process_datasets">#post_process_datasets</a>
+    
     <li ><a href="#method-i-post_process_file">#post_process_file</a>
     
     <li ><a href="#method-i-tempfile_extension">#tempfile_extension</a>
@@ -128,7 +134,7 @@ adhoc program that receives .sql files.</p>
 
         <div class="method-description">
           
-          <p>Define command to run by worker</p>
+          <p>Define the command to be run by sqlite worker</p>
           
           
 
@@ -161,22 +167,144 @@ adhoc program that receives .sql files.</p>
 
         <div class="method-description">
           
-          <p>Define the .sql file template from request structure</p>
+          <p>Define the .sql file template from request structure request = {</p>
+
+<pre>test: (string) teacher&#39;s code that define which testing verification student code should pass,
+extra: (string) teacher&#39;s code that prepare field where student code should run,
+content: (string) student code,
+expectations: [mulang verifications] todo: better explain</pre>
+
+<p>}</p>
           
           
 
           
           <div class="method-source-code" id="compile_file_content-source">
-            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">compile_file_content</span>(<span class="ruby-identifier">request</span>)
-  <span class="ruby-operator">&lt;&lt;</span><span class="ruby-operator">~</span><span class="ruby-constant">SQL</span>
-    <span class="ruby-operator">-</span><span class="ruby-operator">-</span> <span class="ruby-constant">CREATE</span>
-    <span class="ruby-comment">#{request.creation}</span>
-    <span class="ruby-operator">-</span><span class="ruby-operator">-</span> <span class="ruby-constant">DATA</span>
-    <span class="ruby-comment">#{request.data}</span>
-    <span class="ruby-operator">-</span><span class="ruby-operator">-</span> <span class="ruby-constant">QUERY</span>
-    <span class="ruby-comment">#{request.content}</span>
-  <span class="ruby-constant">SQL</span>
+  <span class="ruby-identifier">solution</span>, <span class="ruby-identifier">datasets</span> = <span class="ruby-identifier">parse_test</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">test</span>.<span class="ruby-identifier">strip</span>
+
+  <span class="ruby-identifier">content</span> = {
+      <span class="ruby-identifier">init</span><span class="ruby-operator">:</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">extra</span>.<span class="ruby-identifier">strip</span>,
+      <span class="ruby-identifier">solution</span><span class="ruby-operator">:</span> <span class="ruby-identifier">solution</span>,
+      <span class="ruby-identifier">student</span><span class="ruby-operator">:</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">content</span>.<span class="ruby-identifier">strip</span>,
+      <span class="ruby-identifier">datasets</span><span class="ruby-operator">:</span> <span class="ruby-identifier">datasets</span>
+  }
+
+  <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_json</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-framework" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">framework</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initialize Metatest Framework with Checker &amp; Runner</p>
+          
+          
+
+          
+          <div class="method-source-code" id="framework-source">
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">framework</span>
+  <span class="ruby-constant">Mumukit</span><span class="ruby-operator">::</span><span class="ruby-constant">Metatest</span><span class="ruby-operator">::</span><span class="ruby-constant">Framework</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">checker</span><span class="ruby-operator">:</span> <span class="ruby-constant">Sqlite</span><span class="ruby-operator">::</span><span class="ruby-constant">Checker</span>.<span class="ruby-identifier">new</span>,
+                                   <span class="ruby-identifier">runner</span><span class="ruby-operator">:</span> <span class="ruby-constant">Sqlite</span><span class="ruby-operator">::</span><span class="ruby-constant">MultipleExecutionsRunner</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-parse_test" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_test</span><span
+            class="method-args">(content)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Split query by &#39;– DATASET&#39; line match First match is teacher&#39;s
+solution Rest are Datasets Example:</p>
+
+<pre>select * from table
+-- DATASET
+insert into 1
+-- dataset
+insert into 2</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="parse_test-source">
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 88</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_test</span>(<span class="ruby-identifier">content</span>)
+  <span class="ruby-identifier">query</span> = <span class="ruby-identifier">content</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\s*--\s*dataset\s*\n+/i</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">query</span>.<span class="ruby-identifier">shift</span>, <span class="ruby-identifier">query</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-post_process_datasets" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">post_process_datasets</span><span
+            class="method-args">(datasets)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Transforms array datasets into hash with :id &amp; :rows</p>
+          
+          
+
+          
+          <div class="method-source-code" id="post_process_datasets-source">
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 70</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">post_process_datasets</span>(<span class="ruby-identifier">datasets</span>)
+  <span class="ruby-identifier">datasets</span>.<span class="ruby-identifier">map</span>.<span class="ruby-identifier">with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dataset</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+    {
+        <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>,
+        <span class="ruby-identifier">rows</span><span class="ruby-operator">:</span> <span class="ruby-identifier">dataset</span>
+    }
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -201,16 +329,37 @@ adhoc program that receives .sql files.</p>
 
         <div class="method-description">
           
-          <p>Define how output results</p>
+          <p>Define how output results Expected: {</p>
+
+<pre>&quot;solutions&quot;: [
+    &quot;name\nTest 1.1\nTest 1.2\nTest 1.3\n&quot;,
+    &quot;name\nTest 2.1\nTest 2.2\nTest 2.3\n&quot;
+],
+&quot;results&quot;: [
+    &quot;id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3\n&quot;,
+    &quot;id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3\n&quot;
+]</pre>
+
+<p>}</p>
           
           
 
           
           <div class="method-source-code" id="post_process_file-source">
-            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 34</span>
+            <pre><span class="ruby-comment"># File lib/test_hook.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post_process_file</span>(<span class="ruby-identifier">_file</span>, <span class="ruby-identifier">result</span>, <span class="ruby-identifier">status</span>)
-  <span class="ruby-identifier">output</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>
-  [<span class="ruby-identifier">output</span>, <span class="ruby-identifier">status</span>]
+  <span class="ruby-identifier">output</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">result</span>)
+
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">status</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:passed</span>
+      <span class="ruby-identifier">results</span>   = <span class="ruby-identifier">post_process_datasets</span>(<span class="ruby-identifier">output</span>[<span class="ruby-string">&#39;results&#39;</span>])
+      <span class="ruby-identifier">solutions</span> = <span class="ruby-identifier">post_process_datasets</span>(<span class="ruby-identifier">output</span>[<span class="ruby-string">&#39;solutions&#39;</span>])
+      <span class="ruby-identifier">framework</span>.<span class="ruby-identifier">test</span> <span class="ruby-identifier">solutions</span>, <span class="ruby-identifier">results</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:failed</span>
+      [<span class="ruby-identifier">output</span>[<span class="ruby-string">&#39;output&#39;</span>], <span class="ruby-identifier">status</span>]
+    <span class="ruby-keyword">else</span>
+      [<span class="ruby-identifier">output</span>, <span class="ruby-identifier">status</span>]
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -243,7 +392,7 @@ adhoc program that receives .sql files.</p>
           <div class="method-source-code" id="tempfile_extension-source">
             <pre><span class="ruby-comment"># File lib/test_hook.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tempfile_extension</span>
-  <span class="ruby-string">&#39;.sql&#39;</span>
+  <span class="ruby-string">&#39;.json&#39;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
