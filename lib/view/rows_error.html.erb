@@ -19,10 +19,10 @@
     font-weight: bold;
     background-color: #2E2F30;
   }
-    table.sqlite_error td {
-      width: auto;
-      text-align: left;
-    }
+  table.sqlite_error td {
+    width: auto;
+    text-align: left;
+  }
 </style>
 
 <h5><%= @error %></h5>
@@ -35,14 +35,14 @@
     <table class="table table-bordered sqlite_error sqlite_result">
       <thead>
       <tr>
-        <% @result_headers.each do |header| %>
-            <th><%= header %></th>
+        <% @result[:header].each do |field| %>
+            <th><%= field %></th>
         <% end %>
       </tr>
       </thead>
 
       <tbody>
-      <% @result_rows.each do |row| %>
+      <% @result[:rows].each do |row| %>
           <tr>
             <% row.each do |field| %>
                 <td><%= field %></td>
@@ -59,14 +59,14 @@
     <table class="table table-bordered sqlite_error sqlite_solution">
       <thead>
       <tr>
-        <% @solution_headers.each do |header| %>
-            <th><%= header %></th>
+        <% @solution[:header].each do |field| %>
+            <th><%= field %></th>
         <% end %>
       </tr>
       </thead>
 
       <tbody>
-      <% @solution_rows.each do |row| %>
+      <% @solution[:rows].each do |row| %>
           <tr>
             <% row.each do |field| %>
                 <td><%= field %></td>
