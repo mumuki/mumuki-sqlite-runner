@@ -1,10 +1,12 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'version_hook'
+
 
 Gem::Specification.new do |spec|
   spec.name          = 'mumuki-sqlite-runner'
-  spec.version       = '0.1'
+  spec.version       = SqliteVersionHook::VERSION
   spec.authors       = ['Leandro Di Lorenzo']
   spec.email         = ['leandro.jdl@gmail.com']
   spec.summary       = 'SQLite Runner for Mumuki'
