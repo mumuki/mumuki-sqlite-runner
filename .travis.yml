@@ -1,37 +1,27 @@
 language: ruby
-
 env:
   matrix:
-    - RACK_ENV=development
-  global:
-    secure: Or2qNYOGS6QUg6PtRzotoNNjpNmgT+nEBPAanXKD89awppkvqviEN1gYj7FYjos9jejqFtJZEoRRgGMIbAvetwAgZqYZXikMWH56VtNkdEJY3eofhEcCBcYku5uWAxbAxrPAPjwbg+tKqPANZ+cyO/LsWJTmXvMCpFLx7PoF6LIC5gQmzhuScm5PFXCQTSzHH+OPqyYuVICNY/XOIH1icPFvzSNjmFqy12Uknd7QJ1nsmYYDZ8l5A10LwTxIZJtXmWF7ZRv1lOZfnLxAadPJMLHiGB3Stci2g+mD/O3K8jHF8tq6I1329nAbNQIFArLsKtkzjujUHAHbzsW0YDnxB1391E+6SRA50Q4HNoN7VDx1u+lS8fH+1hbCgfpuWmbM1Q5zOuKgbVLiFio6o+A96K/xf/NyuUQnhC0gappvycDOGbL8e2DkKAF2+OlJEOirLLuyoPBqzRdt2N6EnwGSgRfHMFgVwMco321GBaYhHAPRWJ0r3whPDi0KN+pl7dbwpCAj1yRnF+pVHpj+VGH3e4X7fLeoeDLOc2PSeZKD7EOFViGSCKz8Lghqb5muOjkTd5cMfUR+60qujo3/47PSa+jLoybOrR2VjjNsslyJGG9ZhRu2Xk3yB8G131k2rMFfVwQ9meFE7bayscShwFsC17+zgiu09MuHc7bb3Fd4Rpc=
-
+  - RACK_ENV=development
 sudo: false
-
 rvm:
-  - 2.3.1
-
+- 2.3.1
 services:
-  - docker
-
+- docker
 before_install:
-  - docker pull leandrojdl/mumuki-sqlite-worker
-
+- docker pull leandrojdl/mumuki-sqlite-worker
 before_script:
-  - mv .env.travis .env
-
+- mv .env.travis .env
 script:
-  - bundle exec rspec
-
+- bundle exec rspec
 after_success:
-  - bundle exec codeclimate-test-reporter
-
+- bundle exec codeclimate-test-reporter
 after_failure:
-  - cat $(echo $TEST)
-
-notifications:
-  email:
-    recipients:
-    - leandro.jdl@gmail.com
-    on_success: change
-    on_failure: change
+- cat $(echo $TEST)
+deploy:
+  provider: rubygems
+  api_key:
+    secure: CDve96eXAbPrnGNNAPaXRjkRUeMqylJ0Q8OxlhMuyy5Qc2bnG6h75T1WtQQ108k8GjKap+MLuWnzYQTOLTwgVJjtKtD0UfUE48z/v7nHjkleLW+KuBpHKyVBL7kk3eerR6OoPmKxNd6dFK+dxdl8fV+uw9WwXMCP6t59YiKPjF9e1rl8NWJR+iWSgVM72FqGV/mPr1ihybszz6CohTinXVDBdPseskYZ3zzU+XzjZLMEWWnoB+dhk5CfeGdCLyDUA0gFYp/tFMXfeOjeqortXUFekUlGtGlqs9vsNqTQv1wAH9QM6h4wJvbbVR1WY07rRiKC9MO++2+F/5UwJKJEwvC/BWrf2snLN5IDWkDBhD/LyE1AigbV7PUkc3a08AE35Xa49BtvYJKkyw1iXG2SBg7h2lBALBxt/NN8OG2zPDy1zW2HveAIfXyJaB9/ycpcL8MHtfZPBjYKa5Z2uMC7vJdaLdtDaAFF8MRAz53S3nLVIC3u1xhviKPiuQfieHlsM0NkG5eM/3NlVO7Biv7J65xm1tJva+bUS7fNurMjGxFcXgohPWkYtLqc13btb94lX6+X1Y2ao/Uv31PclNncRCJslPftUVINGrh8bEsrCShgK9id9FQdEumDhDo5zViv3NevnJfizsr6tlrngGRP+tQ9SEkuMJ9Bb+GQVAZEK8A=
+  gem: mumuki-sqlite-runner
+  on:
+    tags: true
+    repo: mumuki/mumuki-sqlite-runner
