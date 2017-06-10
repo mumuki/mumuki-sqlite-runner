@@ -1,24 +1,13 @@
 
-[![Build Status](https://travis-ci.org/leandrojdl/mumuki-sqlite-runner.svg?branch=master)](https://travis-ci.org/leandrojdl/mumuki-sqlite-runner)
-[![Code Climate](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/badges/gpa.svg)](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner)
-[![Test Coverage](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/badges/coverage.svg)](https://codeclimate.com/github/leandrojdl/mumuki-sqlite-runner/coverage)
+[![Build Status](https://travis-ci.org/mumuki/mumuki-sqlite-runner.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-sqlite-runner)
+[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-sqlite-runner/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-sqlite-runner)
+[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-sqlite-runner/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-sqlite-runner/coverage)
 
 
 # Mumuki Sqlite Runner
 
-Motor de SQLite para integrarse a la [Plataforma Mumuki](https://mumuki.io/).
+SQLite Runner for the [Mumuki Platform](https://mumuki.io/), based on [Leandro Di Lorenzo](https://github.com/leandrojdl)'s [MQL project](https://github.com/leandrojdl/mumuki-sqlite-runner).
 
-## Disclaimer
-
-> Este proyecto nace a partir del _Proyecto de Inserción Profesional_, el cual estoy desarrollando
-> para el cierre de la Tecnicatura en Programación Informática en la Universidad Nacional de Quilmes.
->
-> Es por ello que tanto el proyecto como esta documentación se encuentran en constante construcción.
->
-> La información asociada al informe del _TIP_ puede encontrarse en la
-> [Wiki](https://github.com/leandrojdl/mumuki-sqlite-runner/wiki).
->
-> El resto del README será utilizado como detalle de instalación y funcionamiento del _Runner_.
 
 ## Install
 
