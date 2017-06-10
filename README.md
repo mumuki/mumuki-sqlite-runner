@@ -84,3 +84,26 @@ $ docker pull leandrojdl/mumuki-sqlite-worker
 ```bash
 $ bundle exec rspec
 ```
+
+
+### Run the Server
+
+```bash
+$ bundle exec rackup -p 4567
+```
+
+If you need to verify that runner is running, open your web browser
+and go to [http://localhost:4567/info](http://localhost:4567/info).
+You should see a JSON response like this (but more extensive):
+
+```json
+{
+  "name": "sqlite",
+  "version": "0.1",
+  "language": {
+    "name": "sqlite",
+    "version": "v0.2.2"
+  },
+  "url": "http://localhost:4567/info"
+}
+```
