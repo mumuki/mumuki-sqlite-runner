@@ -6,7 +6,7 @@ class SqliteMetadataHook < Mumukit::Hook
         icon: { type: 'devicon', name: 'sqlite' },
         version: 'v0.2.2',
         extension: 'sql',
-        ace_mode: 'assembly_x86',
+        ace_mode: 'sql',
         graphic: true
       },
       test_framework: {
