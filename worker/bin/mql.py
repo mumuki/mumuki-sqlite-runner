@@ -116,7 +116,8 @@ class MQL:
         for dataset in self.code['datasets']:
             try:
                 dump('dataset', dataset)
-                self.run_dataset()
+                self.run_solution()
+                self.run_student()
             except RunException:
                 clean_all()
                 return self
@@ -125,11 +126,17 @@ class MQL:
         self.post_process()
         return self
 
-    def run_dataset(self):
+    def prepare_db(self):
         clean(DATABASE)
         self._run('init')
         self._run('dataset')
+
+    def run_solution(self):
+        self.prepare_db()
         self._run('solution')
+
+    def run_student(self):
+        self.prepare_db()
         self._run('student')
 
     def _run(self, param):
