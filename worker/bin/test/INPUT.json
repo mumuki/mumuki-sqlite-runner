@@ -4,6 +4,7 @@
   "student":  "select * from test;",
   "datasets": [
     "insert into test (name) values ('Test 1.1');\ninsert into test (name) values ('Test 1.2');\ninsert into test (name) values ('Test 1.3');",
-    "insert into test (name) values ('Test 2.1');\ninsert into test (name) values ('Test 2.2');\ninsert into test (name) values ('Test 2.3');"
+    "insert into test (name) values ('Test 2.1');\ninsert into test (name) values ('Test 2.2');\ninsert into test (name) values ('Test 2.3');",
+    "insert into test (name) values ('Test UTF-8 áéíóúñÁÉÍÓÚÑ');"
   ]
 }

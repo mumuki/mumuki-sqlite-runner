@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import json
 from sys import argv
@@ -11,7 +12,7 @@ Example: runmql.py INPUT.json
 
 
 def as_json(content):
-    return json.dumps(content, indent=2)
+    return json.dumps(content, indent=2, ensure_ascii=False)
 
 
 if __name__ == '__main__':
