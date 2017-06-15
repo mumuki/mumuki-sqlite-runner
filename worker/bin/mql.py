@@ -72,7 +72,7 @@ def clean(file):
 
 def dump(name, content):
     file = open(name + '.sql', 'w')
-    file.write(content + '\n')
+    file.write(content.encode('utf8') + '\n')
     file.close()
 
 

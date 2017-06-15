@@ -26,3 +26,16 @@
     INSERT INTO test2 (name) values ('Name 1');
     INSERT INTO test2 (name) values ('Name 2');
   count: 1
+-
+  extra: |
+    CREATE TABLE test3 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  content: "select name from test3;"
+  test: |-
+    select name from test3;
+    -- DATASET
+    INSERT INTO test3 (name) values ('ASCII');
+    INSERT INTO test3 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
+  count: 1

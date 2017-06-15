@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import json
 import unittest
 from mql import *
 
@@ -20,15 +21,15 @@ class TestMQL(unittest.TestCase):
 
     def test_run_ok(self):
         # Arrange
-        content = {
+        content = json.dumps({
             'init': self.create,
             'solution': self.solution_ok,
             'student': self.student,
             'datasets': self.datasets
-        }
+        })
 
         # Act
-        mql = MQL(content).run()
+        mql = MQL(json.loads(content)).run()
         result = mql.get_result()
 
         # Assert
