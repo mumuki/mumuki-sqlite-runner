@@ -39,3 +39,16 @@
     INSERT INTO test3 (name) values ('ASCII');
     INSERT INTO test3 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
   count: 1
+-
+  extra: |
+    CREATE TABLE test (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  content: "select name from test limit 0;"
+  test: |-
+    select name from test limit 0;
+    -- DATASET
+    INSERT INTO test (name) values ('ASCII');
+    INSERT INTO test (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
+  count: 1

@@ -86,7 +86,7 @@ $ bundle exec rspec
 ```
 
 
-### Run the Server
+#### Run the Server
 
 ```bash
 $ bundle exec rackup -p 4567
