@@ -27,13 +27,13 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # }
   #
   def compile_file_content(request)
-    solution, datasets = parse_test request.test.strip
+    solution, data = parse_test request.test
 
     content = {
         init: request.extra.strip,
         solution: solution,
         student: request.content.strip,
-        datasets: datasets
+        datasets: data
     }
 
     content.to_json
@@ -76,18 +76,56 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     end
   end
 
-  # Split query by '-- DATASET' line match
-  # First match is teacher's solution
-  # Rest are Datasets
-  # Example:
-  #   select * from table
-  #   -- DATASET
-  #   insert into 1
-  #   -- dataset
-  #   insert into 2
-  def parse_test(content)
-    query = content.split(/\s*--\s*dataset\s*\n+/i)
-    return query.shift, query
+  # Test should have one of these formats:
+  #
+  # Solution by query:
+  # { solution_type: 'query',
+  #   solution_query: 'SELECT * FROM ...',
+  #   examples: [
+  #     { data: "INSERT INTO..." }
+  #   ]
+  # }
+  #
+  # Solution by datasets:
+  # { solution_type: 'datasets',
+  #   examples: [
+  #     { data: "INSERT INTO...",
+  #       solution: "id|field\n1|row1..."
+  #     }
+  #   ]
+  # }
+  def parse_test(test)
+    test = OpenStruct.new test
+    @solution_type = test.solution_type.to_sym
+
+    case @solution_type
+      when :query
+        parse_test_as_query_solution test
+      when :datasets
+        parse_test_as_datasets_solution test
+      else
+        raise Sqlite::TestSolutionTypeError
+    end
+  end
+
+  # Expected input:
+  # OpenStruct#{
+  #   solution_type: 'query',
+  #   solution_query: 'select * from motores;',
+  #   examples: [
+  #     { dataset: "INSERT INTO ...\nINSERT INTO ..." }
+  #   ]
+  # }
+  def parse_test_as_query_solution(test)
+    data = test.examples.map do |item|
+      item['data']
+    end
+
+    return test.solution_query, data
+  end
+
+  def parse_test_as_datasets_solution(test)
+
   end
 
   # Initialize Metatest Framework with Checker & Runner
