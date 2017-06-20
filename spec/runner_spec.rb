@@ -16,21 +16,17 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#compile_file_content {extra, content, test}' do
     let(:req) do
-
-      test = <<~SQL
-        select * from test
-        --DATASET
-        insert into test values (1)
-        --    DATASET    
-        insert into test values (2)
-          --dataset
-        insert into test values (3)
-        --   dataset  
-        
-        insert into test values (4)
-        -- more on same dataset
-        insert into test values (4.1)
-      SQL
+      test = {
+        solution_type: 'query',
+        solution_query: 'select * from test',
+        examples: [
+          { 'data' => 'insert into test values (1)' },
+          { 'data' => 'insert into test values (2)' },
+          { 'data' => 'insert into test values (3)' },
+          { 'data' => "insert into test values (4)\n-- more on same dataset\ninsert into test values (4.1)"
+          }
+        ]
+      }
 
       struct extra: 'create table test',
              content: 'select id from test',
@@ -100,53 +96,67 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#run!' do
 
-    shared_examples_for 'a correct solution' do |exercise, solution|
-      it 'should pass with correct solution' do
-        result = run exercise, solution
-
-        expect(result[0][0][1]).to eq :passed
-        expect(result[0][0][2]).to include 'Consulta correcta!'
-      end
+    shared_examples_for 'a correct query' do |exercise, query|
+      let(:result) { run exercise, query }
+      it { expect(result[0][0][1]).to eq :passed }
+      it { expect(result[0][0][2]).to include 'Consulta correcta!' }
     end
 
-      context 'with malformed queries' do
-        Fixture.get(:syntax_error).each do | fixture |
-          context "'#{fixture['content']}'" do
+      # context 'with malformed queries' do
+      #   Fixture.get(:syntax_error).each do | fixture |
+      #     context "'#{fixture['content']}'" do
+      #
+      #       it "should fails with '#{fixture['expected']}'" do
+      #         result = run_fixture fixture
+      #
+      #         expect(result[1]).to eq :failed
+      #         expect(result[0]).to match fixture['expected']
+      #       end
+      #
+      #     end
+      #   end
+      # end
 
-            it "should fails with '#{fixture['expected']}'" do
-              result = run_fixture fixture
+    context 'Runner Test 1' do
+      exercise = Sqlite::Exercise.get('00000_runner_test1')
 
-              expect(result[1]).to eq :failed
-              expect(result[0]).to match fixture['expected']
-            end
+      query = 'select * from test1;'
+      it_behaves_like 'a correct query', exercise, query
+    end
 
-          end
-        end
-      end
+    context 'Runner Test 2' do
+      exercise = Sqlite::Exercise.get('00000_runner_test2')
 
-      context 'with well-formed queries' do
-        Fixture.get(:valid_queries).each_with_index do | fixture, index |
-          it "Test ##{index+1} should pass and returns OK" do
-            result = run_fixture fixture
+      query = 'select name from test2;'
+      it_behaves_like 'a correct query', exercise, query
+    end
 
-            expect(result[0][0][0]).to eq 'Dataset 1'
-            expect(result[0][0][1]).to eq :passed
-            expect(result[0][0][2]).to include 'Consulta correcta!'
-          end
-        end
-      end
+    context 'Runner Test 3' do
+      exercise = Sqlite::Exercise.get('00000_runner_test3')
 
-    context '00001_Prueba MQL' do
+      query = 'select name from test3;'
+      it_behaves_like 'a correct query', exercise, query
+    end
+
+    context 'Runner Test 4' do
+      exercise = Sqlite::Exercise.get('00000_runner_test4')
+
+      query = 'select name from test4 limit 0;'
+      it_behaves_like 'a correct query', exercise, query
+    end
+
+    context 'Prueba MQL' do
       exercise = Sqlite::Exercise.get('00001_prueba_mql')
 
-      solution = 'select * from motores;'
-      it_behaves_like 'a correct solution', exercise, solution
+      query = 'select * from motores;'
+      it_behaves_like 'a correct query', exercise, query
     end
+
   end
 
-  def run(exercise, solution)
+  def run(exercise, query)
     req = struct extra: exercise['extra'],
-                 content: solution,
+                 content: query,
                  test: exercise['test']
     file = runner.compile req
     runner.run! file
