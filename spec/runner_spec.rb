@@ -100,6 +100,15 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#run!' do
 
+    shared_examples_for 'a correct solution' do |exercise, solution|
+      it 'should pass with correct solution' do
+        result = run exercise, solution
+
+        expect(result[0][0][1]).to eq :passed
+        expect(result[0][0][2]).to include 'Consulta correcta!'
+      end
+    end
+
       context 'with malformed queries' do
         Fixture.get(:syntax_error).each do | fixture |
           context "'#{fixture['content']}'" do
@@ -127,7 +136,21 @@ describe 'SqliteTestHook as isolated FileHook' do
         end
       end
 
+    context '00001_Prueba MQL' do
+      exercise = Sqlite::Exercise.get('00001_prueba_mql')
+
+      solution = 'select * from motores;'
+      it_behaves_like 'a correct solution', exercise, solution
     end
+  end
+
+  def run(exercise, solution)
+    req = struct extra: exercise['extra'],
+                 content: solution,
+                 test: exercise['test']
+    file = runner.compile req
+    runner.run! file
+  end
 
   def run_fixture(fixture)
     req = struct extra: fixture['extra'],
