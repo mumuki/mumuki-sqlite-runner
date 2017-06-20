@@ -6,8 +6,14 @@ module Sqlite
       @header = @rows = []
       rows = data.split(/\n+/i)
       unless rows.empty?
-        @header = rows.shift.split(/\|/)
-        @rows = rows.map {|row| row.split(/\|/)}
+        @header = split_and_clean rows.shift
+        @rows = rows.map { |item| split_and_clean item }
+      end
+    end
+
+    def split_and_clean(rows)
+      rows.split(/\|/).delete_if do |value|
+        value.blank?
       end
     end
 

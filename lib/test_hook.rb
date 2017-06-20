@@ -57,12 +57,21 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     case status
       when :passed
         results   = post_process_datasets(output['results'])
-        solutions = post_process_datasets(output['solutions'])
+        solutions = post_process_datasets(choose_solutions output['solutions'])
         framework.test solutions, results
       when :failed
         [output['output'], status]
       else
         [output, status]
+    end
+  end
+
+  def choose_solutions(output_solutions)
+    case @solution_type
+      when :datasets
+        @output_solutions
+      else
+        output_solutions
     end
   end
 
@@ -124,8 +133,27 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     return test.solution_query, data
   end
 
+  # Expected input:
+  # OpenStruct#{
+  #   solution_type: 'datasets',
+  #   examples: [
+  #     {
+  #       dataset: "INSERT INTO ...\nINSERT INTO ...",
+  #       solution_dataset: "id|field\n1|row1..."
+  #     }
+  #   ]
+  # }
   def parse_test_as_datasets_solution(test)
+    data = []
+    @output_solutions = []
+    solution_query = '-- none'
 
+    test.examples.each do |item|
+      @output_solutions.append item[:solution_dataset].strip
+      data.append item[:data]
+    end
+
+    return solution_query, data
   end
 
   # Initialize Metatest Framework with Checker & Runner

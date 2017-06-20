@@ -114,6 +114,20 @@ describe 'Server' do
     it_behaves_like 'a submission where rows do not match', program, exercise
   end
 
+  context 'Datasets Solutions' do
+    exercise = Sqlite::Exercise.get('00003_datasets_solutions')
+
+    program = 'select * from bolitas;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select color from bolitas;'
+    it_behaves_like 'a submission where columns do not match', program, exercise
+
+    program = 'select * from bolitas limit 1;'
+    it_behaves_like 'a submission where rows do not match', program, exercise
+  end
+
   def run_tests(program, test, extra)
     bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')
     bridge.run_tests! test: test.to_yaml,

@@ -97,6 +97,7 @@ describe 'SqliteTestHook as isolated FileHook' do
 
     shared_examples_for 'a correct query' do |exercise, query|
       let(:result) { run exercise, query }
+
       it { expect(result[0][0][1]).to eq :passed }
       it { expect(result[0][0][2]).to include 'Consulta correcta!' }
     end
@@ -155,6 +156,13 @@ describe 'SqliteTestHook as isolated FileHook' do
       exercise = Sqlite::Exercise.get('00001_prueba_mql')
 
       query = 'select * from motores;'
+      it_behaves_like 'a correct query', exercise, query
+    end
+
+    context 'Datasets Solutions' do
+      exercise = Sqlite::Exercise.get('00003_datasets_solutions')
+
+      query = 'select * from bolitas;'
       it_behaves_like 'a correct query', exercise, query
     end
 
