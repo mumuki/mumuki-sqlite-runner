@@ -20,6 +20,22 @@ describe 'Server' do
     it { expect(response[:test_results].size).to eq examples_count }
   end
 
+  shared_examples_for 'a submission where columns do not match' do |program, exercise|
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
+
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response[:response_type]).to eq :structured }
+    it { expect(response[:test_results][0][:result]).to include 'Las columnas no coinciden' }
+  end
+
+  shared_examples_for 'a submission where rows do not match' do |program, exercise|
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
+
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response[:response_type]).to eq :structured }
+    it { expect(response[:test_results][0][:result]).to include 'Las filas no coinciden' }
+  end
+
   shared_examples_for 'a syntax-error submission' do |program, exercise, error |
     let(:response) { run_tests program, exercise['test'], exercise['extra'] }
 
@@ -82,6 +98,20 @@ describe 'Server' do
     program = 'select * from motores;'
     it_behaves_like 'a successful submission',
                     program, exercise, examples_count: exercise['count']
+  end
+
+  context 'Hello SELECT!' do
+    exercise = Sqlite::Exercise.get('00002_hello_select')
+
+    program = 'select * from bolitas;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select color from bolitas;'
+    it_behaves_like 'a submission where columns do not match', program, exercise
+
+    program = 'select * from bolitas limit 1;'
+    it_behaves_like 'a submission where rows do not match', program, exercise
   end
 
   def run_tests(program, test, extra)
