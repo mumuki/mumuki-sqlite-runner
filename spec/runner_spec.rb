@@ -4,7 +4,6 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   let(:runner) { SqliteTestHook.new }
 
-
   describe '#tempfile_extension' do
     it { expect(runner.tempfile_extension).to eq '.json' }
   end
@@ -102,26 +101,21 @@ describe 'SqliteTestHook as isolated FileHook' do
       it { expect(result[0][0][2]).to include 'Consulta correcta!' }
     end
 
-      # context 'with malformed queries' do
-      #   Fixture.get(:syntax_error).each do | fixture |
-      #     context "'#{fixture['content']}'" do
-      #
-      #       it "should fails with '#{fixture['expected']}'" do
-      #         result = run_fixture fixture
-      #
-      #         expect(result[1]).to eq :failed
-      #         expect(result[0]).to match fixture['expected']
-      #       end
-      #
-      #     end
-      #   end
-      # end
+    shared_examples_for 'an invalid query' do |exercise, query, error|
+      let(:result) { run exercise, query }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[0]).to match error }
+    end
 
     context 'Runner Test 1' do
       exercise = Sqlite::Exercise.get('00000_runner_test1')
 
       query = 'select * from test1;'
       it_behaves_like 'a correct query', exercise, query
+
+      query = 'selec * from test1;'
+      error = /Error: near line \d: near "selec": syntax error/
+      it_behaves_like 'an invalid query', exercise, query, error
     end
 
     context 'Runner Test 2' do
@@ -129,6 +123,10 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       query = 'select name from test2;'
       it_behaves_like 'a correct query', exercise, query
+
+      query = 'select from test2;'
+      error = /Error: near line \d: near "from": syntax error/
+      it_behaves_like 'an invalid query', exercise, query, error
     end
 
     context 'Runner Test 3' do
@@ -136,6 +134,10 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       query = 'select name from test3;'
       it_behaves_like 'a correct query', exercise, query
+
+      query = 'select * fro test3;'
+      error = /Error: near line \d: near "fro": syntax error/
+      it_behaves_like 'an invalid query', exercise, query, error
     end
 
     context 'Runner Test 4' do
@@ -143,6 +145,10 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       query = 'select name from test4 limit 0;'
       it_behaves_like 'a correct query', exercise, query
+
+      query = 'select * from test4'
+      error = /Error: incomplete SQL: select \* from test4/
+      it_behaves_like 'an invalid query', exercise, query, error
     end
 
     context 'Prueba MQL' do
@@ -158,14 +164,6 @@ describe 'SqliteTestHook as isolated FileHook' do
     req = struct extra: exercise['extra'],
                  content: query,
                  test: exercise['test']
-    file = runner.compile req
-    runner.run! file
-  end
-
-  def run_fixture(fixture)
-    req = struct extra: fixture['extra'],
-                 content: fixture['content'],
-                 test: fixture['test']
     file = runner.compile req
     runner.run! file
   end
