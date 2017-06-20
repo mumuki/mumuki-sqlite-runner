@@ -10,3 +10,4 @@ test:
   - data: |
       INSERT INTO test1 (name) values ('Name 1');
       INSERT INTO test1 (name) values ('Name 2');
+count: 1

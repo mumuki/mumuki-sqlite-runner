@@ -10,3 +10,4 @@ test:
   - data: |
       INSERT INTO test4 (name) values ('ASCII');
       INSERT INTO test4 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
+count: 1

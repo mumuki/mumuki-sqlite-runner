@@ -12,12 +12,20 @@ describe 'Server' do
     Process.kill 'TERM', @pid
   end
 
-  shared_examples_for 'a successful submission' do |program, test, extra = '', examples_count: 1|
-    let(:response) { run_tests program, test, extra }
+  shared_examples_for 'a successful submission' do |program, exercise, examples_count: 1|
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
 
     it { expect(response[:status]).to eq :passed }
     it { expect(response[:response_type]).to eq :structured }
     it { expect(response[:test_results].size).to eq examples_count }
+  end
+
+  shared_examples_for 'a syntax-error submission' do |program, exercise, error |
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
+
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response[:response_type]).to eq :unstructured }
+    it { expect(response[:result]).to match error }
   end
 
   context 'Runner Test 1' do
@@ -25,45 +33,56 @@ describe 'Server' do
 
     program = 'select * from test1;'
     it_behaves_like 'a successful submission',
-                    program,
-                    exercise['test'],
-                    exercise['extra'],
-                    examples_count: 1
+                    program, exercise, examples_count: exercise['count']
 
-    # query = 'selec * from test1;'
-    # error = /Error: near line \d: near "selec": syntax error/
-    # it_behaves_like 'an invalid query', exercise, query, error
+    program = 'selec * from test1;'
+    error = /Error: near line \d: near "selec": syntax error/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
   end
 
-  # shared_examples_for 'a syntax-error submission' do |program, tests, extra = '', examples_count: 1|
-  #   context 'answers a failed hash when submission has syntax errors' do
-  #     let(:response) { run_tests(program, tests, extra) }
-  #
-  #     it { expect(response[:status]).to eq :failed }
-  #     it { expect(response[:response_type]).to eq :unstructured }
-  #     it { expect(response[:test_results].size).to eq examples_count }
-  #   end
-  # end
-  #
-  # Fixture.get(:valid_queries).each_with_index do |fixture, index|
-  #   context "given the ##{index+1} valid query example" do
-  #     it_behaves_like 'a successful submission',
-  #                     fixture['content'],
-  #                     fixture['test'],
-  #                     fixture['extra'],
-  #                     examples_count: fixture['count']
-  #   end
-  # end
-  #
-  # Fixture.get(:syntax_error).each_with_index do |fixture, index|
-  #   context "given the ##{index+1} syntax-error example" do
-  #     it_behaves_like 'a syntax-error submission',
-  #                     fixture['content'],
-  #                     fixture['test'],
-  #                     fixture['extra'],
-  #                     examples_count: 0
-  #   end
-  # end
+  context 'Runner Test 2' do
+    exercise = Sqlite::Exercise.get('00000_runner_test2')
+
+    program = 'select name from test2;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select from test2;'
+    error = /Error: near line \d: near "from": syntax error/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Runner Test 3' do
+    exercise = Sqlite::Exercise.get('00000_runner_test3')
+
+    program = 'select name from test3;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select * fro test3;'
+    error = /Error: near line \d: near "fro": syntax error/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Runner Test 4' do
+    exercise = Sqlite::Exercise.get('00000_runner_test4')
+
+    program = 'select name from test4 limit 0;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select * from test4'
+    error = /Error: incomplete SQL: select \* from test4/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Prueba MQL' do
+    exercise = Sqlite::Exercise.get('00001_prueba_mql')
+
+    program = 'select * from motores;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+  end
 
   def run_tests(program, test, extra)
     bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')

@@ -13,3 +13,4 @@ test:
       INSERT INTO motores (nombre) values ('Oracle');
       INSERT INTO motores (nombre) values ('Microsoft SQL Server');
       INSERT INTO motores (nombre) values ('SQLite');
+count: 1
