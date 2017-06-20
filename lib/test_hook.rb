@@ -95,7 +95,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   #   ]
   # }
   def parse_test(test)
-    test = OpenStruct.new test
+    test = OpenStruct.new (YAML.load(test).deep_symbolize_keys)
     @solution_type = test.solution_type.to_sym
 
     case @solution_type
@@ -118,7 +118,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # }
   def parse_test_as_query_solution(test)
     data = test.examples.map do |item|
-      item['data']
+      item[:data]
     end
 
     return test.solution_query, data

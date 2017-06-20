@@ -25,7 +25,7 @@ describe 'SqliteTestHook as isolated FileHook' do
           { 'data' => "insert into test values (4)\n-- more on same dataset\ninsert into test values (4.1)"
           }
         ]
-      }
+      }.to_yaml
 
       struct extra: 'create table test',
              content: 'select id from test',
@@ -163,7 +163,7 @@ describe 'SqliteTestHook as isolated FileHook' do
   def run(exercise, query)
     req = struct extra: exercise['extra'],
                  content: query,
-                 test: exercise['test']
+                 test: exercise['test'].to_yaml
     file = runner.compile req
     runner.run! file
   end
