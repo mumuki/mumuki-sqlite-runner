@@ -3,13 +3,13 @@
     width: auto;
   }
   table.sqlite_result {
-    border: 3px solid #0B465D;
+    border: none;
   }
   table.sqlite_solution {
-    border: 3px solid darkred;
+    border: none;
   }
   table.sqlite_error tr:nth-child(even) {
-    background-color: #DDDDDD;
+    background-color: #EEEEEE;
   }
   table.sqlite_error tr:nth-child(odd) {
     background-color: #FFFFFF;
@@ -23,6 +23,34 @@
     width: auto;
     text-align: left;
   }
+
+  .required {
+    color: #5cb85c;
+    font-style: italic;
+  }
+  .errored {
+    color: #d9534f;
+    font-style: italic;
+  }
+
+  .required :first-child,
+  .errored :first-child,
+  .nothing :first-child {
+    font-style: normal;
+    padding-left: 2px;
+    padding-right: 2px;
+    background-color: white;
+    border-left: none;
+    border-bottom: 1px solid white;
+  }
+  .required :first-child {
+    color: white;
+    background-color: #5cb85c;
+  }
+  .errored :first-child {
+    color: white;
+    background-color: #d9534f;
+  }
 </style>
 
 <h5><%= @error %></h5>
@@ -34,8 +62,9 @@
     <h6>Se esperaba:</h6>
     <table class="table table-bordered sqlite_error sqlite_result">
       <thead>
-      <tr>
-        <% @result[:header].each do |field| %>
+      <tr class="<%= @result[:header][:class] %>">
+        <th><%= @result[:header][:sign] %></th>
+        <% @result[:header][:fields].each do |field| %>
             <th><%= field %></th>
         <% end %>
       </tr>
@@ -43,8 +72,9 @@
 
       <tbody>
       <% @result[:rows].each do |row| %>
-          <tr>
-            <% row.each do |field| %>
+          <tr class="<%= row[:class] %>">
+            <td><%= row[:sign] %></td>
+            <% row[:fields].each do |field| %>
                 <td><%= field %></td>
             <% end %>
           </tr>
@@ -58,8 +88,9 @@
     <h6>Se obtuvo:</h6>
     <table class="table table-bordered sqlite_error sqlite_solution">
       <thead>
-      <tr>
-        <% @solution[:header].each do |field| %>
+      <tr class="<%= @result[:header][:class] %>">
+        <th><%= @result[:header][:sign] %></th>
+        <% @solution[:header][:fields].each do |field| %>
             <th><%= field %></th>
         <% end %>
       </tr>
@@ -67,8 +98,9 @@
 
       <tbody>
       <% @solution[:rows].each do |row| %>
-          <tr>
-            <% row.each do |field| %>
+          <tr class="<%= row[:class] %>">
+            <td><%= row[:sign] %></td>
+            <% row[:fields].each do |field| %>
                 <td><%= field %></td>
             <% end %>
           </tr>
