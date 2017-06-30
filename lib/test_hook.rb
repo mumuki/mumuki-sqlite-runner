@@ -1,7 +1,8 @@
 require 'json'
+require 'diffy'
 
 ##
-# This Hook allow to run Sqlite Worker from an adhoc program that receives .sql files.
+# This Hook allow to run Sqlite Worker from an ad-hoc program that receives .json files.
 
 class SqliteTestHook < Mumukit::Templates::FileHook
 
@@ -18,12 +19,12 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     "runsql #{filename}"
   end
 
-  # Define the .sql file template from request structure
-  # request = {
-  #   test: (string) teacher's code that define which testing verification student code should pass,
-  #   extra: (string) teacher's code that prepare field where student code should run,
-  #   content: (string) student code,
-  #   expectations: [mulang verifications] todo: better explain
+  # Define the .json file template from request structure
+  # Input: request = {
+  #   test: (yaml string) teacher's code that define which testing verification student code should pass,
+  #   extra: (sql string) teacher's code that prepare field where student code should run,
+  #   content: (sql string) student code,
+  #   expectations: [] not using for now
   # }
   #
   def compile_file_content(request)
@@ -56,8 +57,10 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
     case status
       when :passed
-        results   = post_process_datasets(output['results'])
-        solutions = post_process_datasets(choose_solutions output['solutions'])
+        results   = output['results']
+        solutions = choose_solutions output['solutions']
+        solutions, results = diff solutions, results
+
         framework.test solutions, results
       when :failed
         [output['output'], status]
@@ -66,13 +69,43 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     end
   end
 
+  protected
+
+  # If solutions comes in an explicit datasets, it was stored in
+  # a instance variable of this class.
+  # Instead if solution is correct query, it is passed to the worken
+  # and dataset solution comes from worker.
   def choose_solutions(output_solutions)
     case @solution_type
       when :datasets
-        @output_solutions
+        @solutions
       else
         output_solutions
     end
+  end
+
+  def diff(solutions, results)
+    zipped = solutions.zip(results).map do |solution, result|
+
+      diff = Diffy::SplitDiff.new result << "\n", solution << "\n"
+
+      if diff.left.blank?
+        [solution, result]
+      else
+        res = post_process_diff diff.left
+        sol = post_process_diff diff.right
+        [sol, res]
+      end
+
+    end
+
+    zipped.transpose.map { |dataset| post_process_datasets dataset }
+  end
+
+  def post_process_diff(data)
+    data.scan(/^(\s|-|\+)(.+)/)
+        .map { |mark, content| mark << '|' << content }
+        .join("\n")
   end
 
   # Transforms array datasets into hash with :id & :rows
@@ -145,11 +178,11 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # }
   def parse_test_as_datasets_solution(test)
     data = []
-    @output_solutions = []
+    @solutions = []
     solution_query = '-- none'
 
     test.examples.each do |item|
-      @output_solutions.append item[:solution_dataset].strip
+      @solutions << item[:solution_dataset].scan(/(?!\|).+(?<!\|)/).join("\n")
       data.append item[:data]
     end
 
