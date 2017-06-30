@@ -102,6 +102,20 @@ describe 'SqliteTestHook as isolated FileHook' do
       it { expect(result[0][0][2]).to include 'Consulta correcta!' }
     end
 
+    shared_examples_for 'a query with different columns' do |exercise, query|
+      let(:result) { run exercise, query }
+
+      it { expect(result[0][0][1]).to eq :failed }
+      it { expect(result[0][0][2]).to include 'Las columnas no coinciden' }
+    end
+
+    shared_examples_for 'a query with different rows' do |exercise, query|
+      let(:result) { run exercise, query }
+
+      it { expect(result[0][0][1]).to eq :failed }
+      it { expect(result[0][0][2]).to include 'Las filas no coinciden' }
+    end
+
     shared_examples_for 'an invalid query' do |exercise, query, error|
       let(:result) { run exercise, query }
       it { expect(result[1]).to eq :failed }
@@ -113,6 +127,12 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       query = 'select * from test1;'
       it_behaves_like 'a correct query', exercise, query
+
+      query = 'select name from test1;'
+      it_behaves_like 'a query with different columns', exercise, query
+
+      query = 'select * from test1 limit 1;'
+      it_behaves_like 'a query with different rows', exercise, query
 
       query = 'selec * from test1;'
       error = /Error: near line \d: near "selec": syntax error/

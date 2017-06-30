@@ -4,16 +4,10 @@ module Sqlite
 
     def initialize(data)
       @header = @rows = []
-      rows = data.split(/\n+/i)
+      rows = split_lines data
       unless rows.empty?
-        @header = split_and_clean rows.shift
-        @rows = rows.map { |item| split_and_clean item }
-      end
-    end
-
-    def split_and_clean(rows)
-      rows.split(/\|/).delete_if do |value|
-        value.blank?
+        @header = split_pipe rows.shift
+        @rows = rows.map { |item| split_pipe item }
       end
     end
 
@@ -31,6 +25,14 @@ module Sqlite
     end
 
     protected
+
+    def split_lines(str)
+      str.split(/\n+/i)
+    end
+
+    def split_pipe(line)
+      line.split(/\|/)
+    end
 
     def same_header(other_header)
       @header.eql? other_header
