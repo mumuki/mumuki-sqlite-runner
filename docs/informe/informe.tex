@@ -1,0 +1,48 @@
+% ------ headers globales -------------
+\documentclass[12pt, a4paper, twoside]{article}
+\usepackage{header}
+\usepackage{caratula}
+\usepackage{informe}
+\begin{document}{}
+% -------------------------------------
+
+
+
+% -- Carátula --
+\clearpage{\pagestyle{empty}\input{caratula}\clearpage}
+\setcounter{page}{1}
+
+%-- Índice --
+%\clearpage{\pagestyle{empty}\tableofcontents\cleardoublepage}
+%\clearpage{\pagestyle{empty}\tableofcontents}
+
+%-- Dentro de TP redefino ciertos comandos para que se pueda compilar todo individualmente --
+\begin{TP}
+
+
+%\setcounter{section}{-1}
+
+
+%~ Objetivo, introducción.
+\section{Introduccion}\input{cap/introduccion}
+
+\section{Motivación}
+\section{Presentación}
+\section{Alcance}
+\section{Tecnologías}
+\section{Trabajo futuro}
+\section{Conclusiones}
+
+
+\clearpage
+\section{Referencias}
+\begin{thebibliography}{1}
+
+    \bibitem{boot} How computers boot \\
+    {\texttt http://duartes.org/gustavo/blog/post/how-computers-boot-up}
+
+\end{thebibliography}
+
+
+\end{TP}
+\end{document}
