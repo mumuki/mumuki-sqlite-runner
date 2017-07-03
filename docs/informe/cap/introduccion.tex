@@ -1,50 +1,42 @@
-Cuando se enciende la computadora, el motherboard recibe energía y se prende.
-Al encenderse, el mother inicializa su firmware y trata de hacer andar el CPU.
-Si todo anduvo bien el CPU comienza a andar. En un sistema multi-procesador
-o multi-core se selecciona un CPU (al azar) como procesador de arranque
-(bootstrap processor, o BSP) que ejecuta el BIOS (Basic Input Output System)
-y el código de inicialización del kernel del sistema operativo. 
 
+Hay nuevas formas de aprender a programar, de enseñar a programar
+y también nuevas formas de programar. No tiene que ver con gustos or criterios
+sino con una realidad. La programación como motor de la computación y
+las comunicaciones cambiaron paradigmáticamente la interacción de las
+personas y las sociedades a nivel mundial.
+Hoy existe una fuerte necesidad de instantaneidad en las respuestas.
+En cierto punto se sabe que la respuesta está a la vuelta
+\textit{de una googleada}, sólo es necesario indicar las palabras
+de búsqueda mágicas.
 
-\begin{myframe}
-    El BIOS es el primer programa que se ejecuta en la computadora,
-    su propósito fundamental es iniciar y probar el hardware del sistema
-    y cargar un gestor de arranque o un sistema operativo desde
-    algún dispositivo de almacenamiento.
-\end{myframe}
+Esta velocidad de la información repercute en en las prácticas de
+la enseñanza formal, la cual necesita moverse por terreno firme
+antes que veloz. Cada momento didáctico con un grupo de alumnos
+es una oportunidad única de transmisión de conocimiento; y de la
+calidad del conocimiento transmitido.
+Pero el conocimiento no puede ser transmitido sólo por la calidad del docente.
+El alumno tiene que estar dispuesto a aceptar ese conocimiento.
 
-La mayor parte de los registros del CPU tienen valores definidos en el arranque,
-incluyendo el EIP (puntero de instrucciones) que guarda la dirección de memoria
-de la instrucción que se está ejecutando por la CPU. 
-La CPU luego comienza a ejecutar código del BIOS, que inicializa algunos
-de los componentes de hardware de la máquina. Hecho esto, la BIOS lanza
-el POST (Power on self test) que chequea varios componentes de la computadora. 
+Aprender programación es un desafío en sí mismo. Es necesario poder
+manejar herramientas tecnológicas como lenguajes de programación,
+entornos de desarrollo, compiladores, intérpretes, etc. Pero también
+conceptos como abstracción, refactorización, parametrización.
+Los flujos y los protocolos de comunicación, las
+estructuras de datos: árboles, listas, pilas, colas, etc.
+Y todo sin dejar de tener que cuenta que es necesario ser ordenado y declarativo
+en el diseño de programas, pues será leído por otras personas que
+tienen que poder entenderlo.
 
-\begin{myframe}
-    POST es un proceso de verificación e inicialización de los componentes
-    de entrada y salida en un sistema de cómputo que se encarga de configurar
-    y diagnosticar el estado del hardware.
-\end{myframe}
+Es fundamental entonces organizar estos conceptos y presentarlos
+de forma que no sea abrumadora para el alumno. Es importante poder
+minimizar los problemas de una herramienta tecnológicas cuando
+se busca enseñar un concepto o una estructura.
+Y es importante que el alumno logre sentirse atraído por este conocimiento.
 
-El POST involucra una serie de tests e inicializaciones, incluyendo descubrimiento
-de recursos -interrupciones, rangos de memoria, puertos de entrada/salida-
-para los dispositivos PCI. Los BIOS modernos que siguen las especificaciones
-ACPI (Advanced Configuration and Power Interface) construyen unas tablas de
-datos que describen los dispositivos en la computadora; estas tablas son usadas luego por el kernel.
+Gran parte de los profresores y alumnos están muy naturalizado con el
+uso de ciertas tecnologías (computadoras, celulares, internet, etc.),
+las cuales fueron construidas por docentes y profesionales de la programación.
+La próxima generación ya usa activamente las herramientas que se busca
+enseñarle a construir. Entonces es posible utilizar estas mismas herramientas
+para enseñar a construirlas.
 
-Después del POST, el BIOS intenta bootear un sistema operativo, que debe estar en
-alguna parte: discos rígidos, CD/DVDs, USBs, u otros dispositivos de almacenamiento.
-El orden en el que el BIOS busca el dispositivo de booteo es configurable por el usuario.
-Si  no hay ningun dispositivo de booteo el BIOS termina con un mensaje de error del estilo
-\enquote{No hay disco de sistema o error de disco}; esto sucede por ejemplo cuando
-el disco rígido está roto y no hay otro dispositivo de booteo.
-Si en cambio el BIOS encuentra un dispositivo de almacenamiento en funcionamiento,
-entonces permite continuar con el procedimiento de booteo.
-
-Ahora el BIOS lee el sector de los primeros 512 bytes del disco rígido.
-Este sector se llama MBR (Master Boot Record) y normalmente contiene 2 componentes
-principales: un pequeño programa de inicio específico de un sistema operativo en el comienzo,
-seguido de la tabla de particiones del disco. El BIOS a esta altura ya no toma
-parte de este proceso, sino que simplemente carga los contenidos del MBR en
-memoria y apunta el EIP a la primera posición donde alojó esos contenidos,
-para que se comience a ejecutar el programa que se debería haber traído del MBR.

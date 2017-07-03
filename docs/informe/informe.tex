@@ -3,6 +3,7 @@
 \usepackage{header}
 \usepackage{caratula}
 \usepackage{informe}
+\addbibresource{informe.bib}
 \begin{document}{}
 % -------------------------------------
 
@@ -24,24 +25,23 @@
 
 
 %~ Objetivo, introducción.
-\section{Introduccion}\input{cap/introduccion}
+\section{Introducción}\input{cap/introduccion}
 
-\section{Motivación}
+\section{Motivación}\input{cap/motivacion}
+
 \section{Presentación}
+
 \section{Alcance}
+
 \section{Tecnologías}
+
 \section{Trabajo futuro}
+
 \section{Conclusiones}
 
 
-\clearpage
-\section{Referencias}
-\begin{thebibliography}{1}
-
-    \bibitem{boot} How computers boot \\
-    {\texttt http://duartes.org/gustavo/blog/post/how-computers-boot-up}
-
-\end{thebibliography}
+%\clearpage
+\printbibliography
 
 
 \end{TP}

@@ -2,3 +2,9 @@
 *.fdb_latexmk
 *.fls
 *.log
+*.bbl
+*.bcf
+*.blg
+*.out
+*.pyg
+*.run.xml
