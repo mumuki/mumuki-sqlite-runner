@@ -1,0 +1,76 @@
+
+\subsection*{Ejemplo un ejercicio con solución vía \textit{Query}}
+
+
+\begin{listing}[ht]
+    \begin{minted}[frame=lines,framesep=5mm,baselinestretch=1.2,
+    bgcolor=light-gray,fontsize=\small]{sql}
+    CREATE TABLE motores (
+        id integer primary key,
+        nombre varchar(200) NOT NULL
+    );
+    \end{minted}
+    \caption{\textbf{Extra Code:} SQL}
+    \label{listing:yaml}
+\end{listing}
+
+\begin{listing}[ht]
+    \begin{minted}[frame=lines,framesep=5mm,baselinestretch=1.2,
+    bgcolor=light-gray,fontsize=\small]{yaml}
+    solution_type: "query"
+    solution_query: "select * from motores";
+    examples:
+        - data: |
+            INSERT INTO motores (nombre) values ('MySQL');
+            INSERT INTO motores (nombre) values ('PostgreSQL');
+            INSERT INTO motores (nombre) values ('Oracle');
+            INSERT INTO motores (nombre) values ('Microsoft SQL Server');
+            INSERT INTO motores (nombre) values ('SQLite');
+    \end{minted}
+    \caption{\textbf{Test Code:} YAML}
+    \label{listing:yaml}
+\end{listing}
+
+
+\subsection*{Ejemplo un ejercicio con solución vía \textit{Datasets}}
+
+
+\begin{listing}[ht]
+    \begin{minted}[frame=lines,framesep=5mm,baselinestretch=1.2,
+    bgcolor=light-gray,fontsize=\small]{sql}
+    CREATE TABLE `bolitas` (
+        id integer primary key,
+        color varchar(200) NOT NULL
+    );
+    \end{minted}
+    \caption{\textbf{Extra Code:} SQL}
+    \label{listing:yaml}
+\end{listing}
+
+\begin{listing}[ht]
+    \begin{minted}[frame=lines,framesep=5mm,baselinestretch=1.2,
+    bgcolor=light-gray,fontsize=\small]{yaml}
+    solution_type: "datasets"
+    examples:
+    -   data: |
+            INSERT INTO bolitas (color) values ('Verde');
+            INSERT INTO bolitas (color) values ('Rojo');
+            INSERT INTO bolitas (color) values ('Azul');
+            INSERT INTO bolitas (color) values ('Negro');
+        solution_dataset: |
+            id|color
+            1|Verde
+            2|Rojo
+            3|Azul
+            4|Negro
+    -   data: |
+            INSERT INTO bolitas (color) values ('Violeta');
+            INSERT INTO bolitas (color) values ('Amarillo');
+        solution_dataset: |
+            id|color
+            2|Violeta
+            3|Amarillo
+    \end{minted}
+    \caption{\textbf{Test Code:} YAML}
+    \label{listing:yaml}
+\end{listing}

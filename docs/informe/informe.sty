@@ -8,6 +8,7 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{medium-gray}{gray}{0.50}
+\definecolor{light-gray}{gray}{0.95}
 
 % notes
 \newcommand{\nota}[1]{\hspace{0.5em} \textcolor{dkgreen}{\textbf{[#1]}}}
@@ -22,11 +23,13 @@
 \newcommand{\xor}{\ensuremath{\oplus}}
 \newcommand{\func}[1]{\ensuremath{\textsc{#1}}}
 
-
 \lstset{%
     language=ruby,
     basicstyle=\small,
-    showstringspaces=false
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    captionpos=b,
+    stringstyle=\color{dkgreen}
 }
 
 % -- package y config for header & footer --
