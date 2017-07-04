@@ -1,0 +1,139 @@
+% **************************************************************************
+%
+%  Package 'caratula', version 0.3 (para componer caratulas de TPs del DC).
+%
+%  En caso de dudas, problemas o sugerencias sobre este package escribir a
+%  Brian J. Cardiff (bcardif arroba gmail.com).
+%  Nico Rosner (nrosner arroba dc.uba.ar).
+%
+% --
+%
+% Version adaptada por Leandro Di Lorenzo para UNQ
+%
+% **************************************************************************
+
+% ----- Informacion sobre el package para el sistema -----------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{caratula}[2005/08/09 v0.3 Para componer caratulas de TPs del DC]
+\usepackage[pdftex]{graphicx}
+
+% ----- Imprimir un mensajito al procesar un .tex que use este package -----
+
+\typeout{Cargando package 'caratula' v0.3 (2005/08/09)}
+
+% ----- Algunas variables --------------------------------------------------
+
+\let\Materia\relax
+\let\Submateria\relax
+\let\Titulo\relax
+\let\Subtitulo\relax
+\let\Grupo\relax
+\let\Fecha\relax
+\let\Logoimagefile\relax
+\let\Resumen\relax
+\let\Tags\relax
+
+% ----- Comandos para que el usuario defina las variables ------------------
+
+\def\materia#1{\def\Materia{#1}}
+\def\submateria#1{\def\Submateria{#1}}
+\def\titulo#1{\def\Titulo{#1}}
+\def\subtitulo#1{\def\Subtitulo{#1}}
+\def\grupo#1{\def\Grupo{#1}}
+\def\fecha#1{\def\Fecha{#1}}
+\def\logoimagefile#1{\def\Logoimagefile{#1}}
+\def\resumen#1{\def\Resumen{#1}}
+\def\tags#1{\def\Tags{#1}}
+
+\def\alumno#1{\def\Alumno{#1}}
+\def\profesor#1{\def\Profesor{#1}}
+
+% ----- Token list para los integrantes ------------------------------------
+
+\newtoks\intlist\intlist={}
+
+% ----- Comando para que el usuario agregue integrantes --------------------
+
+\def\integrante#1{\intlist=\expandafter{\the\intlist
+    \rule{0pt}{1.2em}#1\\[0.2em]}}
+%\def\integrante#1#2{\intlist=\expandafter{\the\intlist
+%    \rule{0pt}{1.2em}#1 & \tt #2\\[0.2em]}}
+
+% ----- Macro para generar la tabla de integrantes -------------------------
+
+\def\tablaints{%
+    \begin{center}
+        \vspace{1em}
+        \Large{\Alumno} \\
+        \vspace{2em}
+        \large{\textbf{Coordinador:} \Profesor}
+    \end{center}
+}
+
+% ----- Codigo para manejo de errores --------------------------------------
+
+\def\se{\let\ifsetuperror\iftrue}
+\def\ifsetuperror{%
+    \let\ifsetuperror\iffalse
+    \ifx\Materia\relax\se\errhelp={Te olvidaste de proveer una \materia{}.}\fi
+    \ifx\Titulo\relax\se\errhelp={Te olvidaste de proveer un \titulo{}.}\fi
+    \expandafter\ifsetuperror
+}
+
+
+
+
+% ----- \maketitle correspondiente a la versión v0.3 (gráfica) -------------
+
+\def\maketitlegraf{%
+    \ifsetuperror\errmessage{Faltan datos de la caratula! Ingresar 'h' para mas informacion.}\fi
+%
+    \thispagestyle{empty}
+
+%    \ifx\Logoimagefile\relax\else\includegraphics{\Logoimagefile}\fi \hfill
+    \begin{figure}
+    \includegraphics[width=.5\textwidth]{logo_unq.png}
+    \end{figure}
+
+    \vspace*{.03 \textheight}
+
+    \noindent \textbf{\huge \Titulo}  \medskip \\
+    \ifx\Subtitulo\relax\else\noindent\textbf{\large \Subtitulo} \\ \fi%
+    \noindent \rule{\textwidth}{1 pt}
+
+    {\noindent\large\Fecha \hspace*\fill \Materia} \\
+    \ifx\Submateria\relax\else{\noindent \hspace*\fill \Submateria}\fi%
+
+    \medskip%
+    \begin{center}
+        \ifx\Grupo\relax\else\textbf{\Grupo}\par\bigskip\fi
+        \tablaints
+    \end{center}%
+    \bigskip
+    %~ \ifx\Resumen\relax\else\textbf{\textsf{Resumen}} \\
+    %~ \Resumen\bigskip\fi \\
+    %~ \ifx\Tags\relax\else\textbf{\textsf{Palabras Clave}} \\
+    %~ \Tags\par\bigskip\fi
+    \vfill%
+%
+    \begin{minipage}[t]{\textwidth}
+        %~ \begin{minipage}[t]{.50 \textwidth}
+            %~ \includegraphics[width=0.9\textwidth]{logo_unqui.png}
+        %~ \end{minipage}%%
+        %~ \begin{minipage}[b]{.55 \textwidth}
+            \textsf{Universidad Nacional de Quilmes} \\
+            {\scriptsize %
+            Roque Sáenz Peña 352, Bernal \\
+            Buenos Aires, Argentina (B1876BXD) \\
+            Tel. (+54 11) 4365 7100 $|$ Fax (+54 11) 4365 7101 \\
+            http://www.unq.edu.ar/ $|$ info@unq.edu.ar \\
+            }
+        %~ \end{minipage}
+    \end{minipage}%
+%
+    \newpage}
+
+% ----- Reemplazamos el comando \maketitle de LaTeX con el nuestro ---------
+
+\def\maketitle{\maketitlegraf}

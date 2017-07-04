@@ -1,0 +1,91 @@
+
+La materia \textit{Bases de Datos} contiene mayormente
+alumnos en su segundo o tercer semestre en
+la Tecnicatura en Programación dictada en la Universidad
+Nacional de Quilmes. Idealmente son alumnos que
+vienen de cursar las materias \textit{Introducción
+a la Programación} y \textit{Organización de Computadoras},
+materias antagónicas desde el \textit{alto} y \textit{bajo nivel}
+de los conceptos transmitidos. En \textit{Intro} se aprenden conceptos
+de \textbf{alto nivel} usando Gobstones y en \textit{Orga} conceptos de código
+de máquina utilizando QSIM\footnote{\url{http://orga.blog.unq.edu.ar/qsim/}}.
+Y al mismo tiempo que Bases de Datos muchos cursan
+\textit{Programación con Objetos I}.
+
+Desde \textit{BBDD} se busca transmitir el concepto de relación
+de información. Se enseñan conceptos como \textit{Modelo de
+Entidad-Relacion}, \textit{Normalización} y \textit{Álgebra Relacional}.
+El puente entre estos conceptos y el mundo de la programación
+es el \textbf{lenguaje SQL}.
+
+Al querer enseñar los conceptos necesarios para que el alumno
+pueda manejar SQL, aparecen los problemas recurrentes asociados
+a las tecnologías. Los motores utilizados en la industria como
+Oracle, Postgres, SQL Server, MySQL, etc., son piezas de software
+tan robustas como complejas, y pueden ser una demora cuando se
+quieren trasmitir otras ideas fundacionales.
+
+Mumuki cuenta con soporte para Gobstones~\footnote{\url{https://github.com/mumuki/mumuki-gobstones-runner}}~\cite{MumukiGobstonesAloi}
+y para QSIM\footnote{\url{https://github.com/mumuki/mumuki-qsim-runner}},
+y ambos son utilizados en Intro y Orga respectivamente.
+Además de la ventaja de la familiarización de la tecnología,
+Mumuki permite incorporar los componentes necesarios para
+obtener una adaptación a la necesidad puntual~\footnote{dado que
+es Open Source}.
+
+
+\subsection{Proyecto Mumuki}
+
+\begin{displayquote}[\cite{PaperMumuki}]
+``Mumuki es un software educativo para aprender a programar a partir de la resolución de problemas;
+plantea enseñar conceptos de programación, en un proceso conducido por guías prácticas
+en las que la teoría surge a medida que se avanza. Esta herramienta se presenta al
+estudiante como una aplicación Web interactiva, en la que se articulan explicaciones
+y ejemplos con la opción de que cada uno realice su propia solución y la plataforma
+la pruebe y corrija instantáneamente, orientando acerca de los aciertos y errores.''
+\end{displayquote}
+
+Mumuki es el resultado del trabajo de muchas personas que creen
+que es necesario plantear nuevas formas de enseñar a programar.
+Lo que se plantea es un complemento a la clase en el aula, no
+un reemplazo, pero haciendo foco en que la plataforma pueda ayudar
+a resolver el mayor número de \textit{problemas técnicos}
+que el alumno pueda tener con la tecnología y permitir al docente enfocarse
+en las problemáticas inherentes a la enseñanza de los conceptos.
+
+Es común en cursos introductorios de programación orientada a objetos que los alumnos
+estén una o dos clases (y el tiempo entre semana) tratando de hacer funcionar
+el entorno de Java con sus bibliotecas y el IDE, en lugar de
+aprovechar ese tiempo para practicar conceptos elementales como mensajes
+entre objetos, comportamiento, herencia, etc.
+
+Al usar una plataforma como Mumuki el docente puede saltear esta problemática
+y enforcarse en lo conceptual. Por supuesto que todo estudiante de programación
+debe lograr aprender a instalar y configurar entornos de desarrollo, pero
+en ciertos niveles esta nueva forma de enseñar evita muchas
+frustaciones puramente inherentes a la tecnología,
+las que sino terminan por ser asociadas a la programación como un todo.
+
+\subsection{Gobstones como hilo conductor}
+
+Si bien este trabajo no se relaciona directamente con Gobstones
+\footnote{\url{http://www.gobstones.org/}},
+gran parte de las ideas tienen orígen en las planteadas en el libro
+\enquote{Las bases conceptuales de la Programación: Una nueva forma de aprender a programar}~\cite{LibroGobstones}, del cual obtenemos su definición:
+
+\begin{displayquote}
+``Gobstones es un lenguaje conciso de sintaxis razonablemente simple,
+orientado a personas que no tienen conocimientos previos en programación.
+El lenguaje maneja distintos componentes propios, ideados con el fin de
+aprender a resolver problemas en programación,  pero al mismo tiempo
+intentando volver atractivo el aprendizaje, para lograr captar la atención
+y capacidad de asombro del estudiante.''
+\end{displayquote}
+
+Gobstones busca facilitar la enseñanza de conceptos iniciales de programación
+tratando de mantener distancia de las problemáticas técnicas y
+la comprensión de errores complejos ante fallos de programas.
+Cuenta con el entorno \textit{PyGobstones}~\footnote{\url{http://inpr.web.unq.edu.ar/instalacion-de-pygobstones/}} programado en python
+pero actualmente se está desarrollando una versión web~\footnote{\url{https://gobstones.github.io/editor-beta/}} que no requiere instalación.
+
+
