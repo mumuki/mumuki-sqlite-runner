@@ -91,9 +91,12 @@
 %
     \thispagestyle{empty}
 
-    \ifx\Logoimagefile\relax\else\includegraphics{\Logoimagefile}\fi \hfill \includegraphics{logo_unqui.png}
+%    \ifx\Logoimagefile\relax\else\includegraphics{\Logoimagefile}\fi \hfill
+    \begin{figure}
+    \includegraphics[width=.5\textwidth]{logo_unq.png}
+    \end{figure}
 
-    \vspace*{.07 \textheight}
+    \vspace*{.03 \textheight}
 
     \noindent \textbf{\huge \Titulo}  \medskip \\
     \ifx\Subtitulo\relax\else\noindent\textbf{\large \Subtitulo} \\ \fi%

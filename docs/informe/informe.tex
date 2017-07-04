@@ -14,17 +14,16 @@
 \setcounter{page}{1}
 
 %-- Índice --
+\clearpage{\pagestyle{empty}\tableofcontents\clearpage}
 %\clearpage{\pagestyle{empty}\tableofcontents\cleardoublepage}
-%\clearpage{\pagestyle{empty}\tableofcontents}
 
 %-- Dentro de TP redefino ciertos comandos para que se pueda compilar todo individualmente --
 \begin{TP}
 
 
-%\setcounter{section}{-1}
+%\tableofcontents
 
 
-%~ Objetivo, introducción.
 \section{Introducción}\input{cap/introduccion}
 
 \section{Motivación}\input{cap/motivacion}
@@ -35,11 +34,13 @@
 
 \section{Conclusiones}\input{cap/conclusiones}
 
-%\clearpage
 \printbibliography
 
-\section*{Apéndice}\input{cap/apendice}
-
+%\clearpage
+\section*{Apéndices}
+\addcontentsline{toc}{section}{Apéndices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\input{cap/apendice}
 
 \end{TP}
 \end{document}
