@@ -89,12 +89,11 @@ se dan mediante datos con formato \textit{json}.
 Mumukit permite configurar que la petición hacia el \textit{worker}
 sea mediante un comando que recibe un archivo como parámetro.
 El \textit{Runner SQLite} transforma el ejercicio en una estructura
-del tipo:
+\textit{json} como se observe en el listing \ref{listing:request}.
 
 \begin{listing}[ht]
-    \begin{minted}[frame=lines,framesep=5mm,baselinestretch=1.2,
+    \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,
     bgcolor=light-gray,fontsize=\small]{json}
-
     {
         "init": "CREATE TABLE ...; CREATE ...;",
         "solution": "SELECT ... FROM ...;",
@@ -103,7 +102,7 @@ del tipo:
     }
     \end{minted}
     \caption{\textbf{JSON} enviado al \textit{worker}}
-    \label{listing:yaml}
+    \label{listing:request}
 \end{listing}
 
 El \textit{worker} utiliza un script en \textit{python}
@@ -116,10 +115,30 @@ Cuando la ejecución no contiene errores de sintaxis
 y puede ser procesada por el motor, genera un \textit{dump} en formato \textit{json}
 con las claves \texttt{solutions} y \texttt{results},
 que contienen los \textit{rows} obtenidos como resultado de ejecutar
-cada respectiva \textit{query} en cada set de datos provisto.
+cada respectiva \textit{query} en cada set de datos provisto,
+tal como se muestra en el listing \ref{listing:response}.
 Esos resultados son procesados por el \textit{Runner} que evalúa
 a posteriori la correctitud de la solución del alumno y
 retorna un \textit{feedback} acorde.
+
+\begin{listing}[ht]
+    \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,
+    bgcolor=light-gray,fontsize=\small]{json}
+    {
+        "solutions": [
+            "name\nTest 1.1\nTest 1.2\nTest 1.3",
+            "name\nTest 2.1\nTest 2.2\nTest 2.3",
+
+        ],
+        "results": [
+            "id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3",
+            "id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3",
+        ]
+    }
+    \end{minted}
+    \caption{\textbf{JSON} devuelto por \textit{worker} en caso de éxito}
+    \label{listing:response}
+\end{listing}
 
 
 \begin{figure}[h]
