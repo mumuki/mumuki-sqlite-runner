@@ -1,26 +1,47 @@
 \graphicspath{ {./imgs/}{../imgs/} }
-\usetheme{Warsaw}
+
+\usetheme{AnnArbor}
+\usecolortheme{beaver}
+\setbeamertemplate{title page}[default][rounded=true]
+\setbeamercolor{titlelike}{parent=beaver,bg=beaverdarkgrey}
+\setbeamertemplate{footline}
+{
+    \leavevmode%
+    \hbox{%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+        \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \usebeamerfont{title in head/foot}\insertshorttitle\hspace*{2em}
+    \end{beamercolorbox}}%
+    \vskip0pt%
+}
+
 
 \title[Mumuki Query Learning]
 {%
-    \normalsize{Presentación \\ Trabajo de Inserción Profesional}%
+    Mumuki Query Learning \\
+    \vspace{.6em}
+    \small{\emph{Un Runner de SQL para el Proyecto Mumuki}}
+    %
 }
 
 \author[Leandro Di Lorenzo]
 {
-    Leandro~Di~Lorenzo
-    \vspace{-1em}
+    Leandro~Di~Lorenzo \\
+    \textbf{Coordinador:} Ing. Fernando Dodino
+    % \vspace{-1em}
 }
 
 
-%\institute[TIP - UNQ]
-%{
-%    \textsc{
-%        \normalsize{Universidad Nacional de Quilmes}
-%    }
-%}
+\institute[TIP - UNQ]
+{
+   \textsc{
+       \small{Tecnicatura Universitaria en Programación}
+   }
+}
 
-\date[apr 2017]{1 de Abril, 2017}
+\date[jul 2017]{8 de Julio, 2017}
 
 
 \makeatletter
