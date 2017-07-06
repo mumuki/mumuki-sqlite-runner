@@ -290,144 +290,178 @@
 \begin{frame}[fragile]
     {Runner SQLite}
     {\emph{Ejemplo I}}
-
-    \input{codes/ejemplo1}
-
+    \input{slides/ejemplo1}
 \end{frame}
 
 \begin{frame}[fragile]
     {Runner SQLite}
     {\emph{Ejemplo II}}
-
-    \input{codes/ejemplo2}
-
+    \input{slides/ejemplo2}
 \end{frame}
 
 \begin{frame}[fragile]
     {Runner SQLite}
     {\emph{Ejemplo III}}
-
-    \input{codes/ejemplo3}
-
+    \input{slides/ejemplo3}
 \end{frame}
+
 
 \begin{frame}
-    {Runner SQLite}
-    {\emph{Demo Online}}
 
-    \centering{\LARGE{DEMO}}
+    \begin{center}
+        \LARGE{DEMO}
 
-    \begin{figure}[h]
-        \includegraphics[width=.6\textwidth]{demo}
-    \end{figure}
+        \begin{figure}[h]
+            \includegraphics[width=.6\textwidth]{demo}
+        \end{figure}
+    \end{center}
 
 \end{frame}
+
 
 %%
 %% Mumuki Query Learning :: Objetivos
 %%
 \begin{frame}
-    {Mumuki Query Learning :: Objetivos}
-
-    Proveer a los docentes de \textit{Bases de Datos} una herramienta para:
-
-    \begin{itemize}
-        \item Mejorar la didáctica en la enseñanza de conceptos de SQL
-        \item Facilitar el seguimiento del aprendizaje de los alumnos
-        \item Contar con mejores elementos de evaluación
-    \end{itemize}
-
-    \vspace{1em}
-
-    Proveer a los alumnos una herramienta para:
+    {MQL}
+    {\emph{Objetivos}}
 
     \begin{itemize}
-        \item Comprender mejor los conceptos recibidos
-        \item Recibir feedback de forma temprana
-        \item Poder analizar por su cuenta los fallos obtenidos para poder aprender de ellos
-        \item Analizar su propio progreso visualizando los pasos dados hasta la resolución de los problemas
+        \item Brindar herramientas de \textit{Bases de Datos} para
+
+        \begin{itemize}
+            \item Mejorar la didáctica de SQL
+            \item Facilitar el seguimiento del alumno
+            \item Contar con mejores elementos de evaluación
+        \end{itemize}
+
+        \item Permitirle al alumno
+
+        \begin{itemize}
+            \item Revisar su progreso
+            \item Recibir \emph{feedback online}
+            \item Interacturar como comunidad sobre la temática
+        \end{itemize}
+
+        \item Hacer un aporte al \textit{Proyecto Mumuki} como \\ comunidad \emph{Open Source}
     \end{itemize}
+
 \end{frame}
+
 
 %%
 %% Consecuencias Deseadas
 %%
-\begin{frame}{MQL :: Consecuencias Deseadas}
+\begin{frame}
+    {MQL}
+    {\emph{A Futuro...}}
+
+    Dejar abierta la posibilidad de incorporar tecnología para la enseñanza de:
 
     \begin{itemize}
-        \setlength\itemsep{1em}
-        \item Aportar al crecimiento del \textit{Proyecto Mumuki} con una nueva tecnología de aprendizaje.
-        \item Ayudar a todo programador que desee mejorar su capacidad y calidad en
-        relación al uso de las bases de datos relaciones.
-        \item Dejar abierta la posibilidad de extensión hacia:
-        \vspace{.4em}
+        \item Álgebra Relacional
+
+        \item BBDD orientadas a
+
         \begin{itemize}
-            \setlength\itemsep{.5em}
-            \item Álgebra Relacional
-            \item Bases de datos no relaciones (MongoDB, Neo4j, Redis, etc...)
+            \item Documentos {\footnotesize (\emph{mongoDB})}
+            \item Grafos {\footnotesize (\emph{neo4j})}
         \end{itemize}
+
     \end{itemize}
 
 \end{frame}
 
 
-%%
-%% Herramientas a Implementar
-%%
-\begin{frame}{MQL :: Herramientas a Implementar}
-    \begin{itemize}%[<+->]
-        \setlength\itemsep{1em}
-        \item Docker container con PostgreSQL o SQLite
-        \item Runner de SQL en Ruby que permita:
-        \vspace{.4em}
-        \begin{itemize}
-            \setlength\itemsep{.5em}
-            \item Obtener y ejecutar el código SQL recibido
-            \item Validar resultados obtenidos contra esperados
-            \item Analizar sintaxis para exponer buenas prácticas de código
-        \end{itemize}
-        \item Classroom con set de ejercicios
-    \end{itemize}
-\end{frame}
 
-
-%%
-%% Mumuki :: Organizaciones que la utilizan
-%%
-\begin{frame}{Mumuki :: Organizaciones que la utilizan}
-    \begin{figure}[h]
-        \includegraphics[width=1\textwidth]{organizaciones}
-    \end{figure}
-\end{frame}
 
 
 %%
 %% Algunos Links
 %%
-\begin{frame}{Algunos Links}
-    \begin{itemize}%[<+->]
-        \setlength\itemsep{.7em}
-        \item Proyecto Mumuki: \url{http://www.mumuki.org/}
-        \item Plataforma: \url{https://mumuki.io/}
-        \item Código en GitHub: \url{https://github.com/mumuki}
-        \item Nota en Télam: \url{http://www.telam.com.ar/notas/201703/183460-mumuki-plataforma-gratuita-programacion\\-aprendizaje-ensenanza-software.html}
-        \item PostgreSQL: \url{https://www.postgresql.org/}
-        \item SQLite: \url{https://www.sqlite.org/}
-        \item Docker: \url{https://www.docker.com/}
-    \end{itemize}
+\begin{frame}
+    {MQL}
+    {\emph{Referencias}}
+
+    \begin{thebibliography}{10}
+      \setbeamertemplate{bibliography item}[book]
+      \bibitem{sadosky}
+        Una propuesta para refundar la enseñanza de la computación en las escuelas Argentinas
+        \newblock {\em Fundación Sadosky}
+        \newblock {\footnotesize \url{http://www.fundacionsadosky.org.ar/wp-content/uploads/2014/06/cc-2016.pdf}}
+
+      \setbeamertemplate{bibliography item}[book]
+      \bibitem{gobstones}
+        Las bases conceptuales de la Programación: Una nueva forma de aprender a programar
+        \newblock {\em Pablo E. Martínez López}
+        \newblock {\footnotesize \url{http://www.gobstones.org/bibliografia/Libros/BasesConceptualesProg.pdf}}
+
+      \setbeamertemplate{bibliography item}[article]
+      \bibitem{mumuki}
+        Mumuki, una plataforma libre para aprender a programar
+        \newblock {\em Federico Aloi, Franco Bulgarelli, Lucas Spigariol}
+        \newblock {\footnotesize \url{https://www.academia.edu/25374997/Mumuki\_una\_plataforma\_libre\_para\_aprender\_a\_programar}}
+      \end{thebibliography}
 \end{frame}
+
+%%
+%% Algunos Links
+%%
+\begin{frame}
+    {MQL}
+    {\emph{Links}}
+
+    \setbeamercolor{bibliography entry location}{fg=black}
+    \setbeamercolor{bibliography entry note}{fg=black}
+
+    \begin{thebibliography}{10}
+      \setbeamertemplate{bibliography item}[online]
+      \bibitem{lmumuki}
+        Proyecto Mumuki
+        \newblock {\footnotesize \url{http://www.mumuki.org/}}
+
+      \setbeamertemplate{bibliography item}[online]
+      \bibitem{runner}
+        Runner SQLite
+        \newblock {\footnotesize \url{https://github.com/leandrojdl/mumuki-sqlite-runner}}
+        \newblock {\footnotesize \url{https://github.com/mumuki/mumuki-sqlite-runner}}
+
+      \setbeamertemplate{bibliography item}[online]
+      \bibitem{mumuki}
+        Stack Tecnológico
+        \newblock {\footnotesize \url{https://www.ruby-lang.org/}}
+        \newblock {\footnotesize \url{https://www.sqlite.org/}}
+        \newblock {\footnotesize \url{https://www.docker.com/}}
+        \newblock {\footnotesize \url{https://www.python.org/}}
+
+      \end{thebibliography}
+\end{frame}
+
 
 
 %%
 %% Gracias :: Preguntas
 %%
-\begin{frame}[plain]
+\begin{frame}
     \begin{center}
         \begin{figure}[h]
             \includegraphics[scale=.7]{questions}
         \end{figure}
-        \vspace{2em}
+        \vspace{1em}
         \Large{¿Preguntas, ideas, comentarios?}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+
+        \vspace{4em}
+        \huge{Muchas Gracias}
+
+        \begin{figure}[h]
+            \includegraphics[scale=.1]{12cactus}
+        \end{figure}
+
     \end{center}
 \end{frame}
 
