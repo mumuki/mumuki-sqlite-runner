@@ -1,32 +1,38 @@
 \graphicspath{ {./imgs/}{../imgs/} }
 
-\usetheme{AnnArbor}
+% \usetheme{AnnArbor}
+\usetheme{Warsaw}
 \usecolortheme{beaver}
+\useoutertheme{miniframes}
+\setbeamertemplate{headline}{}
 \setbeamertemplate{title page}[default][rounded=true]
-\setbeamercolor{titlelike}{parent=beaver,bg=beaverdarkgrey}
+\setbeamertemplate{frametitle}[default][colsep=0bp,rounded=false,shadow=false]
+\setbeamercolor{frametitle}{bg=beaverdarkred,fg=white}
+\setbeamercolor{framesubtitle}{bg=darkunq}
+\setbeamercolor{title}{fg=beaverdarkred}
+\setbeamercolor{subtitle}{fg=beaverdarkred}
+\setbeamercolor{author in head/foot}{fg=beaverdarkred,bg=darkgrey}
 \setbeamertemplate{footline}
 {
     \leavevmode%
     \hbox{%
-    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
-        \usebeamerfont{author in head/foot}\insertshortauthor
-    \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
-        \usebeamerfont{title in head/foot}\insertshorttitle\hspace*{2em}
+    \begin{beamercolorbox}[wd=1\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \usebeamerfont{title in head/foot}\insertshortauthor\insertshorttitle\hspace*{2em}
     \end{beamercolorbox}}%
     \vskip0pt%
 }
 
 
-\title[Mumuki Query Learning]
-{%
-    Mumuki Query Learning \\
-    \vspace{.6em}
-    \small{\emph{Un Runner de SQL para el Proyecto Mumuki}}
-    %
+
+
+\title[\texttt{ UNQ -> TIP -> MQL}]{Mumuki Query Learning}
+\subtitle{\emph{Un Runner de SQL para el Proyecto Mumuki}}
+
+\titlegraphic{
+    \includegraphics[width=.4\textwidth]{logo-unq}
 }
 
-\author[Leandro Di Lorenzo]
+\author[\texttt{Leandro Di Lorenzo ::}]
 {
     Leandro~Di~Lorenzo \\
     \textbf{Coordinador:} Ing. Fernando Dodino
@@ -37,7 +43,7 @@
 \institute[TIP - UNQ]
 {
    \textsc{
-       \small{Tecnicatura Universitaria en Programación}
+       \small{Tecnicatura en Programación Informática}
    }
 }
 

@@ -1,0 +1,45 @@
+Ejemplo de un ejercicio con solución vía \textit{Datasets}
+
+\begin{columns}[t]
+    \column{.5\textwidth}
+    \begin{listing}[H]
+        \caption{Extra (Doc)}
+        \begin{minted}[fontsize=\scriptsize]{sql}
+CREATE TABLE motores (
+    id integer primary key,
+    nombre varchar(200) NOT NULL
+);
+        \end{minted}
+    \end{listing}
+
+    \begin{listing}[H]
+        \caption{Content (Alu)}
+        \begin{minted}[fontsize=\scriptsize]{sql}
+        SELECT id, nombre
+        FROM motores;
+        \end{minted}
+    \end{listing}
+
+    \column{.5\textwidth}
+    \begin{listing}[H]
+        \caption{Test (Doc)}
+        \begin{minted}[fontsize=\tiny]{yaml}
+solution_type: "datasets"
+examples:
+  - data: |
+      INSERT INTO motores values ('MySQL');
+      INSERT INTO motores values ('PostgreSQL');
+      INSERT INTO motores values ('Oracle');
+      INSERT INTO motores values ('SQL Server');
+      INSERT INTO motores values ('SQLite');
+    solution_dataset: |
+      id|color
+      1|MySQL
+      2|PostgreSQL
+      3|Oracle
+      4|SQL Server
+      4|SQLite
+        \end{minted}
+    \end{listing}
+
+\end{columns}

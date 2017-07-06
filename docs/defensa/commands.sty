@@ -1,5 +1,10 @@
 \ProvidesPackage{commands}
 
+\definecolor{lightgrey}{RGB}{217,217,217}
+\definecolor{darkgrey}{RGB}{200,200,200}
+\definecolor{darkunq}{RGB}{213,0,35}
+\definecolor{beaverdarkred}{RGB}{163,0,0}
+
 \newenvironment<>{varblock}[2][.9\textwidth]%
 {%
     \setlength{\textwidth}{#1}%
@@ -13,3 +18,5 @@
     \usebeamertemplate{block end}%
     \end{actionenv}%
 }%
+
+\renewcommand\listingscaption{{\footnotesize Código}}
