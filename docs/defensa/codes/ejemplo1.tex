@@ -1,19 +1,19 @@
-Ejemplo de un ejercicio con solución vía \textit{Query}
+Ejemplo de un ejercicio de tipo \texttt{SELECT} con solución vía \textit{Query}
 
 \begin{columns}[t]
     \column{.5\textwidth}
     \begin{listing}[H]
-        \caption{Extra (Doc)}
+        \caption{Extra (Docente, SQL)}
         \begin{minted}[fontsize=\scriptsize]{sql}
-CREATE TABLE motores (
-    id integer primary key,
-    nombre varchar(200) NOT NULL
-);
+    CREATE TABLE motores (
+        id integer primary key,
+        nombre varchar(200) NOT NULL
+    );
         \end{minted}
     \end{listing}
 
     \begin{listing}[H]
-        \caption{Content (Alu)}
+        \caption{Content (Alumno, SQL)}
         \begin{minted}[fontsize=\scriptsize]{sql}
         SELECT id, nombre
         FROM motores;
@@ -22,10 +22,10 @@ CREATE TABLE motores (
 
     \column{.5\textwidth}
     \begin{listing}[H]
-        \caption{Test (Doc)}
+        \caption{Test (Docente, YAML)}
         \begin{minted}[fontsize=\tiny]{yaml}
-solution_type: "query"
-solution_query: "select * from motores";
+solution_type: query
+solution_query: select * from motores;
 examples:
   - data: |
       INSERT INTO motores values ('MySQL');

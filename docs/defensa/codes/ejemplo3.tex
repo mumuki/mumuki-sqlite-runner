@@ -1,22 +1,29 @@
-Ejemplo de un ejercicio de tipo \texttt{SELECT} con solución vía \textit{Datasets}
+Ejemplo de un ejercicio de tipo \texttt{CREATE} con solución vía \textit{Datasets}
 
 \begin{columns}[t]
     \column{.5\textwidth}
     \begin{listing}[H]
         \caption{Extra (Docente, SQL)}
         \begin{minted}[fontsize=\scriptsize]{sql}
-    CREATE TABLE motores (
-        id integer primary key,
-        nombre varchar(200) NOT NULL
-    );
+    -- NONE
         \end{minted}
     \end{listing}
 
     \begin{listing}[H]
         \caption{Content (Alumno, SQL)}
-        \begin{minted}[fontsize=\scriptsize]{sql}
-        SELECT id, nombre
-        FROM motores;
+        \begin{minted}[fontsize=\tiny]{sql}
+    CREATE TABLE motores (
+        id integer primary key,
+        nombre varchar(200) NOT NULL
+    );
+
+    INSERT INTO motores values ('MySQL');
+    INSERT INTO motores values ('PostgreSQL');
+    INSERT INTO motores values ('Oracle');
+    INSERT INTO motores values ('SQL Server');
+    INSERT INTO motores values ('SQLite');
+
+    SELECT * FROM motores;
         \end{minted}
     \end{listing}
 
@@ -26,12 +33,7 @@ Ejemplo de un ejercicio de tipo \texttt{SELECT} con solución vía \textit{Datas
         \begin{minted}[fontsize=\tiny]{yaml}
 solution_type: datasets
 examples:
-  - data: |
-      INSERT INTO motores values ('MySQL');
-      INSERT INTO motores values ('PostgreSQL');
-      INSERT INTO motores values ('Oracle');
-      INSERT INTO motores values ('SQL Server');
-      INSERT INTO motores values ('SQLite');
+  - data: -- none
     solution_dataset: |
       id|color
       1|MySQL
