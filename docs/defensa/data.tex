@@ -1,0 +1,62 @@
+\graphicspath{ {./imgs/}{../imgs/} }
+
+% \usetheme{AnnArbor}
+\usetheme{Warsaw}
+\usecolortheme{beaver}
+\useoutertheme{miniframes}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{title page}[default][rounded=true]
+\setbeamertemplate{frametitle}[default][colsep=0bp,rounded=false,shadow=false]
+\setbeamercolor{frametitle}{bg=beaverdarkred,fg=white}
+\setbeamercolor{framesubtitle}{bg=darkunq}
+\setbeamercolor{title}{fg=beaverdarkred}
+\setbeamercolor{subtitle}{fg=beaverdarkred}
+\setbeamercolor{author in head/foot}{fg=beaverdarkred,bg=darkgrey}
+\setbeamertemplate{footline}
+{
+    \leavevmode%
+    \hbox{%
+    \begin{beamercolorbox}[wd=1\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \usebeamerfont{title in head/foot}\insertshortauthor\insertshorttitle\hspace*{2em}
+    \end{beamercolorbox}}%
+    \vskip0pt%
+}
+\setbeamertemplate{itemize item}[triangle]
+\setitemize{label=\usebeamerfont*{itemize item}%
+  \usebeamercolor[fg]{itemize item}
+  \usebeamertemplate{itemize item}}
+
+
+
+
+\title[\texttt{ UNQ -> TIP -> MQL}]{Mumuki Query Learning}
+\subtitle{\emph{Un Runner de SQL para el Proyecto Mumuki}}
+
+\titlegraphic{
+    \includegraphics[width=.4\textwidth]{logo-unq}
+}
+
+\author[\texttt{Leandro Di Lorenzo ::}]
+{
+    Leandro~Di~Lorenzo \\
+    \textbf{Coordinador:} Ing. Fernando Dodino
+    % \vspace{-1em}
+}
+
+
+\institute[TIP - UNQ]
+{
+   \textsc{
+       \small{Tecnicatura en Programación Informática}
+   }
+}
+
+\date[jul 2017]{8 de Julio, 2017}
+
+
+\makeatletter
+    \newenvironment{withoutheadline}{
+        \setbeamertemplate{headline}[default]
+        \def\beamer@entrycode{\vspace*{-\headheight}}
+    }{}
+\makeatother
