@@ -71,13 +71,19 @@
   
     <li><a href="./Sqlite/Checker.html">Sqlite::Checker</a>
   
+    <li><a href="./Sqlite/Dataset.html">Sqlite::Dataset</a>
+  
     <li><a href="./Sqlite/HtmlRenderer.html">Sqlite::HtmlRenderer</a>
   
     <li><a href="./Sqlite/MultipleExecutionsRunner.html">Sqlite::MultipleExecutionsRunner</a>
   
+    <li><a href="./Sqlite/TestSolutionTypeError.html">Sqlite::TestSolutionTypeError</a>
+  
     <li><a href="./SqliteMetadataHook.html">SqliteMetadataHook</a>
   
     <li><a href="./SqliteTestHook.html">SqliteTestHook</a>
+  
+    <li><a href="./SqliteVersionHook.html">SqliteVersionHook</a>
   
   </ul>
 </div>
@@ -169,6 +175,25 @@ $ sudo usermod -aG docker [your-user]</pre>
 <h4 id="label-Run+Tests">Run Tests<span><a href="#label-Run+Tests">&para;</a> <a href="#top">&uarr;</a></span></h4>
 
 <pre>$ bundle exec rspec</pre>
+
+<h4 id="label-Run+the+Server">Run the Server<span><a href="#label-Run+the+Server">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<pre>$ bundle exec rackup -p 4567</pre>
+
+<p>If you need to verify that runner is running, open your web browser and go
+to <a href="http://localhost:4567/info">localhost:4567/info</a>. You should
+see a JSON response like this (but more extensive):</p>
+
+<pre class="ruby">{
+  <span class="ruby-string">&quot;name&quot;</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;sqlite&quot;</span>,
+  <span class="ruby-string">&quot;version&quot;</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;0.1&quot;</span>,
+  <span class="ruby-string">&quot;language&quot;</span><span class="ruby-operator">:</span> {
+    <span class="ruby-string">&quot;name&quot;</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;sqlite&quot;</span>,
+    <span class="ruby-string">&quot;version&quot;</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;v0.2.2&quot;</span>
+  },
+  <span class="ruby-string">&quot;url&quot;</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;http://localhost:4567/info&quot;</span>
+}
+</pre>
 </main>
 
 

@@ -35,6 +35,7 @@
       <li><a href="README_md.html#label-Install+Ruby+Environment">Install Ruby Environment</a>
       <li><a href="README_md.html#label-Install+Docker+Environment">Install Docker Environment</a>
       <li><a href="README_md.html#label-Run+Tests">Run Tests</a>
+      <li><a href="README_md.html#label-Run+the+Server">Run the Server</a>
     </ul>
   </li>
   
@@ -49,10 +50,16 @@
     <a href="Sqlite/Checker.html">Sqlite::Checker</a>
   </li>
   <li class="class">
+    <a href="Sqlite/Dataset.html">Sqlite::Dataset</a>
+  </li>
+  <li class="class">
     <a href="Sqlite/HtmlRenderer.html">Sqlite::HtmlRenderer</a>
   </li>
   <li class="class">
     <a href="Sqlite/MultipleExecutionsRunner.html">Sqlite::MultipleExecutionsRunner</a>
+  </li>
+  <li class="class">
+    <a href="Sqlite/TestSolutionTypeError.html">Sqlite::TestSolutionTypeError</a>
   </li>
   <li class="class">
     <a href="SqliteMetadataHook.html">SqliteMetadataHook</a>
@@ -60,10 +67,23 @@
   <li class="class">
     <a href="SqliteTestHook.html">SqliteTestHook</a>
   </li>
+  <li class="module">
+    <a href="SqliteVersionHook.html">SqliteVersionHook</a>
+  </li>
 </ul>
 
 <h2 id="methods">Methods</h2>
 <ul>
+
+  <li class="method">
+    <a href="Sqlite/Dataset.html#method-c-new">::new</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/TestSolutionTypeError.html#method-c-new">::new</a>
+    &mdash;
+    <span class="container">Sqlite::TestSolutionTypeError</span>
 
   <li class="method">
     <a href="Sqlite/Checker.html#method-i-check">#check</a>
@@ -71,9 +91,9 @@
     <span class="container">Sqlite::Checker</span>
 
   <li class="method">
-    <a href="Sqlite/Checker.html#method-i-check_equal">#check_equal</a>
+    <a href="SqliteTestHook.html#method-i-choose_solutions">#choose_solutions</a>
     &mdash;
-    <span class="container">Sqlite::Checker</span>
+    <span class="container">SqliteTestHook</span>
 
   <li class="method">
     <a href="SqliteTestHook.html#method-i-command_line">#command_line</a>
@@ -81,9 +101,29 @@
     <span class="container">SqliteTestHook</span>
 
   <li class="method">
+    <a href="Sqlite/Dataset.html#method-i-compare">#compare</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
     <a href="SqliteTestHook.html#method-i-compile_file_content">#compile_file_content</a>
     &mdash;
     <span class="container">SqliteTestHook</span>
+
+  <li class="method">
+    <a href="SqliteTestHook.html#method-i-diff">#diff</a>
+    &mdash;
+    <span class="container">SqliteTestHook</span>
+
+  <li class="method">
+    <a href="Sqlite/HtmlRenderer.html#method-i-diff_class_of">#diff_class_of</a>
+    &mdash;
+    <span class="container">Sqlite::HtmlRenderer</span>
+
+  <li class="method">
+    <a href="Sqlite/Checker.html#method-i-failed">#failed</a>
+    &mdash;
+    <span class="container">Sqlite::Checker</span>
 
   <li class="method">
     <a href="SqliteTestHook.html#method-i-framework">#framework</a>
@@ -96,7 +136,22 @@
     <span class="container">SqliteMetadataHook</span>
 
   <li class="method">
+    <a href="Sqlite/HtmlRenderer.html#method-i-parse_dataset">#parse_dataset</a>
+    &mdash;
+    <span class="container">Sqlite::HtmlRenderer</span>
+
+  <li class="method">
     <a href="SqliteTestHook.html#method-i-parse_test">#parse_test</a>
+    &mdash;
+    <span class="container">SqliteTestHook</span>
+
+  <li class="method">
+    <a href="SqliteTestHook.html#method-i-parse_test_as_datasets_solution">#parse_test_as_datasets_solution</a>
+    &mdash;
+    <span class="container">SqliteTestHook</span>
+
+  <li class="method">
+    <a href="SqliteTestHook.html#method-i-parse_test_as_query_solution">#parse_test_as_query_solution</a>
     &mdash;
     <span class="container">SqliteTestHook</span>
 
@@ -106,9 +161,19 @@
     <span class="container">SqliteTestHook</span>
 
   <li class="method">
+    <a href="SqliteTestHook.html#method-i-post_process_diff">#post_process_diff</a>
+    &mdash;
+    <span class="container">SqliteTestHook</span>
+
+  <li class="method">
     <a href="SqliteTestHook.html#method-i-post_process_file">#post_process_file</a>
     &mdash;
     <span class="container">SqliteTestHook</span>
+
+  <li class="method">
+    <a href="Sqlite/Checker.html#method-i-render_error">#render_error</a>
+    &mdash;
+    <span class="container">Sqlite::Checker</span>
 
   <li class="method">
     <a href="Sqlite/HtmlRenderer.html#method-i-render_error">#render_error</a>
@@ -116,7 +181,7 @@
     <span class="container">Sqlite::HtmlRenderer</span>
 
   <li class="method">
-    <a href="Sqlite/Checker.html#method-i-render_error_output">#render_error_output</a>
+    <a href="Sqlite/Checker.html#method-i-render_success">#render_success</a>
     &mdash;
     <span class="container">Sqlite::Checker</span>
 
@@ -126,19 +191,44 @@
     <span class="container">Sqlite::HtmlRenderer</span>
 
   <li class="method">
-    <a href="Sqlite/Checker.html#method-i-render_success_output">#render_success_output</a>
-    &mdash;
-    <span class="container">Sqlite::Checker</span>
-
-  <li class="method">
     <a href="Sqlite/MultipleExecutionsRunner.html#method-i-run">#run</a>
     &mdash;
     <span class="container">Sqlite::MultipleExecutionsRunner</span>
 
   <li class="method">
-    <a href="Sqlite/HtmlRenderer.html#method-i-split_rows">#split_rows</a>
+    <a href="Sqlite/Dataset.html#method-i-same_amount">#same_amount</a>
     &mdash;
-    <span class="container">Sqlite::HtmlRenderer</span>
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/Dataset.html#method-i-same_content">#same_content</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/Dataset.html#method-i-same_header">#same_header</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/Dataset.html#method-i-same_rows">#same_rows</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/Dataset.html#method-i-split_lines">#split_lines</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/Dataset.html#method-i-split_pipe">#split_pipe</a>
+    &mdash;
+    <span class="container">Sqlite::Dataset</span>
+
+  <li class="method">
+    <a href="Sqlite/Checker.html#method-i-success">#success</a>
+    &mdash;
+    <span class="container">Sqlite::Checker</span>
 
   <li class="method">
     <a href="SqliteTestHook.html#method-i-tempfile_extension">#tempfile_extension</a>
