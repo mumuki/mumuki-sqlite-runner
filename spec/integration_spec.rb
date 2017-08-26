@@ -12,49 +12,128 @@ describe 'Server' do
     Process.kill 'TERM', @pid
   end
 
-  shared_examples_for 'a successful submission' do |program, tests, extra = '', examples_count: 1|
-    context 'answers a valid hash when submission passes' do
-      let(:response) { run_tests(program, tests, extra) }
+  shared_examples_for 'a successful submission' do |program, exercise, examples_count: 1|
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
 
-      it { expect(response[:status]).to eq :passed }
-      it { expect(response[:response_type]).to eq :structured }
-      it { expect(response[:test_results].size).to eq examples_count }
-    end
+    it { expect(response[:status]).to eq :passed }
+    it { expect(response[:response_type]).to eq :structured }
+    it { expect(response[:test_results].size).to eq examples_count }
   end
 
-  shared_examples_for 'a syntax-error submission' do |program, tests, extra = '', examples_count: 1|
-    context 'answers a failed hash when submission has syntax errors' do
-      let(:response) { run_tests(program, tests, extra) }
+  shared_examples_for 'a submission where columns do not match' do |program, exercise|
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
 
-      it { expect(response[:status]).to eq :failed }
-      it { expect(response[:response_type]).to eq :unstructured }
-      it { expect(response[:test_results].size).to eq examples_count }
-    end
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response[:response_type]).to eq :structured }
+    it { expect(response[:test_results][0][:result]).to include 'Las columnas no coinciden' }
   end
 
-  Fixture.get(:valid_queries).each_with_index do |fixture, index|
-    context "given the ##{index+1} valid query example" do
-      it_behaves_like 'a successful submission',
-                      fixture['content'],
-                      fixture['test'],
-                      fixture['extra'],
-                      examples_count: fixture['count']
-    end
+  shared_examples_for 'a submission where rows do not match' do |program, exercise|
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
+
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response[:response_type]).to eq :structured }
+    it { expect(response[:test_results][0][:result]).to include 'Las filas no coinciden' }
   end
 
-  Fixture.get(:syntax_error).each_with_index do |fixture, index|
-    context "given the ##{index+1} syntax-error example" do
-      it_behaves_like 'a syntax-error submission',
-                      fixture['content'],
-                      fixture['test'],
-                      fixture['extra'],
-                      examples_count: 0
-    end
+  shared_examples_for 'a syntax-error submission' do |program, exercise, error |
+    let(:response) { run_tests program, exercise['test'], exercise['extra'] }
+
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response[:response_type]).to eq :unstructured }
+    it { expect(response[:result]).to match error }
   end
 
-  def run_tests(program, tests, extra)
+  context 'Runner Test 1' do
+    exercise = Sqlite::Exercise.get('00000_runner_test1')
+
+    program = 'select * from test1;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'selec * from test1;'
+    error = /Error: near line \d: near "selec": syntax error/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Runner Test 2' do
+    exercise = Sqlite::Exercise.get('00000_runner_test2')
+
+    program = 'select name from test2;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select from test2;'
+    error = /Error: near line \d: near "from": syntax error/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Runner Test 3' do
+    exercise = Sqlite::Exercise.get('00000_runner_test3')
+
+    program = 'select name from test3;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select * fro test3;'
+    error = /Error: near line \d: near "fro": syntax error/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Runner Test 4' do
+    exercise = Sqlite::Exercise.get('00000_runner_test4')
+
+    program = 'select name from test4 limit 0;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select * from test4'
+    error = /Error: incomplete SQL: select \* from test4/
+    it_behaves_like 'a syntax-error submission', program, exercise, error
+  end
+
+  context 'Prueba MQL' do
+    exercise = Sqlite::Exercise.get('00001_prueba_mql')
+
+    program = 'select * from motores;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+  end
+
+  context 'Hello SELECT!' do
+    exercise = Sqlite::Exercise.get('00002_hello_select')
+
+    program = 'select * from bolitas;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select color from bolitas;'
+    it_behaves_like 'a submission where columns do not match', program, exercise
+
+    program = 'select * from bolitas limit 1;'
+    it_behaves_like 'a submission where rows do not match', program, exercise
+  end
+
+  context 'Datasets Solutions' do
+    exercise = Sqlite::Exercise.get('00003_datasets_solutions')
+
+    program = 'select * from bolitas;'
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+
+    program = 'select color from bolitas;'
+    it_behaves_like 'a submission where columns do not match', program, exercise
+
+    program = 'select * from bolitas limit 1;'
+    it_behaves_like 'a submission where rows do not match', program, exercise
+  end
+
+  def run_tests(program, test, extra)
     bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')
-    bridge.run_tests!(test: tests, extra: extra, content: program, expectations: [])
+    bridge.run_tests! test: test.to_yaml,
+                      extra: extra,
+                      content: program,
+                      expectations: []
   end
 
 end

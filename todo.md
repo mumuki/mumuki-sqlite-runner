@@ -1,10 +1,4 @@
 
-## Runner
-
- - Convertir `runsql` en un script de python.
-   **Objetivo**: cada test sería un set de _inserts_ y cada query (doc y alu) se ejecutaría con esos _inserts_
- - Analizar si usar transactions con rollback o dropear todo en cada test de dataset.
-
 ## TOFIX Labo Vagrant
 
  - Vagrant no tiene instalado las aplicaciones de dev: bundle, postgres, etc...,
@@ -23,7 +17,3 @@
    - **Opción 2**: Definirle una IP propia al vagrant en vez de que use localhost
    
  - Instalar docker environment en vagrant
-
- - FIXME "ActiveRecord::RecordInvalid: La validación falló: Tenés que proveer al menos un test o un archivo de expectativas" cuando `sql.save!` ??
-
- - El extra code trae "extras del capítulo"

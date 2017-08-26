@@ -3,9 +3,18 @@ module Sqlite
     attr_reader :header, :rows
 
     def initialize(data)
+      @header = @rows = []
       rows = data.split(/\n+/i)
-      @header = rows.shift.split(/\|/)
-      @rows   = rows.map { |row| row.split(/\|/) }
+      unless rows.empty?
+        @header = split_and_clean rows.shift
+        @rows = rows.map { |item| split_and_clean item }
+      end
+    end
+
+    def split_and_clean(rows)
+      rows.split(/\|/).delete_if do |value|
+        value.blank?
+      end
     end
 
     def compare(other)

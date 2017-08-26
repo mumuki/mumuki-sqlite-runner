@@ -1,0 +1,16 @@
+extra: |
+  CREATE TABLE motores (
+    id integer primary key,
+    nombre varchar(200) NOT NULL
+  );
+test:
+  solution_type: query
+  solution_query: select * from motores;
+  examples:
+  - data: |
+      INSERT INTO motores (nombre) values ('MySQL');
+      INSERT INTO motores (nombre) values ('PostgreSQL');
+      INSERT INTO motores (nombre) values ('Oracle');
+      INSERT INTO motores (nombre) values ('Microsoft SQL Server');
+      INSERT INTO motores (nombre) values ('SQLite');
+count: 1
