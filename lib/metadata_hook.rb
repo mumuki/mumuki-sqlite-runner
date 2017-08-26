@@ -3,7 +3,7 @@ class SqliteMetadataHook < Mumukit::Hook
     {
       language: {
         name: 'sqlite',
-        icon: { type: 'devicon', name: 'sqlite' },
+        icon: { type: 'devicon', name: 'sql' },
         version: SqliteVersionHook::VERSION,
         extension: 'sql',
         ace_mode: 'sql',
