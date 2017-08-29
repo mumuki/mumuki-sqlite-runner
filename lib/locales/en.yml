@@ -1,6 +1,2 @@
 en:
-  records: 'Records'
-  memory: 'Memory'
-  special_records: 'Special records'
-  flags: 'Flags'
-  check_equal_failure: "<b>%{record}</b> should be <b>%{expected}</b>, but was <b>%{actual}</b>"
+  correct_query: 'Correct Query!'

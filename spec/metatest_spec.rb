@@ -55,11 +55,11 @@ describe 'metatest' do
 
       it { expect(result[0][0][0]).to eq 'Dataset 1'}
       it { expect(result[0][0][1]).to eq :passed }
-      it { expect(result[0][0][2]).to include 'Consulta correcta!'}
+      it { expect(result[0][0][2]).to include I18n.t :correct_query }
 
       it { expect(result[0][1][0]).to eq 'Dataset 2'}
       it { expect(result[0][1][1]).to eq :passed }
-      it { expect(result[0][1][2]).to include 'Consulta correcta!'}
+      it { expect(result[0][1][2]).to include I18n.t :correct_query }
     end
   end
 end
