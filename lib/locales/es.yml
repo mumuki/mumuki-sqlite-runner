@@ -1,2 +1,7 @@
 es:
-  correct_query: '¡Consulta correcta!'
+  success:
+    query: '¡Consulta correcta!'
+  failure:
+    columns: 'Las columnas no coinciden'
+    rows:    'Las filas no coinciden'
+    query:   'Las consultas no coinciden'

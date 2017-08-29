@@ -12,11 +12,11 @@ module Sqlite
         when :equals
           success(name, result)
         when :distinct_columns
-          failed(name, result, solution, 'Las columnas no coinciden')
+          failed(name, result, solution, (I18n.t 'failure.columns'))
         when :distinct_rows
-          failed(name, result, solution, 'Las filas no coinciden')
+          failed(name, result, solution, (I18n.t 'failure.rows'))
         else
-          failed(name, result, solution, 'Las consultas no coinciden')
+          failed(name, result, solution, (I18n.t 'failure.query'))
       end
     end
 

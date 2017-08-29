@@ -32,11 +32,11 @@ describe 'metatest' do
 
       it { expect(result[0][0][0]).to eq 'Dataset 1'}
       it { expect(result[0][0][1]).to eq :failed }
-      it { expect(result[0][0][2]).to include 'Las columnas no coinciden'}
+      it { expect(result[0][0][2]).to include I18n.t 'failure.columns' }
 
       it { expect(result[0][1][0]).to eq 'Dataset 2' }
       it { expect(result[0][1][1]).to eq :failed }
-      it { expect(result[0][1][2]).to include 'Las columnas no coinciden'}
+      it { expect(result[0][1][2]).to include I18n.t 'failure.columns' }
 
     end
 
@@ -55,11 +55,11 @@ describe 'metatest' do
 
       it { expect(result[0][0][0]).to eq 'Dataset 1'}
       it { expect(result[0][0][1]).to eq :passed }
-      it { expect(result[0][0][2]).to include I18n.t :correct_query }
+      it { expect(result[0][0][2]).to include I18n.t 'success.query' }
 
       it { expect(result[0][1][0]).to eq 'Dataset 2'}
       it { expect(result[0][1][1]).to eq :passed }
-      it { expect(result[0][1][2]).to include I18n.t :correct_query }
+      it { expect(result[0][1][2]).to include I18n.t 'success.query' }
     end
   end
 end

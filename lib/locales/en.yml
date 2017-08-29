@@ -1,2 +1,7 @@
 en:
-  correct_query: 'Correct Query!'
+  success:
+    query: 'Correct Query!'
+  failure:
+    columns: 'Columns do not match'
+    rows:    'Rows do not match'
+    query:   'Queries do not match'

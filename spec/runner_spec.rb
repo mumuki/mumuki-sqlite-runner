@@ -60,11 +60,11 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expect(post_process[0][0][0]).to eq 'Dataset 1'
       expect(post_process[0][0][1]).to eq :passed
-      expect(post_process[0][0][2]).to include I18n.t :correct_query
+      expect(post_process[0][0][2]).to include I18n.t 'success.query'
 
       expect(post_process[0][1][0]).to eq 'Dataset 2'
       expect(post_process[0][1][1]).to eq :passed
-      expect(post_process[0][1][2]).to include I18n.t :correct_query
+      expect(post_process[0][1][2]).to include I18n.t 'success.query'
     end
 
     it 'returns "Las columnas no coincide" when query passed but not match with expected' do
@@ -77,7 +77,7 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expect(post_process[0][1][0]).to eq 'Dataset 2'
       expect(post_process[0][1][1]).to eq :failed
-      expect(post_process[0][1][2]).to include 'Las columnas no coinciden'
+      expect(post_process[0][1][2]).to include I18n.t 'failure.columns'
     end
 
     it 'returns Error message when query fail' do
@@ -99,21 +99,21 @@ describe 'SqliteTestHook as isolated FileHook' do
       let(:result) { run exercise, query }
 
       it { expect(result[0][0][1]).to eq :passed }
-      it { expect(result[0][0][2]).to include I18n.t :correct_query }
+      it { expect(result[0][0][2]).to include I18n.t 'success.query' }
     end
 
     shared_examples_for 'a query with different columns' do |exercise, query|
       let(:result) { run exercise, query }
 
       it { expect(result[0][0][1]).to eq :failed }
-      it { expect(result[0][0][2]).to include 'Las columnas no coinciden' }
+      it { expect(result[0][0][2]).to include I18n.t 'failure.columns' }
     end
 
     shared_examples_for 'a query with different rows' do |exercise, query|
       let(:result) { run exercise, query }
 
       it { expect(result[0][0][1]).to eq :failed }
-      it { expect(result[0][0][2]).to include 'Las filas no coinciden' }
+      it { expect(result[0][0][2]).to include I18n.t 'failure.rows' }
     end
 
     shared_examples_for 'an invalid query' do |exercise, query, error|
