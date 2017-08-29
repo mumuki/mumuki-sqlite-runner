@@ -137,7 +137,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   #   ]
   # }
   def parse_test(test)
-    test = OpenStruct.new (YAML.load(test).deep_symbolize_keys)
+    test = OpenStruct.new (YAML.load (test).deep_symbolize_keys)
     @solution_type = test.solution_type.to_sym
 
     case @solution_type
