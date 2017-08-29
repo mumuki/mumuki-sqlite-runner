@@ -1,4 +1,5 @@
 es:
+  dataset: "Set de datos %{number}"
   success:
     query: '¡Consulta correcta!'
   failure:

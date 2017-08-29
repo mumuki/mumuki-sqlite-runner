@@ -58,11 +58,11 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       post_process = runner.post_process_file('', result.to_json, :passed)
 
-      expect(post_process[0][0][0]).to eq 'Dataset 1'
+      expect(post_process[0][0][0]).to eq I18n.t :dataset, number: 1
       expect(post_process[0][0][1]).to eq :passed
       expect(post_process[0][0][2]).to include I18n.t 'success.query'
 
-      expect(post_process[0][1][0]).to eq 'Dataset 2'
+      expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
       expect(post_process[0][1][1]).to eq :passed
       expect(post_process[0][1][2]).to include I18n.t 'success.query'
     end
@@ -75,7 +75,7 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       post_process = runner.post_process_file('', result.to_json, :passed)
 
-      expect(post_process[0][1][0]).to eq 'Dataset 2'
+      expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
       expect(post_process[0][1][1]).to eq :failed
       expect(post_process[0][1][2]).to include I18n.t 'failure.columns'
     end

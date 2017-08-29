@@ -1,4 +1,5 @@
 en:
+  dataset: "Dataset %{number}"
   success:
     query: 'Correct Query!'
   failure:

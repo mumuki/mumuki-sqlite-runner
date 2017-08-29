@@ -6,7 +6,7 @@ module Sqlite
     # when distinct_columns: return failed & render error
     # when distinct_rows: return failed & render error
     def check(result, solution)
-      name = "Dataset #{solution[:id]}"
+      name = I18n.t 'dataset', number: solution[:id]
 
       case solution[:dataset].compare result[:dataset]
         when :equals
