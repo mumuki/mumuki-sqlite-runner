@@ -57,10 +57,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
     case status
       when :passed
-        results   = output['results']
-        solutions = choose_solutions output['solutions']
-        solutions, results = diff solutions, results
-
+        solutions, results = parse_output output
         framework.test solutions, results
       when :failed
         [output['output'], status]
@@ -71,17 +68,14 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
   protected
 
-  # If solutions comes in an explicit datasets, it was stored in
-  # a instance variable of this class.
-  # Instead if solution is correct query, it is passed to the worken
-  # and dataset solution comes from worker.
-  def choose_solutions(output_solutions)
-    case @solution_type
-      when :datasets
-        @solutions
-      else
-        output_solutions
+  def parse_output(output)
+    results   = output['results']
+    solutions = output['solutions']
+    unless @solution_parser.nil?
+      solutions = @solution_parser.choose solutions
     end
+
+    diff(solutions, results)
   end
 
   def diff(solutions, results)
@@ -138,55 +132,17 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # }
   def parse_test(test)
     test = OpenStruct.new YAML.load(test).deep_symbolize_keys
-    @solution_type = test.solution_type.to_sym
 
-    case @solution_type
+    case test.solution_type.to_sym
       when :query
-        parse_test_as_query_solution test
+        @solution_parser = Sqlite::QuerySolutionParser.new
       when :datasets
-        parse_test_as_datasets_solution test
+        @solution_parser = Sqlite::DatasetSolutionParser.new
       else
         raise Sqlite::TestSolutionTypeError
     end
-  end
 
-  # Expected input:
-  # OpenStruct#{
-  #   solution_type: 'query',
-  #   solution_query: 'select * from motores;',
-  #   examples: [
-  #     { dataset: "INSERT INTO ...\nINSERT INTO ..." }
-  #   ]
-  # }
-  def parse_test_as_query_solution(test)
-    data = test.examples.map do |item|
-      item[:data]
-    end
-
-    return test.solution_query, data
-  end
-
-  # Expected input:
-  # OpenStruct#{
-  #   solution_type: 'datasets',
-  #   examples: [
-  #     {
-  #       dataset: "INSERT INTO ...\nINSERT INTO ...",
-  #       solution_dataset: "id|field\n1|row1..."
-  #     }
-  #   ]
-  # }
-  def parse_test_as_datasets_solution(test)
-    data = []
-    @solutions = []
-    solution_query = '-- none'
-
-    test.examples.each do |item|
-      @solutions << item[:solution_dataset].scan(/(?!\|).+(?<!\|)/).join("\n")
-      data.append item[:data]
-    end
-
-    return solution_query, data
+    @solution_parser.parse_test test
   end
 
   # Initialize Metatest Framework with Checker & Runner
