@@ -67,7 +67,7 @@ describe 'SqliteTestHook as isolated FileHook' do
       expect(post_process[0][1][2]).to include I18n.t 'success.query'
     end
 
-    it 'returns "Las columnas no coincide" when query passed but not match with expected' do
+    it "returns '#{I18n.t 'failure.columns'}' when query passed but not match with expected" do
       result = {
           solutions: ['solution 1', 'solution 2'],
           results:   ['solution 1', 'solution 3']
