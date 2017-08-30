@@ -25,7 +25,7 @@ describe 'Server' do
 
     it { expect(response[:status]).to eq :failed }
     it { expect(response[:response_type]).to eq :structured }
-    it { expect(response[:test_results][0][:result]).to include 'Las columnas no coinciden' }
+    it { expect(response[:test_results][0][:result]).to include I18n.t 'failure.columns' }
   end
 
   shared_examples_for 'a submission where rows do not match' do |program, exercise|
@@ -33,7 +33,7 @@ describe 'Server' do
 
     it { expect(response[:status]).to eq :failed }
     it { expect(response[:response_type]).to eq :structured }
-    it { expect(response[:test_results][0][:result]).to include 'Las filas no coinciden' }
+    it { expect(response[:test_results][0][:result]).to include I18n.t 'failure.rows' }
   end
 
   shared_examples_for 'a syntax-error submission' do |program, exercise, error |
