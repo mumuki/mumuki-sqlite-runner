@@ -3,9 +3,12 @@ module Sqlite
     attr_reader :header, :rows
 
     def initialize(data)
-      rows = data.split(/\n+/i)
-      @header = rows.shift.split(/\|/)
-      @rows   = rows.map { |row| row.split(/\|/) }
+      @header = @rows = []
+      rows = split_lines data
+      unless rows.empty?
+        @header = split_pipe rows.shift
+        @rows = rows.map { |item| split_pipe item }
+      end
     end
 
     def compare(other)
@@ -22,6 +25,14 @@ module Sqlite
     end
 
     protected
+
+    def split_lines(str)
+      str.split(/\n+/i)
+    end
+
+    def split_pipe(line)
+      line.split(/\|/)
+    end
 
     def same_header(other_header)
       @header.eql? other_header

@@ -1,7 +1,8 @@
 require 'json'
+require 'diffy'
 
 ##
-# This Hook allow to run Sqlite Worker from an adhoc program that receives .sql files.
+# This Hook allow to run Sqlite Worker from an ad-hoc program that receives .json files.
 
 class SqliteTestHook < Mumukit::Templates::FileHook
 
@@ -18,22 +19,22 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     "runsql #{filename}"
   end
 
-  # Define the .sql file template from request structure
-  # request = {
-  #   test: (string) teacher's code that define which testing verification student code should pass,
-  #   extra: (string) teacher's code that prepare field where student code should run,
-  #   content: (string) student code,
-  #   expectations: [mulang verifications] todo: better explain
+  # Define the .json file template from request structure
+  # Input: request = {
+  #   test: (yaml string) teacher's code that define which testing verification student code should pass,
+  #   extra: (sql string) teacher's code that prepare field where student code should run,
+  #   content: (sql string) student code,
+  #   expectations: [] not using for now
   # }
   #
   def compile_file_content(request)
-    solution, datasets = parse_test request.test.strip
+    solution, data = parse_test request.test
 
     content = {
         init: request.extra.strip,
         solution: solution,
         student: request.content.strip,
-        datasets: datasets
+        datasets: data
     }
 
     content.to_json
@@ -56,14 +57,49 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
     case status
       when :passed
-        results   = post_process_datasets(output['results'])
-        solutions = post_process_datasets(output['solutions'])
+        solutions, results = parse_output output
         framework.test solutions, results
       when :failed
         [output['output'], status]
       else
         [output, status]
     end
+  end
+
+  protected
+
+  def parse_output(output)
+    results   = output['results']
+    solutions = output['solutions']
+    unless @solution_parser.nil?
+      solutions = @solution_parser.choose solutions
+    end
+
+    diff(solutions, results)
+  end
+
+  def diff(solutions, results)
+    zipped = solutions.zip(results).map do |solution, result|
+
+      diff = Diffy::SplitDiff.new result << "\n", solution << "\n"
+
+      if diff.left.blank?
+        [solution, result]
+      else
+        res = post_process_diff diff.left
+        sol = post_process_diff diff.right
+        [sol, res]
+      end
+
+    end
+
+    zipped.transpose.map { |dataset| post_process_datasets dataset }
+  end
+
+  def post_process_diff(data)
+    data.scan(/^(\s|-|\+)(.+)/)
+        .map { |mark, content| mark << '|' << content }
+        .join("\n")
   end
 
   # Transforms array datasets into hash with :id & :rows
@@ -76,18 +112,37 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     end
   end
 
-  # Split query by '-- DATASET' line match
-  # First match is teacher's solution
-  # Rest are Datasets
-  # Example:
-  #   select * from table
-  #   -- DATASET
-  #   insert into 1
-  #   -- dataset
-  #   insert into 2
-  def parse_test(content)
-    query = content.split(/\s*--\s*dataset\s*\n+/i)
-    return query.shift, query
+  # Test should have one of these formats:
+  #
+  # Solution by query:
+  # { solution_type: 'query',
+  #   solution_query: 'SELECT * FROM ...',
+  #   examples: [
+  #     { data: "INSERT INTO..." }
+  #   ]
+  # }
+  #
+  # Solution by datasets:
+  # { solution_type: 'datasets',
+  #   examples: [
+  #     { data: "INSERT INTO...",
+  #       solution: "id|field\n1|row1..."
+  #     }
+  #   ]
+  # }
+  def parse_test(test)
+    test = OpenStruct.new YAML.load(test).deep_symbolize_keys
+
+    case test.solution_type.to_sym
+      when :query
+        @solution_parser = Sqlite::QuerySolutionParser.new
+      when :datasets
+        @solution_parser = Sqlite::DatasetSolutionParser.new
+      else
+        raise Sqlite::TestSolutionTypeError
+    end
+
+    @solution_parser.parse_test test
   end
 
   # Initialize Metatest Framework with Checker & Runner

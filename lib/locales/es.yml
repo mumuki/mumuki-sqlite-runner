@@ -1,6 +1,8 @@
 es:
-  records: 'Registros'
-  memory: 'Memoria'
-  special_records: 'Registros especiales'
-  flags: 'Banderas'
-  check_equal_failure: "<b>%{record}</b> debería contener el valor <b>%{expected}</b>, pero se encontró <b>%{actual}</b>"
+  dataset: "Set de datos %{number}"
+  success:
+    query: '¡Consulta correcta!'
+  failure:
+    columns: 'Las columnas no coinciden'
+    rows:    'Las filas no coinciden'
+    query:   'Las consultas no coinciden'

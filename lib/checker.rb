@@ -6,17 +6,17 @@ module Sqlite
     # when distinct_columns: return failed & render error
     # when distinct_rows: return failed & render error
     def check(result, solution)
-      name = "Dataset #{solution[:id]}"
+      name = I18n.t 'dataset', number: solution[:id]
 
       case solution[:dataset].compare result[:dataset]
         when :equals
           success(name, result)
         when :distinct_columns
-          failed(name, result, solution, 'Las columnas no coinciden')
+          failed(name, result, solution, (I18n.t 'failure.columns'))
         when :distinct_rows
-          failed(name, result, solution, 'Las filas no coinciden')
+          failed(name, result, solution, (I18n.t 'failure.rows'))
         else
-          failed(name, result, solution, 'Las consultas no coinciden')
+          failed(name, result, solution, (I18n.t 'failure.query'))
       end
     end
 

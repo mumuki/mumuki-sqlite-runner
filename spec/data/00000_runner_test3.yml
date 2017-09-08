@@ -1,0 +1,13 @@
+extra: |
+  CREATE TABLE test3 (
+    id integer primary key,
+    name varchar(200) NOT NULL
+  );
+test:
+  solution_type: query
+  solution_query: select name from test3;
+  examples:
+  - data: |
+      INSERT INTO test3 (name) values ('ASCII');
+      INSERT INTO test3 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
+count: 1

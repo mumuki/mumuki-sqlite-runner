@@ -4,7 +4,6 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   let(:runner) { SqliteTestHook.new }
 
-
   describe '#tempfile_extension' do
     it { expect(runner.tempfile_extension).to eq '.json' }
   end
@@ -16,21 +15,17 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#compile_file_content {extra, content, test}' do
     let(:req) do
-
-      test = <<~SQL
-        select * from test
-        --DATASET
-        insert into test values (1)
-        --    DATASET    
-        insert into test values (2)
-          --dataset
-        insert into test values (3)
-        --   dataset  
-        
-        insert into test values (4)
-        -- more on same dataset
-        insert into test values (4.1)
-      SQL
+      test = {
+        solution_type: 'query',
+        solution_query: 'select * from test',
+        examples: [
+          { 'data' => 'insert into test values (1)' },
+          { 'data' => 'insert into test values (2)' },
+          { 'data' => 'insert into test values (3)' },
+          { 'data' => "insert into test values (4)\n-- more on same dataset\ninsert into test values (4.1)"
+          }
+        ]
+      }.to_yaml
 
       struct extra: 'create table test',
              content: 'select id from test',
@@ -63,16 +58,16 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       post_process = runner.post_process_file('', result.to_json, :passed)
 
-      expect(post_process[0][0][0]).to eq 'Dataset 1'
+      expect(post_process[0][0][0]).to eq I18n.t :dataset, number: 1
       expect(post_process[0][0][1]).to eq :passed
-      expect(post_process[0][0][2]).to include 'Consulta correcta!'
+      expect(post_process[0][0][2]).to include I18n.t 'success.query'
 
-      expect(post_process[0][1][0]).to eq 'Dataset 2'
+      expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
       expect(post_process[0][1][1]).to eq :passed
-      expect(post_process[0][1][2]).to include 'Consulta correcta!'
+      expect(post_process[0][1][2]).to include I18n.t 'success.query'
     end
 
-    it 'returns "Las columnas no coincide" when query passed but not match with expected' do
+    it "returns '#{I18n.t 'failure.columns'}' when query passed but not match with expected" do
       result = {
           solutions: ['solution 1', 'solution 2'],
           results:   ['solution 1', 'solution 3']
@@ -80,9 +75,9 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       post_process = runner.post_process_file('', result.to_json, :passed)
 
-      expect(post_process[0][1][0]).to eq 'Dataset 2'
+      expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
       expect(post_process[0][1][1]).to eq :failed
-      expect(post_process[0][1][2]).to include 'Las columnas no coinciden'
+      expect(post_process[0][1][2]).to include I18n.t 'failure.columns'
     end
 
     it 'returns Error message when query fail' do
@@ -100,39 +95,103 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#run!' do
 
-      context 'with malformed queries' do
-        Fixture.get(:syntax_error).each do | fixture |
-          context "'#{fixture['content']}'" do
+    shared_examples_for 'a correct query' do |exercise, query|
+      let(:result) { run exercise, query }
 
-            it "should fails with '#{fixture['expected']}'" do
-              result = run_fixture fixture
-
-              expect(result[1]).to eq :failed
-              expect(result[0]).to match fixture['expected']
-            end
-
-          end
-        end
-      end
-
-      context 'with well-formed queries' do
-        Fixture.get(:valid_queries).each_with_index do | fixture, index |
-          it "Test ##{index+1} should pass and returns OK" do
-            result = run_fixture fixture
-
-            expect(result[0][0][0]).to eq 'Dataset 1'
-            expect(result[0][0][1]).to eq :passed
-            expect(result[0][0][2]).to include 'Consulta correcta!'
-          end
-        end
-      end
-
+      it { expect(result[0][0][1]).to eq :passed }
+      it { expect(result[0][0][2]).to include I18n.t 'success.query' }
     end
 
-  def run_fixture(fixture)
-    req = struct extra: fixture['extra'],
-                 content: fixture['content'],
-                 test: fixture['test']
+    shared_examples_for 'a query with different columns' do |exercise, query|
+      let(:result) { run exercise, query }
+
+      it { expect(result[0][0][1]).to eq :failed }
+      it { expect(result[0][0][2]).to include I18n.t 'failure.columns' }
+    end
+
+    shared_examples_for 'a query with different rows' do |exercise, query|
+      let(:result) { run exercise, query }
+
+      it { expect(result[0][0][1]).to eq :failed }
+      it { expect(result[0][0][2]).to include I18n.t 'failure.rows' }
+    end
+
+    shared_examples_for 'an invalid query' do |exercise, query, error|
+      let(:result) { run exercise, query }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[0]).to match error }
+    end
+
+    context 'Runner Test 1' do
+      exercise = Sqlite::Exercise.get('00000_runner_test1')
+
+      query = 'select * from test1;'
+      it_behaves_like 'a correct query', exercise, query
+
+      query = 'select name from test1;'
+      it_behaves_like 'a query with different columns', exercise, query
+
+      query = 'select * from test1 limit 1;'
+      it_behaves_like 'a query with different rows', exercise, query
+
+      query = 'selec * from test1;'
+      error = /Error: near line \d: near "selec": syntax error/
+      it_behaves_like 'an invalid query', exercise, query, error
+    end
+
+    context 'Runner Test 2' do
+      exercise = Sqlite::Exercise.get('00000_runner_test2')
+
+      query = 'select name from test2;'
+      it_behaves_like 'a correct query', exercise, query
+
+      query = 'select from test2;'
+      error = /Error: near line \d: near "from": syntax error/
+      it_behaves_like 'an invalid query', exercise, query, error
+    end
+
+    context 'Runner Test 3' do
+      exercise = Sqlite::Exercise.get('00000_runner_test3')
+
+      query = 'select name from test3;'
+      it_behaves_like 'a correct query', exercise, query
+
+      query = 'select * fro test3;'
+      error = /Error: near line \d: near "fro": syntax error/
+      it_behaves_like 'an invalid query', exercise, query, error
+    end
+
+    context 'Runner Test 4' do
+      exercise = Sqlite::Exercise.get('00000_runner_test4')
+
+      query = 'select name from test4 limit 0;'
+      it_behaves_like 'a correct query', exercise, query
+
+      query = 'select * from test4'
+      error = /Error: incomplete SQL: select \* from test4/
+      it_behaves_like 'an invalid query', exercise, query, error
+    end
+
+    context 'Prueba MQL' do
+      exercise = Sqlite::Exercise.get('00001_prueba_mql')
+
+      query = 'select * from motores;'
+      it_behaves_like 'a correct query', exercise, query
+    end
+
+    context 'Datasets Solutions' do
+      exercise = Sqlite::Exercise.get('00003_datasets_solutions')
+
+      query = 'select * from bolitas;'
+      it_behaves_like 'a correct query', exercise, query
+    end
+
+  end
+
+  def run(exercise, query)
+    req = struct extra: exercise['extra'],
+                 content: query,
+                 test: exercise['test'].to_yaml
     file = runner.compile req
     runner.run! file
   end
