@@ -14,7 +14,7 @@ SQLite Runner for the [Mumuki Platform](https://mumuki.io/), based on [Leandro D
 #### Clone the Project
 
 ```bash
-$ git clone https://github.com/leandrojdl/mumuki-sqlite-runner
+$ git clone https://github.com/mumuki/mumuki-sqlite-runner
 $ cd mumuki-sqlite-runner
 ```
 
@@ -65,7 +65,7 @@ $ docker run hello-world
 Pull docker container
 
 ```bash
-$ docker pull leandrojdl/mumuki-sqlite-worker
+$ docker pull mumuki/mumuki-sqlite-worker
 ```
 
 #### Run Tests

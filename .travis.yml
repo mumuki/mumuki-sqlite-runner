@@ -8,7 +8,7 @@ rvm:
 services:
 - docker
 before_install:
-- docker pull leandrojdl/mumuki-sqlite-worker
+- docker pull mumuki/mumuki-sqlite-worker
 before_script:
 - mv .env.travis .env
 script:
