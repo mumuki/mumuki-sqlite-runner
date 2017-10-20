@@ -14,9 +14,9 @@ test:
       INSERT INTO bolitas (color) values ('Negro');
     solution_dataset: |
       id|color
-      |1|Verde|
-      2|Rojo|
-      |3|Azul
+      1|Verde
+      2|Rojo
+      3|Azul
       4|Negro
   -
     data: |
@@ -25,7 +25,7 @@ test:
       INSERT INTO bolitas (color) values ('Amarillo');
       INSERT INTO bolitas (color) values ('Blanco');
     solution_dataset: |
-        |id|color|
+        id|color
         1|Marrón
         2|Violeta
         3|Amarillo

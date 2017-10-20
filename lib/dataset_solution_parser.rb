@@ -19,7 +19,10 @@ module Sqlite
       solution_query = '-- none'
 
       test.examples.each do |item|
-        @solutions << item[:solution_dataset].scan(/(?!\|).+(?<!\|)/).join("\n")
+        @solutions << item[:solution_dataset].to_s
+                          .split("\n")
+                          .map(&:strip)
+                          .join("\n")
         data.append item[:data]
       end
 

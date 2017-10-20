@@ -128,6 +128,18 @@ describe 'Server' do
     it_behaves_like 'a submission where rows do not match', program, exercise
   end
 
+  context 'Online Library' do
+    exercise = Sqlite::Exercise.get('00004_online_library')
+
+    program = <<-SQL
+      ALTER TABLE ejemplar ADD anio_edicion INT;
+      SELECT * FROM ejemplar;
+    SQL
+
+    it_behaves_like 'a successful submission',
+                    program, exercise, examples_count: exercise['count']
+  end
+
   def run_tests(program, test, extra)
     bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')
     bridge.run_tests! test: test.to_yaml,

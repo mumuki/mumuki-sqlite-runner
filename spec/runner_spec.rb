@@ -186,6 +186,17 @@ describe 'SqliteTestHook as isolated FileHook' do
       it_behaves_like 'a correct query', exercise, query
     end
 
+    context 'Online Library' do
+      exercise = Sqlite::Exercise.get('00004_online_library')
+
+      query = <<-SQL
+        ALTER TABLE ejemplar ADD anio_edicion INT;
+        SELECT * FROM ejemplar;
+      SQL
+      it_behaves_like 'a correct query', exercise, query
+    end
+
+
   end
 
   def run(exercise, query)
