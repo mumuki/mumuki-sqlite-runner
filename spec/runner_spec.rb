@@ -60,14 +60,14 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expect(post_process[0][0][0]).to eq I18n.t :dataset, number: 1
       expect(post_process[0][0][1]).to eq :passed
-      expect(post_process[0][0][2]).to include I18n.t 'success.query'
+      expect(post_process[0][0][2]).to include I18n.t 'message.success.query'
 
       expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
       expect(post_process[0][1][1]).to eq :passed
-      expect(post_process[0][1][2]).to include I18n.t 'success.query'
+      expect(post_process[0][1][2]).to include I18n.t 'message.success.query'
     end
 
-    it "returns '#{I18n.t 'failure.columns'}' when query passed but not match with expected" do
+    it "returns '#{I18n.t 'message.failure.columns'}' when query passed but not match with expected" do
       result = {
           solutions: ['solution 1', 'solution 2'],
           results:   ['solution 1', 'solution 3']
@@ -77,7 +77,7 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
       expect(post_process[0][1][1]).to eq :failed
-      expect(post_process[0][1][2]).to include I18n.t 'failure.columns'
+      expect(post_process[0][1][2]).to include I18n.t 'message.failure.columns'
     end
 
     it 'returns Error message when query fail' do
