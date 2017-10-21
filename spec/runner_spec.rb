@@ -167,51 +167,32 @@ describe 'SqliteTestHook as isolated FileHook' do
       it_behaves_like 'a solution with syntax error'
     end
 
-    # context 'Runner Test 3' do
-    #   exercise = Sqlite::Exercise.get('00000_runner_test3')
-    # 
-    #   query = 'select name from test3;'
-    #   it_behaves_like 'a correct query', exercise, query
-    # 
-    #   query = 'select * fro test3;'
-    #   error = /Error: near line \d: near "fro": syntax error/
-    #   it_behaves_like 'an invalid query', exercise, query, error
-    # end
-    # 
-    # context 'Runner Test 4' do
-    #   exercise = Sqlite::Exercise.get('00000_runner_test4')
-    # 
-    #   query = 'select name from test4 limit 0;'
-    #   it_behaves_like 'a correct query', exercise, query
-    # 
-    #   query = 'select * from test4'
-    #   error = /Error: incomplete SQL: select \* from test4/
-    #   it_behaves_like 'an invalid query', exercise, query, error
-    # end
-    # 
-    # context 'Prueba MQL' do
-    #   exercise = Sqlite::Exercise.get('00001_prueba_mql')
-    # 
-    #   query = 'select * from motores;'
-    #   it_behaves_like 'a correct query', exercise, query
-    # end
-    # 
-    # context 'Datasets Solutions' do
-    #   exercise = Sqlite::Exercise.get('00003_datasets_solutions')
-    # 
-    #   query = 'select * from bolitas;'
-    #   it_behaves_like 'a correct query', exercise, query
-    # end
-    # 
-    # context 'Online Library' do
-    #   exercise = Sqlite::Exercise.get('00004_online_library')
-    # 
-    #   query = <<-SQL
-    #     ALTER TABLE ejemplar ADD anio_edicion INT;
-    #     SELECT * FROM ejemplar;
-    #   SQL
-    #   it_behaves_like 'a correct query', exercise, query
-    # end
+    context 'Runner Test 3' do
+      let(:name) { '00000_runner_test3' }
+      it_behaves_like 'a solution that solves the exercise'
+      it_behaves_like 'a solution with syntax error'
+    end
+
+    context 'Runner Test 4' do
+      let(:name) { '00000_runner_test4' }
+      it_behaves_like 'a solution that solves the exercise'
+      it_behaves_like 'a solution with syntax error'
+    end
+
+    context 'Prueba MQL' do
+      let(:name) { '00001_prueba_mql' }
+      it_behaves_like 'a solution that solves the exercise'
+    end
+
+    context 'Datasets Solutions' do
+      let(:name) { '00003_datasets_solutions' }
+      it_behaves_like 'a solution that solves the exercise'
+    end
+
+    context 'Online Library' do
+      let(:name) { '00004_online_library' }
+      it_behaves_like 'a solution that solves the exercise'
+    end
 
 
   end

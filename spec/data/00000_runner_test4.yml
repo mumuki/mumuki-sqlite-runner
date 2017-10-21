@@ -1,13 +1,18 @@
-extra: |
-  CREATE TABLE test4 (
-    id integer primary key,
-    name varchar(200) NOT NULL
-  );
-test:
-  solution_type: query
-  solution_query: select name from test4 limit 0;
-  examples:
-  - data: |
-      INSERT INTO test4 (name) values ('ASCII');
-      INSERT INTO test4 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
-count: 1
+statement:
+  extra: |
+    CREATE TABLE test4 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  test:
+    solution_type: query
+    solution_query: select name from test4 limit 0;
+    examples:
+    - data: |
+        INSERT INTO test4 (name) values ('ASCII');
+        INSERT INTO test4 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
+  count: 1
+solution:
+  valid: select name from test4 limit 0;
+  syntax_error: select * from test4
+  syntax_error_message: !ruby/regexp '/Error: incomplete SQL: select \* from test4/'
