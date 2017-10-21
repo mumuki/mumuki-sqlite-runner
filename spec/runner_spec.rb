@@ -95,106 +95,128 @@ describe 'SqliteTestHook as isolated FileHook' do
 
   describe '#run!' do
 
-    shared_examples_for 'a correct query' do |exercise, query|
-      let(:result) { run exercise, query }
-
-      it { expect(result[0][0][1]).to eq :passed }
-      it { expect(result[0][0][2]).to include I18n.t 'success.query' }
+    def self.load_exercise
+      let(:exercise) do
+        Sqlite::Exercise.get_struct(name)
+      end
     end
 
-    shared_examples_for 'a query with different columns' do |exercise, query|
-      let(:result) { run exercise, query }
-
-      it { expect(result[0][0][1]).to eq :failed }
-      it { expect(result[0][0][2]).to include I18n.t 'failure.columns' }
+    def self.run_with(query)
+      let(:result) do
+        run exercise.statement, exercise.solution[query]
+      end
     end
 
-    shared_examples_for 'a query with different rows' do |exercise, query|
-      let(:result) { run exercise, query }
+    def self.run_exercise_as(query, status, message)
+      load_exercise
+      run_with query
+      message = I18n.t message
 
-      it { expect(result[0][0][1]).to eq :failed }
-      it { expect(result[0][0][2]).to include I18n.t 'failure.rows' }
+      it "status: #{status}" do
+        expect(result[0][0][1]).to eq status
+      end
+
+      it "message: '#{message}'" do
+        expect(result[0][0][2]).to include message
+      end
     end
 
-    shared_examples_for 'an invalid query' do |exercise, query, error|
-      let(:result) { run exercise, query }
-      it { expect(result[1]).to eq :failed }
-      it { expect(result[0]).to match error }
+    def self.run_syntax_error_exercise
+      load_exercise
+      run_with 'syntax_error'
+      let(:error) { exercise.solution['syntax_error_message'] }
+      status = :failed
+
+      it "status: #{status}" do
+        expect(result[1]).to eq status
+      end
+
+      it 'error: Syntax Error' do
+        expect(result[0]).to match error
+      end
     end
+
+    shared_examples_for 'a solution that solves the exercise' do
+      run_exercise_as 'valid', :passed, 'message.success.query'
+    end
+
+    shared_examples_for 'a solution with column error' do
+      run_exercise_as 'column_error', :failed, 'message.failure.columns'
+    end
+
+    shared_examples_for 'a solution with row error' do
+      run_exercise_as 'row_error', :failed, 'message.failure.rows'
+    end
+
+    shared_examples_for 'a solution with syntax error' do
+      run_syntax_error_exercise
+    end
+
 
     context 'Runner Test 1' do
-      exercise = Sqlite::Exercise.get('00000_runner_test1')
-
-      query = 'select * from test1;'
-      it_behaves_like 'a correct query', exercise, query
-
-      query = 'select name from test1;'
-      it_behaves_like 'a query with different columns', exercise, query
-
-      query = 'select * from test1 limit 1;'
-      it_behaves_like 'a query with different rows', exercise, query
-
-      query = 'selec * from test1;'
-      error = /Error: near line \d: near "selec": syntax error/
-      it_behaves_like 'an invalid query', exercise, query, error
+      let(:name) { '00000_runner_test1' }
+      it_behaves_like 'a solution that solves the exercise'
+      it_behaves_like 'a solution with column error'
+      it_behaves_like 'a solution with row error'
+      it_behaves_like 'a solution with syntax error'
     end
 
-    context 'Runner Test 2' do
-      exercise = Sqlite::Exercise.get('00000_runner_test2')
-
-      query = 'select name from test2;'
-      it_behaves_like 'a correct query', exercise, query
-
-      query = 'select from test2;'
-      error = /Error: near line \d: near "from": syntax error/
-      it_behaves_like 'an invalid query', exercise, query, error
-    end
-
-    context 'Runner Test 3' do
-      exercise = Sqlite::Exercise.get('00000_runner_test3')
-
-      query = 'select name from test3;'
-      it_behaves_like 'a correct query', exercise, query
-
-      query = 'select * fro test3;'
-      error = /Error: near line \d: near "fro": syntax error/
-      it_behaves_like 'an invalid query', exercise, query, error
-    end
-
-    context 'Runner Test 4' do
-      exercise = Sqlite::Exercise.get('00000_runner_test4')
-
-      query = 'select name from test4 limit 0;'
-      it_behaves_like 'a correct query', exercise, query
-
-      query = 'select * from test4'
-      error = /Error: incomplete SQL: select \* from test4/
-      it_behaves_like 'an invalid query', exercise, query, error
-    end
-
-    context 'Prueba MQL' do
-      exercise = Sqlite::Exercise.get('00001_prueba_mql')
-
-      query = 'select * from motores;'
-      it_behaves_like 'a correct query', exercise, query
-    end
-
-    context 'Datasets Solutions' do
-      exercise = Sqlite::Exercise.get('00003_datasets_solutions')
-
-      query = 'select * from bolitas;'
-      it_behaves_like 'a correct query', exercise, query
-    end
-
-    context 'Online Library' do
-      exercise = Sqlite::Exercise.get('00004_online_library')
-
-      query = <<-SQL
-        ALTER TABLE ejemplar ADD anio_edicion INT;
-        SELECT * FROM ejemplar;
-      SQL
-      it_behaves_like 'a correct query', exercise, query
-    end
+    # context 'Runner Test 2' do
+    #   exercise = Sqlite::Exercise.get('00000_runner_test2')
+    # 
+    #   query = 'select name from test2;'
+    #   it_behaves_like 'a correct query', exercise, query
+    # 
+    #   query = 'select from test2;'
+    #   error = /Error: near line \d: near "from": syntax error/
+    #   it_behaves_like 'an invalid query', exercise, query, error
+    # end
+    # 
+    # context 'Runner Test 3' do
+    #   exercise = Sqlite::Exercise.get('00000_runner_test3')
+    # 
+    #   query = 'select name from test3;'
+    #   it_behaves_like 'a correct query', exercise, query
+    # 
+    #   query = 'select * fro test3;'
+    #   error = /Error: near line \d: near "fro": syntax error/
+    #   it_behaves_like 'an invalid query', exercise, query, error
+    # end
+    # 
+    # context 'Runner Test 4' do
+    #   exercise = Sqlite::Exercise.get('00000_runner_test4')
+    # 
+    #   query = 'select name from test4 limit 0;'
+    #   it_behaves_like 'a correct query', exercise, query
+    # 
+    #   query = 'select * from test4'
+    #   error = /Error: incomplete SQL: select \* from test4/
+    #   it_behaves_like 'an invalid query', exercise, query, error
+    # end
+    # 
+    # context 'Prueba MQL' do
+    #   exercise = Sqlite::Exercise.get('00001_prueba_mql')
+    # 
+    #   query = 'select * from motores;'
+    #   it_behaves_like 'a correct query', exercise, query
+    # end
+    # 
+    # context 'Datasets Solutions' do
+    #   exercise = Sqlite::Exercise.get('00003_datasets_solutions')
+    # 
+    #   query = 'select * from bolitas;'
+    #   it_behaves_like 'a correct query', exercise, query
+    # end
+    # 
+    # context 'Online Library' do
+    #   exercise = Sqlite::Exercise.get('00004_online_library')
+    # 
+    #   query = <<-SQL
+    #     ALTER TABLE ejemplar ADD anio_edicion INT;
+    #     SELECT * FROM ejemplar;
+    #   SQL
+    #   it_behaves_like 'a correct query', exercise, query
+    # end
 
 
   end

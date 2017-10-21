@@ -12,25 +12,27 @@ module Sqlite
         when :equals
           success(name, result)
         when :distinct_columns
-          failed(name, result, solution, (I18n.t 'failure.columns'))
+          failed(name, result, solution, 'columns')
         when :distinct_rows
-          failed(name, result, solution, (I18n.t 'failure.rows'))
+          failed(name, result, solution, 'rows')
         else
-          failed(name, result, solution, (I18n.t 'failure.query'))
+          failed(name, result, solution, 'query')
       end
     end
 
     def success(name, result)
-      [name, :passed, render_success(result)]
+      message = I18n.t 'message.success.query'
+      [name, :passed, render_success(result, message)]
     end
 
     def failed(name, result, solution, error)
+      error = I18n.t "message.failure.#{error}"
       [name, :failed, render_error(result, solution, error)]
     end
 
     # Return success page rendered with results
-    def render_success(result)
-      renderer.render_success result
+    def render_success(result, message)
+      renderer.render_success result, message
     end
 
     # Return error page rendered with results & solutions

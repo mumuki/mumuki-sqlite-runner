@@ -3,9 +3,10 @@ require 'active_support/inflector'
 module Sqlite
   class HtmlRenderer
 
-    def render_success(result)
-      @header = result[:dataset].header
-      @rows   = result[:dataset].rows
+    def render_success(result, message)
+      @message = message
+      @header  = result[:dataset].header
+      @rows    = result[:dataset].rows
       template_file_success.result binding
     end
 
