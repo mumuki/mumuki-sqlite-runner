@@ -161,17 +161,12 @@ describe 'SqliteTestHook as isolated FileHook' do
       it_behaves_like 'a solution with syntax error'
     end
 
-    # context 'Runner Test 2' do
-    #   exercise = Sqlite::Exercise.get('00000_runner_test2')
-    # 
-    #   query = 'select name from test2;'
-    #   it_behaves_like 'a correct query', exercise, query
-    # 
-    #   query = 'select from test2;'
-    #   error = /Error: near line \d: near "from": syntax error/
-    #   it_behaves_like 'an invalid query', exercise, query, error
-    # end
-    # 
+    context 'Runner Test 2' do
+      let(:name) { '00000_runner_test2' }
+      it_behaves_like 'a solution that solves the exercise'
+      it_behaves_like 'a solution with syntax error'
+    end
+
     # context 'Runner Test 3' do
     #   exercise = Sqlite::Exercise.get('00000_runner_test3')
     # 
