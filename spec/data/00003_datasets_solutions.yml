@@ -34,3 +34,5 @@ statement:
   count: 2
 solution:
   valid: select * from bolitas;
+  row_error: select * from bolitas limit 1;
+  column_error: select color from bolitas;

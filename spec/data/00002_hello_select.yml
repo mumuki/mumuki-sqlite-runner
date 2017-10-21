@@ -20,6 +20,6 @@ statement:
         INSERT INTO bolitas (color) values ('Blanco');
   count: 2
 solution:
-  valid:
-  syntax_error:
-  syntax_error_message: !ruby/regexp ''
+  valid: select * from bolitas;
+  row_error: select * from bolitas limit 1;
+  column_error: select color from bolitas;
