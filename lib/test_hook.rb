@@ -9,6 +9,15 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # Define that worker runs on a freshly-cleaned environment
   isolated
 
+  def initialize(config = nil)
+    super(config)
+    @test_parsers = {
+        query:   Sqlite::QueryTestParser,
+        dataset: Sqlite::DatasetTestParser
+    }
+    @test_parsers.default = Sqlite::InvalidTestParser
+  end
+
   # Just define file extension
   def tempfile_extension
     '.json'
@@ -19,25 +28,24 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     "runsql #{filename}"
   end
 
-  # Define the .json file template from request structure
-  # Input: request = {
-  #   test: (yaml string) teacher's code that define which testing verification student code should pass,
-  #   extra: (sql string) teacher's code that prepare field where student code should run,
-  #   content: (sql string) student code,
-  #   expectations: [] not using for now
+  # Transform Mumuki Request into Docker file style
+  # Request = {
+  #   test: {
+  #     type: (string) query|dataset,
+  #     seed: (string) sql code to populate tables,
+  #     expected: (string) query sentence | resulting table
+  #   },
+  #   extra: (string) sql code to create tables,
+  #   content: (string) student's solution,
+  #   expectations: []    # not using
   # }
   #
   def compile_file_content(request)
-    solution, data = parse_test request.test
-
-    content = {
-        init: request.extra.strip,
-        solution: solution,
+    {
+        init:    request.extra.strip,
         student: request.content.strip,
-        datasets: data
-    }
-
-    content.to_json
+        test:    parse_test(request.test)
+    }.to_json
   end
 
   # Define how output results
@@ -112,37 +120,26 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     end
   end
 
-  # Test should have one of these formats:
+  # This method receives a list of test cases.
+  # Each one could be like one of these:
   #
-  # Solution by query:
-  # { solution_type: 'query',
-  #   solution_query: 'SELECT * FROM ...',
-  #   examples: [
-  #     { data: "INSERT INTO..." }
-  #   ]
-  # }
+  #   type: query
+  #   seed: INSERT INTO ...
+  #   expected: SELECT * FROM ...
   #
-  # Solution by datasets:
-  # { solution_type: 'datasets',
-  #   examples: [
-  #     { data: "INSERT INTO...",
-  #       solution: "id|field\n1|row1..."
-  #     }
-  #   ]
-  # }
-  def parse_test(test)
-    test = OpenStruct.new YAML.load(test).deep_symbolize_keys
-
-    case test.solution_type.to_sym
-      when :query
-        @solution_parser = Sqlite::QuerySolutionParser.new
-      when :datasets
-        @solution_parser = Sqlite::DatasetSolutionParser.new
-      else
-        raise Sqlite::TestSolutionTypeError
+  #   type: dataset
+  #   seed: INSERT INTO ...
+  #   expected: |
+  #     id|field
+  #     1|row 1
+  #     ...
+  def parse_test(tests)
+    @tests = tests.map do | test |
+      test = YAML.load(test).deep_symbolize_keys.to_struct
+      @test_parsers[test.type.to_sym].new test
     end
 
-    @solution_parser.parse_test test
+    @tests.map(&:result)
   end
 
   # Initialize Metatest Framework with Checker & Runner

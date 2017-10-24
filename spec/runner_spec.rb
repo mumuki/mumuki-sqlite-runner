@@ -14,38 +14,25 @@ describe 'SqliteTestHook as isolated FileHook' do
   end
 
   describe '#compile_file_content {extra, content, test}' do
-    let(:req) do
-      test = {
-        solution_type: 'query',
-        solution_query: 'select * from test',
-        examples: [
-          { 'data' => 'insert into test values (1)' },
-          { 'data' => 'insert into test values (2)' },
-          { 'data' => 'insert into test values (3)' },
-          { 'data' => "insert into test values (4)\n-- more on same dataset\ninsert into test values (4.1)"
-          }
-        ]
-      }.to_yaml
+    it 'transforms mumuki request into docker style' do
+      request = struct extra:   'create table test',
+                       content: 'select id from test',
+                       test: [{
+                           type: 'query',
+                           seed: 'insert into test values (1)',
+                           expected: 'select * from test'
+                       }.to_yaml]
 
-      struct extra: 'create table test',
-             content: 'select id from test',
-             test: test
-    end
-
-    it do
       expected = {
-          init: 'create table test',
-          solution: 'select * from test',
-          student:  'select id from test',
-          datasets: [
-              'insert into test values (1)',
-              'insert into test values (2)',
-              'insert into test values (3)',
-              "insert into test values (4)\n-- more on same dataset\ninsert into test values (4.1)"
-          ],
+          init:    'create table test',
+          student: 'select id from test',
+          test: [{
+              seed: 'insert into test values (1)',
+              expected: 'select * from test'
+          }]
       }.to_json
 
-      expect(runner.compile_file_content(req)).to eq expected
+      expect(runner.compile_file_content(request)).to eq expected
     end
   end
 
