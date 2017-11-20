@@ -3,66 +3,59 @@
 
 from subprocess import *
 
-""" Receive a dictionary like this:
-
-program = {
-    'init': "create table ...;\ninsert into ...;",
-    'solution': "select ... from ...;",
-    'dataset': [
-        "insert into ...;",
-        "insert into ...;"
-    ],
-    'student': "select ... from ...;"
+""" Receives a dictionary like this:
+data = {
+    'init': "CREATE TABLE ...;\nINSERT INTO ...;",
+    'student': "SELECT ... FROM ...;"
+    'tests': [{
+        'seed': "INSERT INTO ...;\nINSERT INTO ...",
+        'expected': "SELECT * FROM ...;"
+    },{
+        'seed': "INSERT INTO ...;\nINSERT INTO ...",
+        'expected': "-- NONE"
+    }],
 }
 
-And Run sqlite3 with an empty mumuki database.
+Then run:
+    for test in data['tests']:
+        clean database
+        run data['init']
+        run test['seed']
+        run test['expected'] >> response['expected']
+        
+        clean database
+        run data['init']
+        run test['seed']
+        run data['student'] >> response['student']
 
-Example:
-    clean mumuki database
-    run 'init'
-    run 'dataset'[0]
-    run 'solution'
-    run 'student'
-    
-    clean mumuki database
-    run 'init'
-    run 'dataset'[1]
-    run 'solution'
-    run 'student'
-    
-    ...
-
-
-Output expected if success:
-
-{
-    'solutions': [
+And return:
+response = {
+    'expected': [
         'id|name|...\n1|test1|...\n1|test2|...\',
         'id|name|...\n1|bla1|...\n1|bla2|...\',
     ],
-    'results': [
+    'student': [
         'id|name|...\n1|test1|...\n1|test2|...\',
         'id|name|...\n1|bla1|...\n1|bla2|...\',
     ],
 }
 
-
-Output expected if error:
-
-{
-    'error': 'Error descriptions...'
+If error:
+response = {
+    "output": "Error: incomplete SQL: SELECT name FROM test",
+    "code": 1
 }
 """
 
-DATABASE = 'mumuki.sqlite'
-
-
-def rm(filename):
-    call(['rm', '-f', filename])
-
-
-def clean_all():
-    map(clean, [DATABASE, 'init.sql', 'dataset.sql', 'solution.sql', 'student.sql'])
+# Constants
+EXT = '.sql'
+FILES = {
+    'db': 'mumuki.sqlite',
+    'init': 'init.sql',
+    'seed': 'seed.sql',
+    'student': 'student.sql',
+    'expected': 'expected.sql',
+}
 
 
 def clean(file):
@@ -70,10 +63,28 @@ def clean(file):
     call(['touch', file])
 
 
-def dump(name, content):
-    file = open(name + '.sql', 'w')
+def clean_db():
+    clean(FILES['db'])
+
+
+def rm_all():
+    map(rm, FILES.values())
+
+
+def rm(filename):
+    call(['rm', '-f', filename])
+
+
+def dump(content, filename):
+    content = content if content else "-- NONE"
+    clean(filename)
+    file = open(filename, 'w')
     file.write(content.encode('utf8') + '\n')
     file.close()
+
+
+def dump_data(data, name):
+    dump(data[name], FILES[name])
 
 
 class RunException(Exception):
@@ -82,81 +93,63 @@ class RunException(Exception):
 
 
 def command(filename):
-    return 'sqlite3 {db} < {file}.sql'.format(db=DATABASE, file=filename)
+    return 'sqlite3 {db} < {file}.sql'.format(db=FILES['db'], file=filename)
 
 
 class MQL:
-    def __init__(self, code):
-        self.code = code
-        self.result = {
-            'solutions': [],
-            'results': [],
-        }
-
-    def has_error(self):
-        return 'error' in self.result
-
-    def get_error(self):
-        return self.result['error']
-
-    def get_result(self):
-        return self.result
-
-    def dump(self, name):
-        dump(name, self.code[name])
+    def __init__(self, data):
+        self.data = data
+        self.response = {'expected': [], 'student': []}
 
     def run(self):
-        clean_all()
         self.dump('init')
-        self.dump('solution')
         self.dump('student')
-
-        if not self.code['datasets']:
-            self.code['datasets'] = ["-- none"]
-
-        for dataset in self.code['datasets']:
+        for test in self.data['tests']:
+            dump_data(test, 'seed')
+            dump_data(test, 'expected')
             try:
-                dump('dataset', dataset)
-                self.run_solution()
-                self.run_student()
+                self.prepare_db()
+                self._run('expected')
+                self.prepare_db()
+                self._run('student')
             except RunException:
-                clean_all()
-                return self
-
-        clean_all()
+                break
+        rm_all()
         self.post_process()
         return self
 
     def prepare_db(self):
-        clean(DATABASE)
+        clean_db()
         self._run('init')
-        self._run('dataset')
-
-    def run_solution(self):
-        self.prepare_db()
-        self._run('solution')
-
-    def run_student(self):
-        self.prepare_db()
-        self._run('student')
+        self._run('seed')
 
     def _run(self, param):
         try:
             output = check_output(command(param), stderr=STDOUT, shell=True)
         except CalledProcessError as e:
-            self.result['error'] = {
+            self.response['error'] = {
                 'code': e.returncode,
                 'output': e.output.strip(),
             }
             raise RunException('Error: ' + e.output)
         else:
-            if param == 'solution':
-                self.result['solutions'].append(output)
-            elif param == 'student':
-                self.result['results'].append(output)
+            if param in ['expected', 'student']:
+                self.response[param].append(output)
             else:
                 pass
 
     def post_process(self):
-        self.result['solutions'] = map(str.strip, self.result['solutions'])
-        self.result['results'] = map(str.strip, self.result['results'])
+        for name in ['expected', 'student']:
+            self.response[name] = map(str.strip, self.response[name])
+
+    def has_error(self):
+        return 'error' in self.response
+
+    def get_error(self):
+        return self.response['error']
+
+    def get_result(self):
+        return self.response
+
+    def dump(self, name):
+        dump(self.data[name], FILES[name])

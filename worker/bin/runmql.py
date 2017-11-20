@@ -22,9 +22,9 @@ if __name__ == '__main__':
         exit(1)
 
     with open(argv[1]) as json_file:
-        code_blocks = json.load(json_file)
+        data = json.load(json_file)
 
-    mql = MQL(code_blocks).run()
+    mql = MQL(data).run()
 
     if mql.has_error():
         print as_json(mql.get_error())

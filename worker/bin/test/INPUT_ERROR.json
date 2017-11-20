@@ -1,9 +1,10 @@
 {
-  "init": "create table test (\nid integer primary key,\nname varchar(200) not null\n);",
-  "solution": "select name from test",
-  "student":  "select * from test;",
-  "datasets": [
-    "insert into test (name) values ('Test 1.1');\ninsert into test (name) values ('Test 1.2');\ninsert into test (name) values ('Test 1.3');",
-    "insert into test (name) values ('Test 2.1');\ninsert into test (name) values ('Test 2.2');\ninsert into test (name) values ('Test 2.3');"
+  "init": "CREATE TABLE test (\nid INTEGER PRIMARY KEY,\nname VARCHAR(200) NOT NULL\n);",
+  "student": "SELECT * FROM test;",
+  "tests":[
+      {
+        "seed":"INSERT INTO test (name) VALUES ('Test 1.1');\nINSERT INTO test (name) VALUES ('Test 1.2');\nINSERT INTO test (name) VALUES ('Test 1.3');",
+        "expected":"SELECT name FROM test"
+      }
   ]
 }
