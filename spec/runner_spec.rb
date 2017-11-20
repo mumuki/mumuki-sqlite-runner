@@ -18,15 +18,15 @@ describe 'SqliteTestHook as isolated FileHook' do
       request = struct extra:   'create table test',
                        content: 'select id from test',
                        test: [{
-                           type: 'query',
-                           seed: 'insert into test values (1)',
-                           expected: 'select * from test'
-                       }.to_yaml]
+                           'type' => 'query',
+                           'seed' => 'insert into test values (1)',
+                           'expected' => 'select * from test'
+                       }].to_yaml
 
       expected = {
           init:    'create table test',
           student: 'select id from test',
-          test: [{
+          tests: [{
               seed: 'insert into test values (1)',
               expected: 'select * from test'
           }]
@@ -39,8 +39,8 @@ describe 'SqliteTestHook as isolated FileHook' do
   describe '#post_process_file' do
     it 'returns "OK" when query passed and match with expected' do
       result = {
-        solutions: ['solution 1', 'solution 2'],
-        results:   ['solution 1', 'solution 2']
+        expected: ['solution 1', 'solution 2'],
+        student:  ['solution 1', 'solution 2']
       }
 
       post_process = runner.post_process_file('', result.to_json, :passed)
@@ -56,8 +56,8 @@ describe 'SqliteTestHook as isolated FileHook' do
 
     it "returns '#{I18n.t 'message.failure.columns'}' when query passed but not match with expected" do
       result = {
-          solutions: ['solution 1', 'solution 2'],
-          results:   ['solution 1', 'solution 3']
+          expected: ['solution 1', 'solution 2'],
+          student:  ['solution 1', 'solution 3']
       }
 
       post_process = runner.post_process_file('', result.to_json, :passed)

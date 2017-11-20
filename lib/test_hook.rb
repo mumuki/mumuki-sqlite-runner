@@ -44,18 +44,18 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     {
         init:    request.extra.strip,
         student: request.content.strip,
-        test:    parse_test(request.test)
+        tests:   parse_tests(request.test)
     }.to_json
   end
 
   # Define how output results
   # Expected:
   # {
-  #     "solutions": [
+  #     "expected": [
   #         "name\nTest 1.1\nTest 1.2\nTest 1.3\n",
   #         "name\nTest 2.1\nTest 2.2\nTest 2.3\n"
   #     ],
-  #     "results": [
+  #     "student": [
   #         "id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3\n",
   #         "id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3\n"
   #     ]
@@ -65,8 +65,8 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
     case status
       when :passed
-        solutions, results = parse_output output
-        framework.test solutions, results
+        expected, student = parse_output output
+        framework.test expected, student
       when :failed
         [output['output'], status]
       else
@@ -77,30 +77,22 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   protected
 
   def parse_output(output)
-    results   = output['results']
-    solutions = output['solutions']
-    unless @solution_parser.nil?
-      solutions = @solution_parser.choose solutions
+    student  = output['student']
+    expected = output['expected']
+    unless @expected_parser.nil?
+      expected = @expected_parser.choose expected
     end
 
-    diff(solutions, results)
+    diff(expected, student)
   end
 
-  def diff(solutions, results)
-    zipped = solutions.zip(results).map do |solution, result|
-
-      diff = Diffy::SplitDiff.new result << "\n", solution << "\n"
-
-      if diff.left.blank?
-        [solution, result]
-      else
-        res = post_process_diff diff.left
-        sol = post_process_diff diff.right
-        [sol, res]
-      end
-
+  def diff(expected, student)
+    zipped = expected.zip(student).map do |expected_i, student_i|
+      diff = Diffy::SplitDiff.new student_i << "\n", expected_i << "\n"
+      expected_i = diff.left  unless diff.left.blank?
+      student_i  = diff.right unless diff.right.blank?
+      [expected_i, student_i].map { |e| post_process_diff e }
     end
-
     zipped.transpose.map { |dataset| post_process_datasets dataset }
   end
 
@@ -133,9 +125,11 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   #     id|field
   #     1|row 1
   #     ...
-  def parse_test(tests)
+  def parse_tests(tests)
+    tests = YAML.load tests
     @tests = tests.map do | test |
-      test = YAML.load(test).deep_symbolize_keys.to_struct
+      # test = YAML.load test unless test.is_a? Hash
+      test = test.to_struct
       @test_parsers[test.type.to_sym].new test
     end
 

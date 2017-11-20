@@ -10,7 +10,6 @@ Mumukit.configure do |config|
   config.structured = true
 end
 
-require_relative './extensions/hash_extension'
 require_relative './version_hook'
 require_relative './test_hook'
 require_relative './metadata_hook'

@@ -1,6 +1,8 @@
 module Sqlite
   class DatasetTestParser
 
+    include Sqlite::CommonTestParser
+
     def initialize(test)
       @test = test
       @result = parse test
@@ -21,7 +23,7 @@ module Sqlite
     # }
     def parse(test)
       @solutions = test[:expected].to_s.split("\n").map(&:strip).join("\n")
-      final_parse test, {espected: '-- NONE'}
+      final_parse test, {expected: '-- NONE'}
     end
 
     def choose(_solution)
