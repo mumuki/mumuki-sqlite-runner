@@ -5,13 +5,20 @@ statement:
       name varchar(200) NOT NULL
     );
   test:
-    solution_type: query
-    solution_query: select name from test2;
-    examples:
-    - data: |
+    - type: query
+      seed: |
         INSERT INTO test2 (name) values ('Name 1');
         INSERT INTO test2 (name) values ('Name 2');
-  count: 1
+      expected: select name from test2;
+    - type: dataset
+      seed: |
+        INSERT INTO test2 (name) values ('Name 1');
+        INSERT INTO test2 (name) values ('Name 2');
+      expected: |
+        id|name
+        1|Name 1
+        2|Name 2
+  count: 2
 solution:
   valid: select name from test2;
   syntax_error: select from test2;
