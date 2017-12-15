@@ -4,7 +4,7 @@ require 'mumukit/bridge'
 describe 'Server' do
 
   before(:all) do
-    @pid = Process.spawn 'rackup -p 4568', err: ENV['LOG_PATH']  || '/dev/null'
+    @pid = Process.spawn 'rackup -p 4568', err: '/dev/null'
     sleep 2
   end
 
