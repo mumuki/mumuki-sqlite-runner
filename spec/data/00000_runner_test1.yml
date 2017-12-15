@@ -10,7 +10,7 @@ statement:
         INSERT INTO test1 (name) values ('Name 1');
         INSERT INTO test1 (name) values ('Name 2');
       expected: select * from test1;
-    - type: dataset
+    - type: datasets
       seed: |
         INSERT INTO test1 (name) values ('Name 3');
         INSERT INTO test1 (name) values ('Name 4');
