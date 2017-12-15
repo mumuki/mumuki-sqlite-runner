@@ -6,19 +6,19 @@ statement:
     );
   test:
     - type: query
-      query: select * from bolitas;
       seed: |
         INSERT INTO bolitas (color) values ('Verde');
         INSERT INTO bolitas (color) values ('Rojo');
         INSERT INTO bolitas (color) values ('Azul');
         INSERT INTO bolitas (color) values ('Negro');
+      expected: select * from bolitas;
     - type: query
-      query: select * from bolitas;
       seed: |
         INSERT INTO bolitas (color) values ('Marrón');
         INSERT INTO bolitas (color) values ('Violeta');
         INSERT INTO bolitas (color) values ('Amarillo');
         INSERT INTO bolitas (color) values ('Blanco');
+      expected: select * from bolitas;
   count: 2
 solution:
   valid: select * from bolitas;
