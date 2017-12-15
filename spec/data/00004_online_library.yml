@@ -56,10 +56,8 @@ statement:
       (785, 78, '2013-02-20 00:00:00', NULL),
       (101, 03, '2013-11-17 00:00:00', '2013/11/18');
   test:
-    solution_type: "datasets"
-    examples:
-    - data: ""
-      solution_dataset: |
+    - type: "datasets"
+      seed: |
         cod_ejemplar|isbn_libro|edicion|anio_edicion
         503|33058621|2|
         785|33058621|4|

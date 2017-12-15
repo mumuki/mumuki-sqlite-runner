@@ -5,27 +5,25 @@ statement:
       color varchar(200) NOT NULL
     );
   test:
-    solution_type: datasets
-    examples:
-    -
-      data: |
+    - type: datasets
+      seed: |
         INSERT INTO bolitas (color) values ('Verde');
         INSERT INTO bolitas (color) values ('Rojo');
         INSERT INTO bolitas (color) values ('Azul');
         INSERT INTO bolitas (color) values ('Negro');
-      solution_dataset: |
+      expected: |
         id|color
         1|Verde
         2|Rojo
         3|Azul
         4|Negro
-    -
-      data: |
+    - type: datasets
+      seed: |
         INSERT INTO bolitas (color) values ('Marrón');
         INSERT INTO bolitas (color) values ('Violeta');
         INSERT INTO bolitas (color) values ('Amarillo');
         INSERT INTO bolitas (color) values ('Blanco');
-      solution_dataset: |
+      expected: |
           id|color
           1|Marrón
           2|Violeta

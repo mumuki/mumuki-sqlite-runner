@@ -5,15 +5,16 @@ statement:
       color varchar(200) NOT NULL
     );
   test:
-    solution_type: query
-    solution_query: select * from bolitas;
-    examples:
-    - data: |
+    - type: query
+      query: select * from bolitas;
+      seed: |
         INSERT INTO bolitas (color) values ('Verde');
         INSERT INTO bolitas (color) values ('Rojo');
         INSERT INTO bolitas (color) values ('Azul');
         INSERT INTO bolitas (color) values ('Negro');
-    - data: |
+    - type: query
+      query: select * from bolitas;
+      seed: |
         INSERT INTO bolitas (color) values ('Marrón');
         INSERT INTO bolitas (color) values ('Violeta');
         INSERT INTO bolitas (color) values ('Amarillo');

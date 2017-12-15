@@ -5,12 +5,11 @@ statement:
       name varchar(200) NOT NULL
     );
   test:
-    solution_type: query
-    solution_query: select name from test3;
-    examples:
-    - data: |
+    - type: query
+      seed: |
         INSERT INTO test3 (name) values ('ASCII');
         INSERT INTO test3 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
+      expected: select name from test3;
   count: 1
 solution:
   valid: select name from test3;
