@@ -12,8 +12,8 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   def initialize(config = nil)
     super(config)
     @test_parsers = {
-        query:   Sqlite::QueryTestParser,
-        dataset: Sqlite::DatasetTestParser
+        query:    Sqlite::QueryTestParser,
+        datasets: Sqlite::DatasetTestParser
     }
     @test_parsers.default = Sqlite::InvalidTestParser
   end
@@ -79,8 +79,8 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   def parse_output(output)
     student  = output['student']
     expected = output['expected']
-    unless @expected_parser.nil?
-      expected = @expected_parser.choose expected
+    expected.map!.with_index do |expect, i|
+      @expected_parser[i].choose expect
     end
 
     diff(expected, student)
@@ -133,6 +133,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
       @test_parsers[test.type.to_sym].new test
     end
 
+    @expected_parser = @tests
     @tests.map(&:result)
   end
 

@@ -15,9 +15,9 @@ statement:
         INSERT INTO test2 (name) values ('Name 1');
         INSERT INTO test2 (name) values ('Name 2');
       expected: |
-        id|name
-        1|Name 1
-        2|Name 2
+        name
+        Name 1
+        Name 2
   count: 2
 solution:
   valid: select name from test2;

@@ -37,12 +37,25 @@ describe 'SqliteTestHook as isolated FileHook' do
   end
 
   describe '#post_process_file' do
+    let(:request) do
+      struct extra:   'create table test',
+             content: 'select id from test',
+             test: [{
+                 'type' => 'datasets',
+                 'expected' => 'solution 1'
+             },{
+                 'type' => 'datasets',
+                 'expected' => 'solution 2'
+             }].to_yaml
+    end
+
     it 'returns "OK" when query passed and match with expected' do
       result = {
         expected: ['solution 1', 'solution 2'],
         student:  ['solution 1', 'solution 2']
       }
 
+      runner.compile_file_content(request)
       post_process = runner.post_process_file('', result.to_json, :passed)
 
       expect(post_process[0][0][0]).to eq I18n.t :dataset, number: 1
@@ -60,6 +73,7 @@ describe 'SqliteTestHook as isolated FileHook' do
           student:  ['solution 1', 'solution 3']
       }
 
+      runner.compile_file_content(request)
       post_process = runner.post_process_file('', result.to_json, :passed)
 
       expect(post_process[0][1][0]).to eq I18n.t :dataset, number: 2
