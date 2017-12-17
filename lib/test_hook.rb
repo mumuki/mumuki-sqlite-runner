@@ -89,11 +89,15 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   def diff(expected, student)
     zipped = expected.zip(student).map do |expected_i, student_i|
       diff = Diffy::SplitDiff.new student_i << "\n", expected_i << "\n"
-      expected_i = diff.left  unless diff.left.blank?
-      student_i  = diff.right unless diff.right.blank?
-      [expected_i, student_i].map { |e| post_process_diff e }
+      choose_left_right(diff, expected_i, student_i).map { |e| post_process_diff e }
     end
     zipped.transpose.map { |dataset| post_process_datasets dataset }
+  end
+
+  def choose_left_right(diff, expected, student)
+    expected = diff.left  unless diff.left.blank?
+    student  = diff.right unless diff.right.blank?
+    [expected, student]
   end
 
   def post_process_diff(data)
