@@ -9,16 +9,18 @@ module Sqlite
       @result = parse test
     end
 
+    def choose(solution)
+      solution
+    end
+
+    protected
+
     def final_parse(test, override = {})
       seed = test[:seed].blank? ? '' : test[:seed].strip
       {
           seed:     override[:seed]     || seed,
           expected: override[:expected] || test[:expected].strip
       }
-    end
-
-    def choose(solution)
-      solution
     end
 
   end

@@ -14,7 +14,7 @@ module Sqlite
     #   expected: SELECT * FROM ...
     # }
     def parse(test)
-      final_parse(test)
+      final_parse test
     end
 
   end

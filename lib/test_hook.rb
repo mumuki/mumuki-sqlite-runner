@@ -132,7 +132,6 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   def parse_tests(tests)
     tests = YAML.load tests
     @tests = tests.map do | test |
-      # test = YAML.load test unless test.is_a? Hash
       test = test.to_struct
       @test_parsers[test.type.to_sym].new test
     end
