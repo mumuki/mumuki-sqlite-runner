@@ -5,19 +5,19 @@ statement:
       color varchar(200) NOT NULL
     );
   test:
-    - type: final_dataset
-      seed: |
-        INSERT INTO bolitas (color) values ('Verde');
-        INSERT INTO bolitas (color) values ('Rojo');
-        INSERT INTO bolitas (color) values ('Azul');
-        INSERT INTO bolitas (color) values ('Negro');
-      final: SELECT color, hex FROM bolitas;
-      expected: |
-        color|hex
-        Verde|#00FF00
-        Rojo|#FF0000
-        Azul|#0000FF
-        Negro|#000000
+    type: final_dataset
+    seed: |
+      INSERT INTO bolitas (color) values ('Verde');
+      INSERT INTO bolitas (color) values ('Rojo');
+      INSERT INTO bolitas (color) values ('Azul');
+      INSERT INTO bolitas (color) values ('Negro');
+    final: SELECT color, hex FROM bolitas;
+    expected: |
+      color|hex
+      Verde|#00FF00
+      Rojo|#FF0000
+      Azul|#0000FF
+      Negro|#000000
   count: 1
 solution:
   valid: |
