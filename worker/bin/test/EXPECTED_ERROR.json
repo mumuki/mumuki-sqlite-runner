@@ -1,4 +1,4 @@
 {
-  "output": "Error: incomplete SQL: select name from test",
+  "output": "Error: incomplete SQL: SELECT name FROM test",
   "code": 1
 }

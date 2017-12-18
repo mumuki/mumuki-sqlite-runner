@@ -1,13 +1,25 @@
-extra: |
-  CREATE TABLE test2 (
-    id integer primary key,
-    name varchar(200) NOT NULL
-  );
-test:
-  solution_type: query
-  solution_query: select name from test2;
-  examples:
-  - data: |
-      INSERT INTO test2 (name) values ('Name 1');
-      INSERT INTO test2 (name) values ('Name 2');
-count: 1
+statement:
+  extra: |
+    CREATE TABLE test2 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  test:
+    - type: query
+      seed: |
+        INSERT INTO test2 (name) values ('Name 1');
+        INSERT INTO test2 (name) values ('Name 2');
+      expected: select name from test2;
+    - type: datasets
+      seed: |
+        INSERT INTO test2 (name) values ('Name 1');
+        INSERT INTO test2 (name) values ('Name 2');
+      expected: |
+        name
+        Name 1
+        Name 2
+  count: 2
+solution:
+  valid: select name from test2;
+  syntax_error: select from test2;
+  syntax_error_message: !ruby/regexp '/Error: near line \d: near "from": syntax error/'

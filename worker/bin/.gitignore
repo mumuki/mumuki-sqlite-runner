@@ -2,7 +2,6 @@
 *.pyc
 mumuki.sqlite
 init.sql
-dataset.sql
-solution.sql
+seed.sql
+expected.sql
 student.sql
-

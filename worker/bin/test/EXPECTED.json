@@ -1,13 +1,13 @@
 {
-  "solutions": [
+  "expected": [
     "name\nTest 1.1\nTest 1.2\nTest 1.3",
-    "name\nTest 2.1\nTest 2.2\nTest 2.3",
-    "name\nTest UTF-8 áéíóúñÁÉÍÓÚÑ"
+    "name\nTest UTF-8 áéíóúñÁÉÍÓÚÑ",
+    ""
 
   ],
-  "results": [
+  "student": [
     "id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3",
-    "id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3",
+    "id|name\n1|Test UTF-8 áéíóúñÁÉÍÓÚÑ",
     "id|name\n1|Test UTF-8 áéíóúñÁÉÍÓÚÑ"
   ]
 }

@@ -1,20 +1,26 @@
-extra: |
-  CREATE TABLE `bolitas` (
-    id integer primary key,
-    color varchar(200) NOT NULL
-  );
-test:
-  solution_type: query
-  solution_query: select * from bolitas;
-  examples:
-  - data: |
-      INSERT INTO bolitas (color) values ('Verde');
-      INSERT INTO bolitas (color) values ('Rojo');
-      INSERT INTO bolitas (color) values ('Azul');
-      INSERT INTO bolitas (color) values ('Negro');
-  - data: |
-      INSERT INTO bolitas (color) values ('Marrón');
-      INSERT INTO bolitas (color) values ('Violeta');
-      INSERT INTO bolitas (color) values ('Amarillo');
-      INSERT INTO bolitas (color) values ('Blanco');
-count: 2
+statement:
+  extra: |
+    CREATE TABLE `bolitas` (
+      id integer primary key,
+      color varchar(200) NOT NULL
+    );
+  test:
+    - type: query
+      seed: |
+        INSERT INTO bolitas (color) values ('Verde');
+        INSERT INTO bolitas (color) values ('Rojo');
+        INSERT INTO bolitas (color) values ('Azul');
+        INSERT INTO bolitas (color) values ('Negro');
+      expected: select * from bolitas;
+    - type: query
+      seed: |
+        INSERT INTO bolitas (color) values ('Marrón');
+        INSERT INTO bolitas (color) values ('Violeta');
+        INSERT INTO bolitas (color) values ('Amarillo');
+        INSERT INTO bolitas (color) values ('Blanco');
+      expected: select * from bolitas;
+  count: 2
+solution:
+  valid: select * from bolitas;
+  row_error: select * from bolitas limit 1;
+  column_error: select color from bolitas;

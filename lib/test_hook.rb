@@ -9,6 +9,16 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # Define that worker runs on a freshly-cleaned environment
   isolated
 
+  def initialize(config = nil)
+    super(config)
+    @test_parsers = {
+        query: Sqlite::QueryTestParser,
+        datasets: Sqlite::DatasetTestParser,
+        final_dataset: Sqlite::FinalDatasetTestParser,
+    }
+    @test_parsers.default = Sqlite::InvalidTestParser
+  end
+
   # Just define file extension
   def tempfile_extension
     '.json'
@@ -19,35 +29,36 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     "runsql #{filename}"
   end
 
-  # Define the .json file template from request structure
-  # Input: request = {
-  #   test: (yaml string) teacher's code that define which testing verification student code should pass,
-  #   extra: (sql string) teacher's code that prepare field where student code should run,
-  #   content: (sql string) student code,
-  #   expectations: [] not using for now
+  # Transform Mumuki Request into Docker file style
+  # Request = {
+  #   test: {
+  #     type: (string) query|dataset,
+  #     seed: (string) sql code to populate tables,
+  #     expected: (string) query sentence | resulting table
+  #   },
+  #   extra: (string) sql code to create tables,
+  #   content: (string) student's solution,
+  #   expectations: []    # not using
   # }
   #
   def compile_file_content(request)
-    solution, data = parse_test request.test
-
-    content = {
-        init: request.extra.strip,
-        solution: solution,
-        student: request.content.strip,
-        datasets: data
-    }
-
-    content.to_json
+    tests = parse_tests request.test
+    final = get_final_query
+    {
+        init:    request.extra.strip,
+        student: request.content.strip << final,
+        tests:   tests
+    }.to_json
   end
 
   # Define how output results
   # Expected:
   # {
-  #     "solutions": [
+  #     "expected": [
   #         "name\nTest 1.1\nTest 1.2\nTest 1.3\n",
   #         "name\nTest 2.1\nTest 2.2\nTest 2.3\n"
   #     ],
-  #     "results": [
+  #     "student": [
   #         "id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3\n",
   #         "id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3\n"
   #     ]
@@ -57,8 +68,8 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
     case status
       when :passed
-        solutions, results = parse_output output
-        framework.test solutions, results
+        expected, student = parse_output output
+        framework.test expected, student
       when :failed
         [output['output'], status]
       else
@@ -69,31 +80,27 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   protected
 
   def parse_output(output)
-    results   = output['results']
-    solutions = output['solutions']
-    unless @solution_parser.nil?
-      solutions = @solution_parser.choose solutions
+    student  = output['student']
+    expected = output['expected']
+    expected.map!.with_index do |expect, i|
+      @expected_parser[i].choose expect
     end
 
-    diff(solutions, results)
+    diff(expected, student)
   end
 
-  def diff(solutions, results)
-    zipped = solutions.zip(results).map do |solution, result|
-
-      diff = Diffy::SplitDiff.new result << "\n", solution << "\n"
-
-      if diff.left.blank?
-        [solution, result]
-      else
-        res = post_process_diff diff.left
-        sol = post_process_diff diff.right
-        [sol, res]
-      end
-
+  def diff(expected, student)
+    zipped = expected.zip(student).map do |expected_i, student_i|
+      diff = Diffy::SplitDiff.new student_i << "\n", expected_i << "\n"
+      choose_left_right(diff, expected_i, student_i).map { |e| post_process_diff e }
     end
-
     zipped.transpose.map { |dataset| post_process_datasets dataset }
+  end
+
+  def choose_left_right(diff, expected, student)
+    expected = diff.left  unless diff.left.blank?
+    student  = diff.right unless diff.right.blank?
+    [expected, student]
   end
 
   def post_process_diff(data)
@@ -112,37 +119,33 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     end
   end
 
-  # Test should have one of these formats:
+  # This method receives a list of test cases.
+  # Each one could be like one of these:
   #
-  # Solution by query:
-  # { solution_type: 'query',
-  #   solution_query: 'SELECT * FROM ...',
-  #   examples: [
-  #     { data: "INSERT INTO..." }
-  #   ]
-  # }
+  #   type: query
+  #   seed: INSERT INTO ...
+  #   expected: SELECT * FROM ...
   #
-  # Solution by datasets:
-  # { solution_type: 'datasets',
-  #   examples: [
-  #     { data: "INSERT INTO...",
-  #       solution: "id|field\n1|row1..."
-  #     }
-  #   ]
-  # }
-  def parse_test(test)
-    test = OpenStruct.new YAML.load(test).deep_symbolize_keys
-
-    case test.solution_type.to_sym
-      when :query
-        @solution_parser = Sqlite::QuerySolutionParser.new
-      when :datasets
-        @solution_parser = Sqlite::DatasetSolutionParser.new
-      else
-        raise Sqlite::TestSolutionTypeError
+  #   type: dataset
+  #   seed: INSERT INTO ...
+  #   expected: |
+  #     id|field
+  #     1|row 1
+  #     ...
+  def parse_tests(tests)
+    tests = YAML.load tests
+    @tests = tests.map do | test |
+      test = test.to_struct
+      @test_parsers[test.type.to_sym].new test
     end
 
-    @solution_parser.parse_test test
+    @expected_parser = @tests
+    @tests.map(&:result)
+  end
+
+  def get_final_query
+    parsers = @expected_parser.select { |parser| !parser.final.blank? }
+    parsers.empty? ? '' : parsers.first.final
   end
 
   # Initialize Metatest Framework with Checker & Runner

@@ -8,15 +8,11 @@ rvm:
 services:
 - docker
 before_install:
-- docker pull mumuki/mumuki-sqlite-worker
-before_script:
-- mv .env.travis .env
+- docker pull mumuki/mumuki-sqlite-worker:v3-rc1
 script:
 - bundle exec rspec
 after_success:
 - bundle exec codeclimate-test-reporter
-after_failure:
-- cat $(echo $TEST)
 deploy:
   provider: rubygems
   api_key:

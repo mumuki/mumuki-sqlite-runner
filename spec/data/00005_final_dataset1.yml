@@ -1,0 +1,30 @@
+statement:
+  extra: |
+    CREATE TABLE `bolitas` (
+      id integer primary key,
+      color varchar(200) NOT NULL
+    );
+  test:
+    - type: final_dataset
+      seed: |
+        INSERT INTO bolitas (color) values ('Verde');
+        INSERT INTO bolitas (color) values ('Rojo');
+        INSERT INTO bolitas (color) values ('Azul');
+        INSERT INTO bolitas (color) values ('Negro');
+      query: SELECT color, hex FROM bolitas;
+      expected: |
+        color|hex
+        Verde|#00FF00
+        Rojo|#FF0000
+        Azul|#0000FF
+        Negro|#000000
+  count: 1
+solution:
+  valid: |
+    ALTER TABLE bolitas ADD COLUMN hex VARCHAR(10);
+    UPDATE bolitas SET hex = '#00FF00' WHERE color = 'Verde';
+    UPDATE bolitas SET hex = '#FF0000' WHERE color = 'Rojo';
+    UPDATE bolitas SET hex = '#0000FF' WHERE color = 'Azul';
+    UPDATE bolitas SET hex = '#000000' WHERE color = 'Negro';
+#  row_error: select * from bolitas limit 1;
+#  column_error: select color from bolitas;
