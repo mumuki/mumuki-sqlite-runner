@@ -195,6 +195,15 @@ describe 'SqliteTestHook as isolated FileHook' do
       it_behaves_like 'a solution that solves the exercise'
     end
 
+    context 'Final Dataset 1' do
+      let(:name) { '00005_final_dataset1' }
+      it_behaves_like 'a solution that solves the exercise'
+    end
+
+    context 'Final Dataset 2' do
+      let(:name) { '00006_final_dataset2' }
+      it_behaves_like 'a solution that solves the exercise'
+    end
 
   end
 

@@ -2,7 +2,7 @@ module Sqlite
   module CommonTestParser
 
     COMMENT = '-- NONE'
-    attr_reader :result
+    attr_reader :result, :final
     required :parse, 'You need to implement parse method when use CommonTestParse mixin!'
 
     def initialize(test)

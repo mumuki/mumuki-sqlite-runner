@@ -12,8 +12,9 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   def initialize(config = nil)
     super(config)
     @test_parsers = {
-        query:    Sqlite::QueryTestParser,
-        datasets: Sqlite::DatasetTestParser
+        query: Sqlite::QueryTestParser,
+        datasets: Sqlite::DatasetTestParser,
+        final_dataset: Sqlite::FinalDatasetTestParser,
     }
     @test_parsers.default = Sqlite::InvalidTestParser
   end
@@ -41,10 +42,12 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # }
   #
   def compile_file_content(request)
+    tests = parse_tests request.test
+    final = get_final_query
     {
         init:    request.extra.strip,
-        student: request.content.strip,
-        tests:   parse_tests(request.test)
+        student: request.content.strip << final,
+        tests:   tests
     }.to_json
   end
 
@@ -138,6 +141,11 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
     @expected_parser = @tests
     @tests.map(&:result)
+  end
+
+  def get_final_query
+    parsers = @expected_parser.select { |parser| !parser.final.blank? }
+    parsers.empty? ? '' : parsers.first.final
   end
 
   # Initialize Metatest Framework with Checker & Runner

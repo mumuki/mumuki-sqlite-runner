@@ -119,6 +119,16 @@ describe 'Server' do
     it_behaves_like 'a successful submission'
   end
 
+  context 'Final Dataset 1' do
+    let(:name) { '00005_final_dataset1' }
+    it_behaves_like 'a successful submission'
+  end
+
+  context 'Final Dataset 2' do
+    let(:name) { '00006_final_dataset2' }
+    it_behaves_like 'a successful submission'
+  end
+
   def run_tests(program, test, extra)
     bridge = Mumukit::Bridge::Runner.new('http://localhost:4568')
     bridge.run_tests! test: test.to_yaml,
