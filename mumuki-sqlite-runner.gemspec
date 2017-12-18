@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Leandro Di Lorenzo']
   spec.email         = ['leandro.jdl@gmail.com']
   spec.summary       = 'SQLite Runner for Mumuki'
-  spec.homepage      = 'http://github.com/leandrojdl/mumuki-sqlite-runner'
+  spec.homepage      = 'http://github.com/mumuki/mumuki-sqlite-runner'
   spec.license       = 'MIT'
 
   spec.files         = Dir['lib/**/**']
