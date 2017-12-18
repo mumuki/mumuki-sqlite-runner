@@ -134,6 +134,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   #     ...
   def parse_tests(tests)
     tests = YAML.load tests
+    tests = [tests] unless tests.kind_of? Array
     @tests = tests.map do | test |
       test = test.to_struct
       @test_parsers[test.type.to_sym].new test
