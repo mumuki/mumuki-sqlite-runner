@@ -12,7 +12,13 @@ class SqliteMetadataHook < Mumukit::Hook
       test_framework: {
         name: 'metatest',
         test_extension: 'yml',
-        template: <<YAML
+        template: template
+      }
+    }
+  end
+
+  def template
+    <<YAML
 # El siguiente es un ejemplo de cómo generar test para SQL utilizando formato YAML.
 # Acá dejamos los tres tipos de tests que podés escribir.
 # Para info más detallada revisá la wiki: https://github.com/mumuki/mumuki-sqlite-runner/wiki
@@ -45,7 +51,5 @@ class SqliteMetadataHook < Mumukit::Hook
     dato 2
     dato 3
 YAML
-      }
-    }
   end
 end
