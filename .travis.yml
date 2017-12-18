@@ -8,7 +8,7 @@ rvm:
 services:
 - docker
 before_install:
-- docker pull mumuki/mumuki-sqlite-worker:v3-rc1
+- docker pull mumuki/mumuki-sqlite-worker:3
 script:
 - bundle exec rspec
 after_success:
