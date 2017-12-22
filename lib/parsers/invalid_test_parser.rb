@@ -3,16 +3,8 @@ module Sqlite
 
     include Sqlite::CommonTestParser
 
-    # return {
-    #   seed: -- NONE,
-    #   expected: -- NONE
-    # }
     def parse(test)
-      final_parse(test, {
-          seed: COMMENT,
-          expected: COMMENT
-      })
+      raise "Unsupported test type #{test.type}"
     end
-
   end
 end
