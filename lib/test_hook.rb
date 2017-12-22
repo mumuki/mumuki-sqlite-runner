@@ -46,7 +46,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     final = get_final_query
     {
         init:    request.extra.strip,
-        student: request.content.strip << final,
+        student: "#{request.content&.strip}#{final}",
         tests:   tests
     }.to_json
   end
