@@ -10,5 +10,6 @@ statement:
       INSERT INTO test1 (name) values ('Name 1');
       INSERT INTO test1 (name) values ('Name 2');
     query: select * from test1;
+  count: 1
 solution:
   valid:

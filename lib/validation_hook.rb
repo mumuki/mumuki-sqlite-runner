@@ -22,10 +22,10 @@ class SqliteValidationHook < Mumukit::Hook
 
   def types_tests(tests)
     # Assumes that pass lint_tests
-    valid = load_tests(tests).all? do |test|
-      @test_parsers.has_key? test.type.to_sym
+    load_tests(tests).each do |test|
+      valid = @test_parsers.has_key? test.type.to_sym
+      raise Mumukit::RequestValidationError, I18n.t('message.failure.tests.types', type: test.type) unless valid
     end
-    raise Mumukit::RequestValidationError, I18n.t('message.failure.tests.types') unless valid
   end
 
 end

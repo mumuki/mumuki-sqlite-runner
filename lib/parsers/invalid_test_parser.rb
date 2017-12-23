@@ -4,7 +4,7 @@ module Sqlite
     include Sqlite::CommonTestParser
 
     def parse(test)
-      raise "Unsupported test type #{test.type}"
+      raise I18n.t('message.failure.tests.types', type: test.type)
     end
   end
 end
