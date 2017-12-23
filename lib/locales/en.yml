@@ -7,3 +7,6 @@ en:
       columns: 'Columns do not match'
       rows:    'Rows do not match'
       query:   'Queries do not match'
+      tests:
+        lint: "Invalid tests, It should be a valid YAML format. Try with this validator http://www.yamllint.com/"
+        types: "Some 'type' is invalid. Use one of these: datasets, query, final_dataset"

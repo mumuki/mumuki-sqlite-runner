@@ -6,11 +6,29 @@ module Sqlite
     required :parse, 'You need to implement parse method when use CommonTestParse mixin!'
 
     def initialize(test)
+      @test = test
       @result = parse test
     end
 
     def choose(solution)
       solution
+    end
+
+    def has?(key)
+      !@test[key.to_sym].blank?
+    end
+
+    def get(key)
+      @test[key.to_sym]
+    end
+
+    def has_final?
+      # Only FinalDataset should have final query
+      false
+    end
+
+    def get_final
+      ''
     end
 
     protected

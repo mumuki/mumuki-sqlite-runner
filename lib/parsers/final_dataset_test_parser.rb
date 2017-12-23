@@ -1,9 +1,13 @@
 module Sqlite
   class FinalDatasetTestParser < DatasetTestParser
 
-    def initialize(test)
-      super(test)
-      @final = test[:query] || test[:final]
+    def has_final?
+      has?(:final) || has?(:query)
+    end
+
+    def get_final
+      # Assume has_final? is true
+      has?(:final) ? get(:final) : get(:query)
     end
 
   end
