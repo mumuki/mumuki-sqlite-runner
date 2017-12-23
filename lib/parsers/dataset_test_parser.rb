@@ -3,11 +3,6 @@ module Sqlite
 
     include Sqlite::CommonTestParser
 
-    def initialize(test)
-      @test = test
-      @result = parse test
-    end
-
     # test = {
     #   type: dataset,
     #   seed: INSERT INTO ...,

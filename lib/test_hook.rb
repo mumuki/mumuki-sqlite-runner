@@ -5,42 +5,23 @@ require 'diffy'
 # This Hook allow to run Sqlite Worker from an ad-hoc program that receives .json files.
 
 class SqliteTestHook < Mumukit::Templates::FileHook
-
-  # Define that worker runs on a freshly-cleaned environment
   isolated
+  include Sqlite::TestHelper
 
   def initialize(config = nil)
     super(config)
-    @test_parsers = {
-        query: Sqlite::QueryTestParser,
-        datasets: Sqlite::DatasetTestParser,
-        final_dataset: Sqlite::FinalDatasetTestParser,
-    }
-    @test_parsers.default = Sqlite::InvalidTestParser
+    set_test_parsers_hash
   end
 
-  # Just define file extension
   def tempfile_extension
     '.json'
   end
 
-  # Define the command to be run by sqlite worker
   def command_line(filename)
     "runsql #{filename}"
   end
 
   # Transform Mumuki Request into Docker file style
-  # Request = {
-  #   test: {
-  #     type: (string) query|dataset,
-  #     seed: (string) sql code to populate tables,
-  #     expected: (string) query sentence | resulting table
-  #   },
-  #   extra: (string) sql code to create tables,
-  #   content: (string) student's solution,
-  #   expectations: []    # not using
-  # }
-  #
   def compile_file_content(request)
     tests = parse_tests request.test
     final = get_final_query
@@ -51,21 +32,9 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     }.to_json
   end
 
-  # Define how output results
-  # Expected:
-  # {
-  #     "expected": [
-  #         "name\nTest 1.1\nTest 1.2\nTest 1.3\n",
-  #         "name\nTest 2.1\nTest 2.2\nTest 2.3\n"
-  #     ],
-  #     "student": [
-  #         "id|name\n1|Test 1.1\n2|Test 1.2\n3|Test 1.3\n",
-  #         "id|name\n1|Test 2.1\n2|Test 2.2\n3|Test 2.3\n"
-  #     ]
-  # }
+  # Transform Docker result into Response to Mumuki
   def post_process_file(_file, result, status)
-    output = JSON.parse(result)
-
+    output = JSON.parse result
     case status
       when :passed
         expected, student = parse_output output
@@ -83,12 +52,12 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     student  = output['student']
     expected = output['expected']
     expected.map!.with_index do |expect, i|
-      @expected_parser[i].choose expect
+      @tests[i].choose expect
     end
-
     diff(expected, student)
   end
 
+  # Make diff between expected and student dataset result and mark each line one according comparision
   def diff(expected, student)
     zipped = expected.zip(student).map do |expected_i, student_i|
       diff = Diffy::SplitDiff.new student_i << "\n", expected_i << "\n"
@@ -119,34 +88,17 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     end
   end
 
-  # This method receives a list of test cases.
-  # Each one could be like one of these:
-  #
-  #   type: query
-  #   seed: INSERT INTO ...
-  #   expected: SELECT * FROM ...
-  #
-  #   type: dataset
-  #   seed: INSERT INTO ...
-  #   expected: |
-  #     id|field
-  #     1|row 1
-  #     ...
+  # This method receives a list of test cases and transforms each one according it parser
   def parse_tests(tests)
-    tests = YAML.load tests
-    tests = [tests] unless tests.kind_of? Array
-    @tests = tests.map do | test |
-      test = test.to_struct
+    @tests = load_tests(tests).map do | test |
       @test_parsers[test.type.to_sym].new test
     end
-
-    @expected_parser = @tests
     @tests.map(&:result)
   end
 
   def get_final_query
-    parsers = @expected_parser.select { |parser| !parser.final.blank? }
-    parsers.empty? ? '' : parsers.first.final
+    tests = @tests.select { |test| test.has_final? }
+    tests.empty? ? '' : tests.first.get_final
   end
 
   # Initialize Metatest Framework with Checker & Runner
