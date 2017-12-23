@@ -7,3 +7,6 @@ es:
       columns: 'Las columnas no coinciden'
       rows:    'Las filas no coinciden'
       query:   'Las consultas no coinciden'
+    tests:
+      lint: "¡Tests inválidos! No tienen el formato YAML correcto. Podés probar en este validador http://www.yamllint.com/"
+      types: "El test type '%{type}' no está soportado. Tenés que usar uno de éstos: datasets, query, display, final_dataset"

@@ -3,16 +3,8 @@ module Sqlite
 
     include Sqlite::CommonTestParser
 
-    # return {
-    #   seed: -- NONE,
-    #   expected: -- NONE
-    # }
     def parse(test)
-      final_parse(test, {
-          seed: COMMENT,
-          expected: COMMENT
-      })
+      raise I18n.t('message.failure.tests.types', type: test.type)
     end
-
   end
 end

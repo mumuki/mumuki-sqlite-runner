@@ -1,0 +1,15 @@
+statement:
+  extra: |
+    CREATE TABLE test1 (
+      id integer primary key,
+      name varchar(200) NOT NULL
+    );
+  test:
+    type: display
+    seed: |
+      INSERT INTO test1 (name) values ('Name 1');
+      INSERT INTO test1 (name) values ('Name 2');
+    query: select * from test1;
+  count: 1
+solution:
+  valid:

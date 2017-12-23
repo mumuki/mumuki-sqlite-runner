@@ -180,6 +180,11 @@ describe 'SqliteTestHook as isolated FileHook' do
       it_behaves_like 'a solution with syntax error'
     end
 
+    context 'Runner Test 5' do
+      let(:name) { '00000_runner_test5' }
+      it_behaves_like 'a solution that solves the exercise'
+    end
+
     context 'Prueba MQL' do
       let(:name) { '00001_prueba_mql' }
       it_behaves_like 'a solution that solves the exercise'
