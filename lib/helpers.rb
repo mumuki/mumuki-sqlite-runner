@@ -8,7 +8,6 @@ module Sqlite
           datasets: Sqlite::DatasetTestParser,
           final_dataset: Sqlite::FinalDatasetTestParser,
       }
-      @test_parsers.default = Sqlite::InvalidTestParser
     end
 
     def load_tests(test)
