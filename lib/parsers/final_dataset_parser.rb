@@ -1,5 +1,5 @@
 module Sqlite
-  class FinalDatasetTestParser < DatasetTestParser
+  class FinalDatasetParser < DatasetsParser
 
     def has_final?
       has?(:final) || has?(:query)

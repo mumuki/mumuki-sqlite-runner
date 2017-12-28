@@ -1,7 +1,7 @@
 module Sqlite
-  class DatasetTestParser
+  class DatasetsParser
 
-    include Sqlite::CommonTestParser
+    include Sqlite::GeneralParser
 
     # test = {
     #   type: dataset,

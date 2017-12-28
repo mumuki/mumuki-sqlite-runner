@@ -1,5 +1,5 @@
 
-describe Sqlite::DatasetTestParser do
+describe Sqlite::DatasetsParser do
 
   let(:solution) do
     <<-DATA.gsub(/\s+/, ' ').strip
@@ -10,7 +10,7 @@ describe Sqlite::DatasetTestParser do
   end
 
   let(:parser) do
-    Sqlite::DatasetTestParser.new({
+    Sqlite::DatasetsParser.new({
         type: 'dataset',
         seed: 'INSERT INTO ...',
         expected: solution

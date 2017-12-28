@@ -1,8 +1,8 @@
 
-describe Sqlite::QueryTestParser do
+describe Sqlite::QueryParser do
 
   let(:parser) do
-    Sqlite::QueryTestParser.new({
+    Sqlite::QueryParser.new({
         type: 'query',
         seed: 'INSERT INTO ...',
         expected: 'SELECT * FROM ...'

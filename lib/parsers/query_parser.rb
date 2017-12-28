@@ -1,7 +1,7 @@
 module Sqlite
-  class QueryTestParser
+  class QueryParser
 
-    include Sqlite::CommonTestParser
+    include Sqlite::GeneralParser
 
     # test = {
     #   type: query,

@@ -1,6 +1,6 @@
 module Sqlite
-  class DisplayTestParser
-    include Sqlite::CommonTestParser
+  class DisplayParser
+    include Sqlite::GeneralParser
 
     def has_final?
       has?(:query)

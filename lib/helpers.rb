@@ -3,10 +3,10 @@ module Sqlite
 
     def set_test_parsers_hash
       @test_parsers = {
-          query: Sqlite::QueryTestParser,
-          display: Sqlite::DisplayTestParser,
-          datasets: Sqlite::DatasetTestParser,
-          final_dataset: Sqlite::FinalDatasetTestParser,
+          query: Sqlite::QueryParser,
+          display: Sqlite::DisplayParser,
+          datasets: Sqlite::DatasetsParser,
+          final_dataset: Sqlite::FinalDatasetParser,
       }
     end
 
