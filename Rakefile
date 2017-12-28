@@ -9,6 +9,7 @@ RSpec::Core::RakeTask.new(:spec)
 
 
 RSpec::Core::RakeTask.new(:test) do |t|
+  t.rspec_opts = '--fail-fast'
   t.exclude_pattern = './spec/integration_spec.rb'
 end
 

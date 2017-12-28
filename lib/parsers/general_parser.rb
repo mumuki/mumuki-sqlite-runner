@@ -2,16 +2,30 @@ module Sqlite
   module GeneralParser
 
     COMMENT = '-- NONE'
-    attr_reader :result, :final
-    required :parse, 'You need to implement parse method when use CommonTestParse mixin!'
+    attr_reader :test_result
 
-    def initialize(test)
+    def parse_test(test)
       @test = test
-      @result = parse test
+      @test_result = transform_test
     end
 
-    def choose(solution)
+    # A Parser can choose it's own solution or just return which is passed.
+    # This is default choice
+    def choose_solution(solution)
       solution
+    end
+
+    def get_final_query
+      ''
+    end
+
+    protected
+
+    def transform_test
+      {
+          seed: get_seed,
+          expected: get_expected
+      }
     end
 
     def has?(key)
@@ -22,24 +36,8 @@ module Sqlite
       @test[key.to_sym]
     end
 
-    def has_final?
-      # Only FinalDataset should have final query
-      false
+    def get_seed
+      has?(:seed) ? get(:seed).strip : ''
     end
-
-    def get_final
-      ''
-    end
-
-    protected
-
-    def final_parse(test, override = {})
-      seed = test[:seed].blank? ? '' : test[:seed].strip
-      {
-          seed:     override[:seed]     || seed,
-          expected: override[:expected] || test[:expected].strip
-      }
-    end
-
   end
 end

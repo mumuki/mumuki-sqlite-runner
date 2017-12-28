@@ -10,7 +10,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
   def initialize(config = nil)
     super(config)
-    set_test_parsers_hash
+    set_parsers
   end
 
   def tempfile_extension
@@ -23,12 +23,11 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
   # Transform Mumuki Request into Docker file style
   def compile_file_content(request)
-    tests = parse_tests request.test
-    final = get_final_query
+    parse_tests request.test
     {
         init:    "#{request.extra&.strip}",
-        student: "#{request.content&.strip}#{final}",
-        tests:   tests
+        student: "#{request.content&.strip}#{get_final_query}",
+        tests:   get_tests
     }.to_json
   end
 
@@ -52,7 +51,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     student  = output['student']
     expected = output['expected']
     expected.map!.with_index do |expect, i|
-      @tests[i].choose expect
+      @tests[i].choose_solution expect
     end
     diff(expected, student)
   end
@@ -90,15 +89,19 @@ class SqliteTestHook < Mumukit::Templates::FileHook
 
   # This method receives a list of test cases and transforms each one according it parser
   def parse_tests(tests)
-    @tests = load_tests(tests).map do | test |
-      @test_parsers[test.type.to_sym].new test
+    @tests = collect_tests(tests).map do |test|
+      parser = @parsers[test.type.to_sym].new
+      parser.parse_test test
+      parser
     end
-    @tests.map(&:result)
+  end
+
+  def get_tests
+    @tests.map(&:test_result)
   end
 
   def get_final_query
-    tests = @tests.select { |test| test.has_final? }
-    tests.empty? ? '' : tests.first.get_final
+    @tests.map{ |t| t.get_final_query.to_s }.reject(&:empty?).join
   end
 
   # Initialize Metatest Framework with Checker & Runner

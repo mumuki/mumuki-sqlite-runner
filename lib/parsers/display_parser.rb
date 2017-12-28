@@ -2,17 +2,14 @@ module Sqlite
   class DisplayParser
     include Sqlite::GeneralParser
 
-    def has_final?
-      has?(:query)
-    end
-
-    def get_final
-      # Assume has_final? is true
+    def get_final_query
       get(:query)
     end
 
-    def parse(test)
-      final_parse test, { expected: get_final }
+    protected
+
+    def get_expected
+      get_final_query
     end
   end
 end

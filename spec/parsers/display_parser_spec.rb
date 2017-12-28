@@ -1,26 +1,25 @@
-describe Sqlite::QueryParser do
+describe Sqlite::DisplayParser do
 
-  let(:parser) { Sqlite::QueryParser.new }
-  let(:solution) { 'SELECT * FROM ...' }
+  let(:parser) { Sqlite::DisplayParser.new }
   let(:test) do
     {
-        type: 'query',
+        type: 'display',
         seed: 'INSERT INTO ...',
-        expected: solution
+        query: 'SELECT * FROM ...'
     }
   end
 
   describe '#parse_test' do
     # test = {
     #   seed: INSERT INTO ...,
-    #   expected: SELECT * FROM ...
+    #   query: SELECT * FROM ...
     # }
     #
     # return {
     #   seed: INSERT INTO ...,
     #   expected: SELECT * FROM ...
     # }
-    it 'should keep seed and expected' do
+    it 'should keep seed and put query field on expected' do
       parse_expected = {
           seed: 'INSERT INTO ...',
           expected: 'SELECT * FROM ...'
@@ -38,8 +37,9 @@ describe Sqlite::QueryParser do
   end
 
   describe '#get_final_query' do
-    it 'should return empty string' do
-      expect(parser.get_final_query).to eq ''
+    it 'should return string given in query field' do
+      parser.parse_test test
+      expect(parser.get_final_query).to eq 'SELECT * FROM ...'
     end
   end
 end

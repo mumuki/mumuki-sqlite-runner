@@ -1,29 +1,27 @@
 module Sqlite
   class DatasetsParser
-
     include Sqlite::GeneralParser
 
-    # test = {
-    #   type: dataset,
-    #   seed: INSERT INTO ...,
-    #   expected: |
-    #     id|field
-    #     1|row 1
-    #     ...
-    # }
-    #
-    # return {
-    #   seed: INSERT INTO ...,
-    #   expected: -- NONE
-    # }
-    def parse(test)
-      @solutions = test[:expected].to_s.split("\n").map(&:strip).join("\n")
-      final_parse test, {expected: '-- NONE'}
-    end
-
-    def choose(_solution)
+    def choose_solution(_solution)
       @solutions
     end
 
+    protected
+
+    def transform_test
+      @solutions = strip_lines get(:expected)
+      super
+    end
+
+    def get_expected
+      COMMENT
+    end
+
+    def strip_lines(array)
+      array.to_s
+          .split("\n")
+          .map(&:strip)
+          .join("\n")
+    end
   end
 end
