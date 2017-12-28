@@ -9,4 +9,4 @@ es:
       query:   'Las consultas no coinciden'
     tests:
       lint: "¡Tests inválidos! No tienen el formato YAML correcto. Podés probar en este validador http://www.yamllint.com/"
-      types: "Alguno de los 'type' es inválido. Tenés que usar uno de éstos: datasets, query, final_dataset"
+      types: "El test type '%{type}' no está soportado. Tenés que usar uno de éstos: datasets, query, display, final_dataset"

@@ -23,7 +23,8 @@ YAML
 - type: query   # valid
 - type: final_dataset # correct
 YAML
-      expect { validate tests }.to raise_error(I18n.t('message.failure.tests.types'))
+      message = I18n.t('message.failure.tests.types', type: 'dataset')
+      expect { validate tests }.to raise_error(message)
     end
   end
 

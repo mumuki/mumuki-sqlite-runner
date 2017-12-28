@@ -95,6 +95,11 @@ describe 'Server' do
     it_behaves_like 'a syntax-error submission'
   end
 
+  context 'Runner Test 5' do
+    let(:name) { '00000_runner_test5' }
+    it_behaves_like 'a successful submission'
+  end
+
   context 'Prueba MQL' do
     let(:name) { '00001_prueba_mql' }
     it_behaves_like 'a successful submission'
