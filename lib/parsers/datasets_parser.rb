@@ -2,6 +2,13 @@ module Sqlite
   class DatasetsParser
     include Sqlite::GeneralParser
 
+    def initialize
+      @fields = {
+          required: [:type, :expected],
+          optional: [:seed]
+      }
+    end
+
     def choose_solution(_solution)
       @solutions
     end

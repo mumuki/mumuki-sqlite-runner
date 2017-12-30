@@ -9,6 +9,13 @@ module Sqlite
       @test_result = transform_test
     end
 
+    def test_has_valid_fields?(test)
+      required = @fields[:required].sort
+      optional = @fields[:optional]
+      keys = process_alias test.to_h.keys.map(&:to_sym).sort
+      (keys - optional).eql? required
+    end
+
     # A Parser can choose it's own solution or just return which is passed.
     # This is default choice
     def choose_solution(solution)
@@ -38,6 +45,10 @@ module Sqlite
 
     def get_seed
       has?(:seed) ? get(:seed).strip : ''
+    end
+
+    def process_alias(keys)
+      keys
     end
   end
 end

@@ -9,4 +9,10 @@ es:
       query:   'Las consultas no coinciden'
     tests:
       lint: "¡Tests inválidos! No tienen el formato YAML correcto. Podés probar en este validador http://www.yamllint.com/"
+      type: "Tenés que declarar el campo type:"
       types: "El test type '%{type}' no está soportado. Tenés que usar uno de éstos: datasets, query, display, final_dataset"
+      fields:
+        query: "Para el type:query deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), expected (requerido)"
+        datasets: "Para el type:datasets deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), expected (requerido)"
+        final_dataset: "Para el type:final_dataset, deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), final (requerido), expected (requerido)"
+        display: "Para el type:display deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), query (requerido)"
