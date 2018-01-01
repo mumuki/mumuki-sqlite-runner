@@ -8,11 +8,6 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   isolated
   include Sqlite::TestHelper
 
-  def initialize(config = nil)
-    super(config)
-    set_parsers
-  end
-
   def tempfile_extension
     '.json'
   end
@@ -90,7 +85,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # This method receives a list of test cases and transforms each one according it parser
   def parse_tests(tests)
     @tests = collect_tests(tests).map do |test|
-      parser = @parsers[test.type.to_sym].new
+      parser = parsers[test.type.to_sym].new
       parser.parse_test test
       parser
     end

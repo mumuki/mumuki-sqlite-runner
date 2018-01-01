@@ -1,8 +1,8 @@
 module Sqlite
   module TestHelper
 
-    def set_parsers
-      @parsers = {
+    def parsers
+      @parsers ||= {
           query: Sqlite::QueryParser,
           display: Sqlite::DisplayParser,
           datasets: Sqlite::DatasetsParser,
