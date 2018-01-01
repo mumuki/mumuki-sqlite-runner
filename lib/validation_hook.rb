@@ -9,11 +9,9 @@ class SqliteValidationHook < Mumukit::Hook
   end
 
   def lint_tests(tests)
-    begin
-      YAML.load tests
-    rescue
-      fail! 'message.failure.tests.lint'
-    end
+    YAML.load tests
+  rescue
+    fail! 'message.failure.tests.lint'
   end
 
   def types_tests(tests)
