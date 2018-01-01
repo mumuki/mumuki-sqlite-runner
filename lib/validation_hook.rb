@@ -12,18 +12,15 @@ class SqliteValidationHook < Mumukit::Hook
     begin
       YAML.load tests
     rescue
-      raise Mumukit::RequestValidationError,
-            I18n.t('message.failure.tests.lint')
+      fail! 'message.failure.tests.lint'
     end
   end
 
   def types_tests(tests)
     # Assumes pass lint_tests
     collect_tests(tests).each do |test|
-      raise Mumukit::RequestValidationError,
-            I18n.t('message.failure.tests.type') if test.type.blank?
-      raise Mumukit::RequestValidationError,
-            I18n.t('message.failure.tests.types', type: test.type) unless parsers.has_key? test.type.to_sym
+      fail! 'message.failure.tests.type' if test.type.blank?
+      fail!('message.failure.tests.types', type: test.type) unless parsers.has_key? test.type.to_sym
     end
   end
 
@@ -31,9 +28,11 @@ class SqliteValidationHook < Mumukit::Hook
     # Assumes pass types_tests
     collect_tests(tests).each do |test|
       parser = parsers[test.type.to_sym].new
-      raise Mumukit::RequestValidationError,
-            I18n.t("message.failure.tests.fields.#{test.type}") unless parser.test_has_valid_fields? test
+      fail! "message.failure.tests.fields.#{test.type}" unless parser.test_has_valid_fields? test
     end
   end
 
+  def fail!(*args)
+    raise Mumukit::RequestValidationError, I18n.t(*args)
+  end
 end
