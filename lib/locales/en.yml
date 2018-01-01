@@ -9,4 +9,10 @@ en:
       query:   'Queries do not match'
       tests:
         lint: "Invalid tests, It should be a valid YAML format. Try with this validator http://www.yamllint.com/"
+        type: "You need to declare field type:"
         types: "Unsupported test type '%{type}'. Use one of these: datasets, query, display, final_dataset"
+        fields:
+          query: "For type:query you should use ONLY these fields: type (required), seed (optional), expected (required)"
+          datasets: "For type:datasets you should use ONLY these fields: type (required), seed (optional), expected (required)"
+          final_dataset: "For type:final_dataset you should use ONLY these fields: type (required), seed (optional), final (required), expected (required)"
+          display: "For type:display you should use ONLY these fields: type (required), seed (optional), query (required)"
