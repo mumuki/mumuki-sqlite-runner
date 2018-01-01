@@ -1,5 +1,5 @@
 module Sqlite
-  module GeneralParser
+  class BaseParser
 
     COMMENT = '-- NONE'
     attr_reader :test_result

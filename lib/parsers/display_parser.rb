@@ -1,6 +1,5 @@
 module Sqlite
-  class DisplayParser
-    include Sqlite::GeneralParser
+  class DisplayParser < BaseParser
 
     def initialize
       @fields = {

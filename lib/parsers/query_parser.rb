@@ -1,6 +1,5 @@
 module Sqlite
-  class QueryParser
-    include Sqlite::GeneralParser
+  class QueryParser < BaseParser
 
     def initialize
       @fields = {
