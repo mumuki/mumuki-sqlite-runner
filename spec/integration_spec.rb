@@ -50,6 +50,11 @@ describe 'Server' do
 
     it 'process all tests' do
       expect(response[:test_results].size).to eq exercise.statement['count']
+      response[:test_results].each.with_index do |test, i|
+        expect(test[:title]).to eq I18n.t(:dataset, number: i + 1)
+        expect(test[:result]).to include('<th>')
+        expect(test[:result]).to include('<td>')
+      end
     end
   end
 
@@ -58,7 +63,7 @@ describe 'Server' do
     show_error_message 'message.failure.columns'
   end
 
-  shared_examples_for 'a submission where rows do not match' do |program, exercise|
+  shared_examples_for 'a submission where rows do not match' do
     run_program_as 'row_error', :failed, :structured
     show_error_message 'message.failure.rows'
   end

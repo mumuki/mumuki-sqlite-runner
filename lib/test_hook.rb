@@ -66,10 +66,17 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     [expected, student]
   end
 
+  # split lines grouping by diff mark & data content
+  # then append mark as dataset column & re join
   def post_process_diff(data)
-    data.scan(/^(\s|-|\+)(.+)/)
-        .map { |mark, content| mark << '|' << content }
+    data.scan(/^(\s|-|\+)*(.+)/)
+        .map { |mark, content| "#{proper_mark(mark)}#{content}" }
         .join("\n")
+  end
+
+  def proper_mark(mark)
+    mark = mark.to_s
+    "#{mark}|" unless mark.blank?
   end
 
   # Transforms array datasets into hash with :id & :rows

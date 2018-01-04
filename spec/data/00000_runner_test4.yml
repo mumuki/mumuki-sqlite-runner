@@ -9,9 +9,9 @@ statement:
       seed: |
         INSERT INTO test4 (name) values ('ASCII');
         INSERT INTO test4 (name) values ('UTF-8 áéíóúñÁÉÍÓÚÑ');
-      expected: select name from test4 limit 0;
+      expected: select name from test4 limit 1;
   count: 1
 solution:
-  valid: select name from test4 limit 0;
+  valid: select name from test4 limit 1;
   syntax_error: select * from test4
   syntax_error_message: !ruby/regexp '/Error: incomplete SQL: select \* from test4/'
