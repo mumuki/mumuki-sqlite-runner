@@ -29,8 +29,4 @@ class SqliteValidationHook < Mumukit::Hook
       fail! "message.failure.tests.fields.#{test.type}" unless parser.test_has_valid_fields? test
     end
   end
-
-  def fail!(*args)
-    raise Mumukit::RequestValidationError, I18n.t(*args)
-  end
 end

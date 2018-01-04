@@ -16,5 +16,8 @@ module Sqlite
       tests.map(&:to_struct)
     end
 
+    def fail!(*args)
+      raise Mumukit::RequestValidationError, I18n.t(*args)
+    end
   end
 end
