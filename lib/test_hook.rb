@@ -54,7 +54,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # Make diff between expected and student dataset result and mark each line one according comparision
   def diff(expected, student)
     zipped = expected.zip(student).map do |expected_i, student_i|
-      diff = Diffy::SplitDiff.new student_i << "\n", expected_i << "\n"
+      diff = Diffy::SplitDiff.new expected_i << "\n", student_i << "\n"
       choose_left_right(diff, expected_i, student_i).map { |e| post_process_diff e }
     end
     zipped.transpose.map { |dataset| post_process_datasets dataset }
@@ -66,10 +66,17 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     [expected, student]
   end
 
+  # split lines grouping by diff mark & data content
+  # then append mark as dataset column & re join
   def post_process_diff(data)
-    data.scan(/^(\s|-|\+)(.+)/)
-        .map { |mark, content| mark << '|' << content }
+    data.scan(/^(\s|-|\+)*(.+)/)
+        .map { |mark, content| "#{proper_mark(mark)}#{content}" }
         .join("\n")
+  end
+
+  def proper_mark(mark)
+    mark = mark.to_s
+    "#{mark}|" unless mark.blank?
   end
 
   # Transforms array datasets into hash with :id & :rows
