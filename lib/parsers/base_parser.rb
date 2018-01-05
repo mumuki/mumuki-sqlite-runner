@@ -26,6 +26,10 @@ module Sqlite
       ''
     end
 
+    def show_query?
+      false
+    end
+
     protected
 
     def transform_test

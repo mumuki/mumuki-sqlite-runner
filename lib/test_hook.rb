@@ -85,7 +85,9 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     datasets.map.with_index do |dataset, i|
       {
           id: i + 1,
-          dataset: Sqlite::Dataset.new(dataset)
+          dataset: Sqlite::Dataset.new(dataset),
+          show_query: @tests[i].show_query?,
+          query: @tests[i].get_final_query
       }
     end
   end

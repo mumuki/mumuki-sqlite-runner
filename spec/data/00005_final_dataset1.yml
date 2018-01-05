@@ -26,5 +26,3 @@ solution:
     UPDATE bolitas SET hex = '#FF0000' WHERE color = 'Rojo';
     UPDATE bolitas SET hex = '#0000FF' WHERE color = 'Azul';
     UPDATE bolitas SET hex = '#000000' WHERE color = 'Negro';
-#  row_error: select * from bolitas limit 1;
-#  column_error: select color from bolitas;

@@ -1,9 +1,13 @@
 es:
   dataset: "Set de datos %{number}"
+  expected: 'Se esperaba:'
+  obtained: 'Se obtuvo:'
   message:
     success:
       query: '¡Consulta correcta!'
+      show_query: 'La consulta `%{query}` devolvió:'
     failure:
+      show_query: 'Se esperaba que la consulta `%{query}` devolviera:'
       semicolon_ending: 'Tenés que terminar cada sentencia SQL con punto y coma (;)'
       columns: 'Las columnas no coinciden'
       rows:    'Las filas no coinciden'

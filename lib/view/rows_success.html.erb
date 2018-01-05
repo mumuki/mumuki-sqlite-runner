@@ -21,6 +21,9 @@
 </style>
 
 <h5><%= message %></h5>
+<% if @extra_message %>
+  <h6><%= @extra_message %></h6>
+<% end %>
 <table class="table table-bordered sqlite_success">
   <thead>
   <tr>

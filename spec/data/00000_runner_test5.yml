@@ -13,3 +13,4 @@ statement:
   count: 1
 solution:
   valid:
+  row_error: select * from test1 limit 1;

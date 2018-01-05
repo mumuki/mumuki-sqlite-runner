@@ -103,6 +103,7 @@ describe 'Server' do
   context 'Runner Test 5' do
     let(:name) { '00000_runner_test5' }
     it_behaves_like 'a successful submission'
+    it_behaves_like 'a submission where rows do not match'
   end
 
   context 'Prueba MQL' do
