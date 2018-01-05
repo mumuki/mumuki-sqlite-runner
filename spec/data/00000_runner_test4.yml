@@ -13,5 +13,6 @@ statement:
   count: 1
 solution:
   valid: select name from test4 limit 1;
-  syntax_error: select * from test4
-  syntax_error_message: !ruby/regexp '/Error: incomplete SQL: select \* from test4/'
+  syntax_error: select * ;
+  no_semicolon_ending: select * from test4
+  syntax_error_message: !ruby/regexp '/Error: near line \d: no tables specified/'

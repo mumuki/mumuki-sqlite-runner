@@ -16,7 +16,7 @@ describe 'SqliteTestHook as isolated FileHook' do
   describe '#compile_file_content {extra, content, test}' do
     it 'transforms mumuki request into docker style' do
       request = struct extra:   'create table test',
-                       content: 'select id from test',
+                       content: 'select id from test;',
                        test: [{
                            'type' => 'query',
                            'seed' => 'insert into test values (1)',
@@ -25,7 +25,7 @@ describe 'SqliteTestHook as isolated FileHook' do
 
       expected = {
           init:    'create table test',
-          student: 'select id from test',
+          student: 'select id from test;',
           tests: [{
               seed: 'insert into test values (1)',
               expected: 'select * from test'
@@ -39,7 +39,7 @@ describe 'SqliteTestHook as isolated FileHook' do
   describe '#post_process_file' do
     let(:request) do
       struct extra:   'create table test',
-             content: 'select id from test',
+             content: 'select id from test;',
              test: [{
                  'type' => 'datasets',
                  'expected' => 'solution 1'
@@ -122,7 +122,19 @@ describe 'SqliteTestHook as isolated FileHook' do
       end
     end
 
-    def self.run_syntax_error_exercise
+    shared_examples_for 'a solution that solves the exercise' do
+      run_exercise_as 'valid', :passed, 'message.success.query'
+    end
+
+    shared_examples_for 'a solution with column error' do
+      run_exercise_as 'column_error', :failed, 'message.failure.columns'
+    end
+
+    shared_examples_for 'a solution with row error' do
+      run_exercise_as 'row_error', :failed, 'message.failure.rows'
+    end
+
+    shared_examples_for 'a solution with syntax error' do
       load_exercise
       run_with 'syntax_error'
       let(:error) { exercise.solution['syntax_error_message'] }
@@ -137,20 +149,12 @@ describe 'SqliteTestHook as isolated FileHook' do
       end
     end
 
-    shared_examples_for 'a solution that solves the exercise' do
-      run_exercise_as 'valid', :passed, 'message.success.query'
-    end
-
-    shared_examples_for 'a solution with column error' do
-      run_exercise_as 'column_error', :failed, 'message.failure.columns'
-    end
-
-    shared_examples_for 'a solution with row error' do
-      run_exercise_as 'row_error', :failed, 'message.failure.rows'
-    end
-
-    shared_examples_for 'a solution with syntax error' do
-      run_syntax_error_exercise
+    shared_examples_for 'a solution without semicolon ending' do
+      load_exercise
+      message = I18n.t 'message.failure.semicolon_ending'
+      it 'raise error if student code no ends with semicolon' do
+        expect { run exercise.statement, exercise.solution['no_semicolon_ending'] }.to raise_error(message)
+      end
     end
 
 
@@ -177,6 +181,7 @@ describe 'SqliteTestHook as isolated FileHook' do
     context 'Runner Test 4' do
       let(:name) { '00000_runner_test4' }
       it_behaves_like 'a solution that solves the exercise'
+      it_behaves_like 'a solution without semicolon ending'
       it_behaves_like 'a solution with syntax error'
     end
 

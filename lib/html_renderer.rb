@@ -7,6 +7,7 @@ module Sqlite
       @message = message
       @header  = result[:dataset].header
       @rows    = result[:dataset].rows
+      @extra_message = extra_message result
       template_file_success.result binding
     end
 
@@ -14,7 +15,8 @@ module Sqlite
       @error = error
       @result = parse_dataset(result[:dataset].header, result[:dataset].rows)
       @solution = parse_dataset(solution[:dataset].header, solution[:dataset].rows)
-
+      @expected_message = expected_message result
+      @obtained_message = I18n.t 'obtained'
       template_file_error.result binding
     end
 
@@ -54,6 +56,18 @@ module Sqlite
           'errored'
         else
           'nothing'
+      end
+    end
+
+    def extra_message(result)
+      result[:show_query] ? I18n.t('message.success.show_query', query: result[:query]) : ''
+    end
+
+    def expected_message(result)
+      if result[:show_query]
+        I18n.t('message.failure.show_query', query: result[:query])
+      else
+        I18n.t 'expected'
       end
     end
 

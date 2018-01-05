@@ -11,6 +11,10 @@ module Sqlite
       }
     end
 
+    def show_query?
+      true
+    end
+
     def get_final_query
       has?(:final) ? get(:final) : get(:query)
     end

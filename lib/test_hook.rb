@@ -19,9 +19,10 @@ class SqliteTestHook < Mumukit::Templates::FileHook
   # Transform Mumuki Request into Docker file style
   def compile_file_content(request)
     parse_tests request.test
+    student_code = parse_student_code "#{request.content&.strip}#{get_final_query}"
     {
         init:    "#{request.extra&.strip}",
-        student: "#{request.content&.strip}#{get_final_query}",
+        student: student_code,
         tests:   get_tests
     }.to_json
   end
@@ -84,9 +85,17 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     datasets.map.with_index do |dataset, i|
       {
           id: i + 1,
-          dataset: Sqlite::Dataset.new(dataset)
+          dataset: Sqlite::Dataset.new(dataset),
+          show_query: @tests[i].show_query?,
+          query: @tests[i].get_final_query
       }
     end
+  end
+
+  def parse_student_code(code)
+    code = code&.strip
+    fail! 'message.failure.semicolon_ending' unless code&.end_with? ';'
+    code
   end
 
   # This method receives a list of test cases and transforms each one according it parser

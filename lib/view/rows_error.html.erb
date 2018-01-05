@@ -59,7 +59,7 @@
 
   <!-- Result -->
   <div class="col-md-6">
-    <h6>Se esperaba:</h6>
+    <h6><%= @expected_message %></h6>
     <table class="table table-bordered sqlite_error sqlite_result">
       <thead>
       <tr class="<%= @result[:header][:class] %>">
@@ -85,7 +85,7 @@
 
   <!-- Solution -->
   <div class="col-md-6">
-    <h6>Se obtuvo:</h6>
+    <h6><%= @obtained_message %></h6>
     <table class="table table-bordered sqlite_error sqlite_solution">
       <thead>
       <tr class="<%= @result[:header][:class] %>">
