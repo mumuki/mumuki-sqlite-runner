@@ -14,8 +14,6 @@ describe Sqlite::HtmlRenderer do
     end
 
     it { expect(render).to include I18n.t 'message.success.query' }
-    it { expect(render).to include 'sqlite_success' }
-    it { expect(render).not_to include 'sqlite_error' }
   end
 
   describe '#render_error' do
@@ -33,8 +31,6 @@ describe Sqlite::HtmlRenderer do
     end
 
     it { expect(render).to include error }
-    it { expect(render).to include 'sqlite_error' }
-    it { expect(render).not_to include 'sqlite_success' }
   end
 
 end

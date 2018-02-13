@@ -1,5 +1,6 @@
 es:
   dataset: "Set de datos %{number}"
+  default_table_name: 'Resultado'
   expected: 'Se esperaba:'
   obtained: 'Se obtuvo:'
   message:

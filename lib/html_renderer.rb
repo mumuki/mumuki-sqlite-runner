@@ -5,6 +5,7 @@ module Sqlite
 
     def render_success(result, message)
       @message = message
+      @table_name = result[:table_name]
       @header  = result[:dataset].header
       @rows    = result[:dataset].rows
       @extra_message = extra_message result
@@ -13,6 +14,7 @@ module Sqlite
 
     def render_error(result, solution, error)
       @error = error
+      @table_name = result[:table_name]
       @result = parse_dataset(result[:dataset].header, result[:dataset].rows)
       @solution = parse_dataset(solution[:dataset].header, solution[:dataset].rows)
       @expected_message = expected_message result

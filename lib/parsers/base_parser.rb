@@ -30,6 +30,10 @@ module Sqlite
       false
     end
 
+    def table_name
+      has?(:result_alias) ? get(:result_alias) : I18n.t('default_table_name')
+    end
+
     protected
 
     def transform_test
