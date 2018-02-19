@@ -47,26 +47,29 @@
   <!-- Solution -->
   <div class="col-md-6">
     <h6><%= @obtained_message %></h6>
-    <header><%= @table_name %></header>
-    <table>
-      <thead>
-      <tr class="<%= @result[:header][:class] %>">
-        <th><%= @result[:header][:sign] %></th>
-        <% @solution[:header][:fields].each do |field| %>
-            <th><%= field %></th>
+    
+    <div class="mu-sql-table-rendered">
+      <header><%= @table_name %></header>
+      <table>
+        <thead>
+        <tr class="<%= @result[:header][:class] %>">
+          <th><%= @result[:header][:sign] %></th>
+          <% @solution[:header][:fields].each do |field| %>
+              <th><%= field %></th>
+          <% end %>
+        </tr>
+        </thead>
+        <tbody>
+        <% @solution[:rows].each do |row| %>
+            <tr class="<%= row[:class] %>">
+              <td><%= row[:sign] %></td>
+              <% row[:fields].each do |field| %>
+                  <td><%= field %></td>
+              <% end %>
+            </tr>
         <% end %>
-      </tr>
-      </thead>
-      <tbody>
-      <% @solution[:rows].each do |row| %>
-          <tr class="<%= row[:class] %>">
-            <td><%= row[:sign] %></td>
-            <% row[:fields].each do |field| %>
-                <td><%= field %></td>
-            <% end %>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
