@@ -51,7 +51,7 @@ module Sqlite
     end
 
     def first_column(row)
-      row.first.present? && row.first =~ /^[+-]$/ ? row.shift : ''
+      row.first.present? && row.first =~ /^[+-]$/ ? row.shift : '✓'
     end
 
     def diff_class_of(value)
