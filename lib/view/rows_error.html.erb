@@ -1,29 +1,4 @@
 <style>
-  table.sqlite_error {
-    width: auto;
-  }
-  table.sqlite_result {
-    border: none;
-  }
-  table.sqlite_solution {
-    border: none;
-  }
-  table.sqlite_error tr:nth-child(even) {
-    background-color: #EEEEEE;
-  }
-  table.sqlite_error tr:nth-child(odd) {
-    background-color: #FFFFFF;
-  }
-  table.sqlite_error th {
-    color: white;
-    font-weight: bold;
-    background-color: #2E2F30;
-  }
-  table.sqlite_error td {
-    width: auto;
-    text-align: left;
-  }
-
   .required {
     color: #5cb85c;
     font-style: italic;
@@ -31,25 +6,6 @@
   .errored {
     color: #d9534f;
     font-style: italic;
-  }
-
-  .required :first-child,
-  .errored :first-child,
-  .nothing :first-child {
-    font-style: normal;
-    padding-left: 2px;
-    padding-right: 2px;
-    background-color: white;
-    border-left: none;
-    border-bottom: 1px solid white;
-  }
-  .required :first-child {
-    color: white;
-    background-color: #5cb85c;
-  }
-  .errored :first-child {
-    color: white;
-    background-color: #d9534f;
   }
 </style>
 
@@ -60,54 +16,60 @@
   <!-- Result -->
   <div class="col-md-6">
     <h6><%= @expected_message %></h6>
-    <table class="table table-bordered sqlite_error sqlite_result">
-      <thead>
-      <tr class="<%= @result[:header][:class] %>">
-        <th><%= @result[:header][:sign] %></th>
-        <% @result[:header][:fields].each do |field| %>
-            <th><%= field %></th>
-        <% end %>
-      </tr>
-      </thead>
 
-      <tbody>
-      <% @result[:rows].each do |row| %>
-          <tr class="<%= row[:class] %>">
-            <td><%= row[:sign] %></td>
-            <% row[:fields].each do |field| %>
-                <td><%= field %></td>
-            <% end %>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
+    <div class="mu-sql-table-rendered">
+      <header><%= @table_name %></header>
+      <table>
+        <thead>
+        <tr class="<%= @result[:header][:class] %>">
+          <th><%= @result[:header][:sign] %></th>
+          <% @result[:header][:fields].each do |field| %>
+              <th><%= field %></th>
+          <% end %>
+        </tr>
+        </thead>
+        <tbody>
+        <% @result[:rows].each do |row| %>
+            <tr class="<%= row[:class] %>">
+              <td><%= row[:sign] %></td>
+              <% row[:fields].each do |field| %>
+                  <td><%= field %></td>
+              <% end %>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+
   </div>
 
   <!-- Solution -->
   <div class="col-md-6">
     <h6><%= @obtained_message %></h6>
-    <table class="table table-bordered sqlite_error sqlite_solution">
-      <thead>
-      <tr class="<%= @result[:header][:class] %>">
-        <th><%= @result[:header][:sign] %></th>
-        <% @solution[:header][:fields].each do |field| %>
-            <th><%= field %></th>
+    
+    <div class="mu-sql-table-rendered">
+      <header><%= @table_name %></header>
+      <table>
+        <thead>
+        <tr class="<%= @result[:header][:class] %>">
+          <th><%= @result[:header][:sign] %></th>
+          <% @solution[:header][:fields].each do |field| %>
+              <th><%= field %></th>
+          <% end %>
+        </tr>
+        </thead>
+        <tbody>
+        <% @solution[:rows].each do |row| %>
+            <tr class="<%= row[:class] %>">
+              <td><%= row[:sign] %></td>
+              <% row[:fields].each do |field| %>
+                  <td><%= field %></td>
+              <% end %>
+            </tr>
         <% end %>
-      </tr>
-      </thead>
-
-      <tbody>
-      <% @solution[:rows].each do |row| %>
-          <tr class="<%= row[:class] %>">
-            <td><%= row[:sign] %></td>
-            <% row[:fields].each do |field| %>
-                <td><%= field %></td>
-            <% end %>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-
-

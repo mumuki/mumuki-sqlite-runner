@@ -86,6 +86,7 @@ class SqliteTestHook < Mumukit::Templates::FileHook
       {
           id: i + 1,
           dataset: Sqlite::Dataset.new(dataset),
+          table_name: @tests[i].table_name,
           show_query: @tests[i].show_query?,
           query: @tests[i].get_final_query
       }

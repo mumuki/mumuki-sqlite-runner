@@ -5,14 +5,16 @@ module Sqlite
 
     def render_success(result, message)
       @message = message
-      @header  = result[:dataset].header
-      @rows    = result[:dataset].rows
+      @table_name = result[:table_name]
+      @header = result[:dataset].header
+      @rows = result[:dataset].rows
       @extra_message = extra_message result
       template_file_success.result binding
     end
 
     def render_error(result, solution, error)
       @error = error
+      @table_name = result[:table_name]
       @result = parse_dataset(result[:dataset].header, result[:dataset].rows)
       @solution = parse_dataset(solution[:dataset].header, solution[:dataset].rows)
       @expected_message = expected_message result
@@ -23,10 +25,10 @@ module Sqlite
     protected
 
     def parse_dataset(header, rows)
-      header_sign = header.shift
+      header_sign = first_column(header)
       rows = rows.map do |row|
         {
-            sign: row.shift,
+            sign: first_column(row),
             row: row
         }
       end
@@ -39,13 +41,17 @@ module Sqlite
           },
           rows: rows.map do |row|
             {
-                sign:row[:sign],
+                sign: row[:sign],
                 class: diff_class_of(row[:sign]),
                 fields: row[:row]
             }
           end
       }
 
+    end
+
+    def first_column(row)
+      row.first.present? && row.first =~ /^[+-]$/ ? row.shift : '✓'
     end
 
     def diff_class_of(value)
