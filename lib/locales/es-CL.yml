@@ -1,0 +1,24 @@
+es:
+  dataset: "Set de datos %{number}"
+  default_table_name: 'Resultado'
+  expected: 'Se esperaba:'
+  obtained: 'Se obtuvo:'
+  message:
+    success:
+      query: '¡Consulta correcta!'
+      show_query: 'La consulta `%{query}` devolvió:'
+    failure:
+      show_query: 'Se esperaba que la consulta `%{query}` devolviera:'
+      semicolon_ending: 'Tienes que terminar cada sentencia SQL con punto y coma (;)'
+      columns: 'Las columnas no coinciden'
+      rows:    'Las filas no coinciden'
+      query:   'Las consultas no coinciden'
+    tests:
+      lint: "¡Tests inválidos! No tienen el formato YAML correcto. Puedes probar en este validador http://www.yamllint.com/"
+      type: "tienes que declarar el campo type:"
+      types: "El test type '%{type}' no está soportado. Tienes que usar uno de éstos: datasets, query, display, final_dataset"
+      fields:
+        query: "Para el type:query deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), expected (requerido)"
+        datasets: "Para el type:datasets deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), expected (requerido)"
+        final_dataset: "Para el type:final_dataset, deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), final (requerido), expected (requerido)"
+        display: "Para el type:display deberías usar ÚNICAMENTE estos campos: type (requerido), seed (opcional), query (requerido)"
