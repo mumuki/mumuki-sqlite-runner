@@ -1,6 +1,12 @@
 require 'rdoc/task'
 require 'rspec/core/rake_task'
+require_relative 'lib/sqlite_runner'
 
+task :pull_worker do
+  image = Mumukit.config.docker_image
+  puts "Fetching image #{image}..."
+  Docker::Image.create('fromImage' => image)
+end
 
 task default: :spec
 
