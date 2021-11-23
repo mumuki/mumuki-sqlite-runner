@@ -35,7 +35,7 @@ module Sqlite
     end
 
     def same_header(other_header)
-      @header.eql? other_header
+      @header.map(&:downcase).eql? other_header.map(&:downcase)
     end
 
     def same_rows(other_rows)
