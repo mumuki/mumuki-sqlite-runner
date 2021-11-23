@@ -25,6 +25,18 @@ describe Sqlite::Dataset do
       expect(solution.compare result).to eq :equals
     end
 
+    it 'should be equals when has same columns & same rows in same order, but different case' do
+      result = <<~ROWS
+        id|NAME
+        1|Name 1
+        2|Name 2
+        3|Name 3
+      ROWS
+      result = Sqlite::Dataset.new result
+
+      expect(solution.compare result).to eq :equals
+    end
+
     # :distinct_columns
     it 'should has distinct columns when result has less columns than solution' do
       result = <<~ROWS
