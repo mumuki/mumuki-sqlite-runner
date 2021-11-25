@@ -49,7 +49,18 @@ class SqliteTestHook < Mumukit::Templates::FileHook
     expected.map!.with_index do |expect, i|
       @tests[i].choose_solution expect
     end
+    student = normalize_headers(student)
+    expected = normalize_headers(expected)
     diff(expected, student)
+  end
+
+  def normalize_headers(results)
+    results.map do |result|
+      headers, *rows = result.split("\n")
+
+      headers.downcase!
+      [headers, *rows].join("\n")
+    end
   end
 
   # Make diff between expected and student dataset result and mark each line one according comparision
