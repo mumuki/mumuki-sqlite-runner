@@ -92,6 +92,34 @@ describe 'SqliteTestHook as isolated FileHook' do
       expect(post_process[1]).to eq :failed
       expect(post_process[0]).to eq 'Error near something'
     end
+
+    it 'is case insensitive for headers row' do
+      result = {
+        expected: ['solution 1'],
+        student:  ['SoLuTiOn 1']
+      }
+
+      runner.compile_file_content(request)
+      post_process = runner.post_process_file('', result.to_json, :passed)
+
+      expect(post_process[0][0][0]).to eq I18n.t :dataset, number: 1
+      expect(post_process[0][0][1]).to eq :passed
+      expect(post_process[0][0][2]).to include I18n.t 'message.success.query'
+    end
+
+    it 'is not case insensitive for other rows' do
+      result = {
+        expected: ["solution 1\ntest"],
+        student:  ["solution 1\nTest"]
+      }
+
+      runner.compile_file_content(request)
+      post_process = runner.post_process_file('', result.to_json, :passed)
+
+      expect(post_process[0][0][0]).to eq I18n.t :dataset, number: 1
+      expect(post_process[0][0][1]).to eq :failed
+      expect(post_process[0][0][2]).to include I18n.t 'message.failure.rows'
+    end
   end
 
   describe '#run!' do
